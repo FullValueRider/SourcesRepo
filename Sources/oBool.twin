@@ -1,0 +1,50 @@
+Class oBool
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oBool"
+    
+    Private Type State
+    
+        Item                                        As Boolean
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipBoolean As Boolean) As oBool
+        With New oBool
+            Return .ConstructInstance(ipBoolean)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipBoolean As Boolean) As oBool
+        s.Item = ipBoolean
+    End Function
+    
+    
+    Public Property Get Val() As Boolean
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipBoolean As Boolean)
+        s.Item = ipBoolean
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+End Class

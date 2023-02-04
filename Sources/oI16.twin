@@ -1,0 +1,51 @@
+Class oI16
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oI16"
+    
+    Private Type State
+    
+        Item                                        As Integer
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipInteger As Integer) As oI16
+        With New oI16
+            Return .ConstructInstance(ipInteger)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipInteger As Integer) As oI16
+        s.Item = ipInteger
+    End Function
+    
+    
+    Public Property Get Val() As Integer
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipInteger As Integer)
+        s.Item = ipInteger
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+    
+End Class

@@ -1,0 +1,51 @@
+Class oStr
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oStr"
+    
+    Private Type State
+    
+        Item                                        As String
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipString As String) As oStr
+        With New oStr
+            Return .ConstructInstance(ipString)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipString As String) As oStr
+        s.Item = ipString
+    End Function
+    
+    
+    Public Property Get Val() As String
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipString As String)
+        s.Item = ipString
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return s.Item
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+
+End Class

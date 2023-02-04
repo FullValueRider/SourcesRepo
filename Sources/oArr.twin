@@ -1,0 +1,63 @@
+Class oArr(Of T)
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oArr"
+    
+    Private Type State
+    
+        Items                                       As variant
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByRef ipArray As pArray) As Object
+        With New oArr(Of T)
+            Return .ConstructInstance(ipArray)
+        End With
+    End Function
+    
+    ' Public function Deb(byref  ipArray as object ) as Object
+    '     with new oArr(of T)
+    '         return .ConstructInstance(ipArray)
+    '     end with
+    ' end function
+    
+  
+    Friend Function ConstructInstance(ByRef ipArray As pArray) As Object
+        
+        If arrayinfo.IsNotArray(ipArray.Val) Then
+            return Nothing
+        End If
+        s.Items = ipArray.Val
+        
+        Return Me
+    End Function
+    
+    
+    Public Property Get Val() As Variant
+        Return s.Items
+    End Property
+    
+    Public Property Let Val(ByVal ipVariant As Variant)
+        s.Items = ipVariant
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return fmt.Text("{0}", s.Items)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+
+End Class

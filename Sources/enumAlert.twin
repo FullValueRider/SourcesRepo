@@ -1,0 +1,1739 @@
+Class enumAlert
+    Attribute VB_GlobalNameSpace = False
+    Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+    Option Explicit
+
+    /* 
+    This enumeration implements error messages
+    To allow consistem namin of error message we introduce the alOrd enum
+    snd a dictionary that maps erral to the actual error number
+    */
+
+    Private Const MY_TYPENAME              As String = "enumAlert"
+
+    Public Enum AlertOrd ' using the prefix al
+        /*
+        The first part of this enumeration reflects alError names
+        However we are not using Alerts as error messages
+        Just to say to the programmer, Hey something unexpected happended
+        and leave it to the programmer to determine if the alert is an
+        error, warning, info or just a log.
+        */
+        alOkay = -1
+        alNotOkay = 0
+        alReturnWithoutGoSub
+        alInvalidProcedureCall
+        alOverflow
+        alOutOfMemory
+        alSubscriptOutOfRange
+        alThisArrayIsFixedOrTemporarilyLocked
+        alDivisionByZero
+        alTypeMisAreSame
+        alOutOfStringSpace
+        alExpressionTooComplex
+        alCannotPerformRequestedOperation
+        alUserInterruptOccurred
+        alResumeWithoutError
+        alOutOfStackSpace
+        alSubFunctionOrPropertyNotDefined
+        alTooManyCodeResourceOrDLLApplicationClients
+        alErrorInLoadingCodeResourceOrDLL
+        alBadCodeResourceOrDLLCallingConvention
+        alInternalError
+        alBadFileNameOrNumber
+        alFileNotFound
+        alBadFileMode
+        alFileAlreadyOpen
+        alDeviceIOError
+        alFileAlreadyExists
+        alBadRecordLength
+        alDiskFull
+        alInputPastEndOfFile
+        alBadRecordNumber
+        alTooManyFiles
+        alDeviceUnavailable
+        alPermissionDenied
+        alDiskNotReady
+        alCannotRenameWithDifferentDrive
+        alPathFileAccessError
+        alPathNotFound
+        alObjectVariableOrWithBlockVariableNotSet
+        alForLoopNotInitialized
+        alInvalidPatternString
+        alInvalidUseOfNull
+        alCannotCallFriendProcedureOnAnObjectThatIsNotAnInstanceOfTheDefiningClass
+        alAPropertyOrMethodCallCannotIncludeAReferenceToAPrivateObjectEitherAsAnArgumentOrAsAReturnValue
+        alSystemResourceOrDLLCouldNotBeLoaded
+        alCannotUseCharacterDeviceOrdNamesInSpecifiEdfileOrdNames
+        alInvalidFileFormat
+        alCannotMakeNecessaryTemporaryFile
+        alInvalidFormatInResourceFile
+        alDataValueNamedNotFound
+        alIllegalParameterCannotWriteArrays
+        alCouldNotAccessSystemRegistry
+        alComponentNotCorrectlyRegistered
+        alComponentNotFound
+        alComponentDidNotRunCorrectly
+        alObjectAlreadyLoaded
+        alCannotLoadOrUnloadThisObject
+        alControlSpecifiEdnotFound
+        alObjectWasUnloaded
+        alUnableToUnloadWithinThisContext
+        alTheSpecifiEdfileIsOutOfDateThisProgramRequiresALaterVersion
+        alTheSpecifiedObjectCannotBeUsEdasAnOwnerFormForShow
+        alInvalidPropertyValue
+        alInvalidPropertyArrayIndex
+        alPropertySetCannotBeExecutedAtRunTime
+        alPropertySetCannotBeUsedWithAReadOnlyProperty
+        alNeedPropertyArrayIndex
+        alPropertySetNotPermitted
+        alPropertyGetCannotBeExecutEdatRunTime
+        alPropertyGetCannotBeExecutEdonWriteOnlyProperty
+        alFormAlreadyDisplayEdcannotShowModally
+        alCodeMustCloseTopmostModalFormFirst
+        alPermissionToUseObjectDenied
+        alPropertyNotFound
+        alPropertyOrMethodNotFound
+        alObjectRequired
+        alInvalidObjectUse
+        alComponentCannotMakeObjectOrReturnReferenceToThisObject
+        alClassDoesNotSupportAutomation
+        alFileNameOrClassNameNotFoundDuringAutomationOperation
+        alObjectDoesNotSupportThisPropertyOrMethod
+        alAutomationError
+        alConnectionToTypeLibraryOrObjectLibraryForRemoteProcessHasBeenLost
+        alAutomationObjectDoesNotHaveADefaultValue
+        alObjectDoesNotSupportThisAction
+        alObjectDoesNotSupportNamEdarguments
+        alObjectDoesNotSupportCurrentLocaleSetting
+        alNamedArgumentNotFound
+        alArgumentNotOptionalOrInvalidPropertyAssignment
+        alWrongNumberOfArgumentsOrInvalidPropertyAssignment
+        alObjectNotACollection
+        alInvalidOrdinal
+        alSpecifiEdcodeResourceNotFound
+        alCodeResourceNotFound
+        alCodeResourceLockError
+        alThisKeyIsAlreadyAssociatedWithAnElementOfThisCollection
+        alVariableUsesATypeNotSupportEdinVisualBasic
+        alThisComponentDoesNotSupportTheSetOfEvents
+        alInvalidClipboardFormat
+        alMethodOrDataMemberNotFound
+        alTheRemoteServerMachineDoesNotExistOrIsUnavailable
+        alClassNotRegisterEdonLocalMachine
+        alCannotMakeAutoRedrawImage
+        alInvalidPicture
+        alPrinterError
+        alPrinterDriverDoesNotSupportSpecifiEdproperty
+        alProblemGettingPrinterInformationFromTheSystemMakeSureThePrinterIsSetUpCorrectly
+        alInvalidPictureType
+        alCannotPrintFormImageToThisTypeOfPrinter
+        alCannotEmptyClipboard
+        alCannotOpenClipboard
+        alCannotSaveFileToTEMPDirectory
+        alSearchTextNotFound
+        alReplacementsTooLong
+        alApplicationDefinedOrObjectDefinedError
+        alSystemOutOfMemory
+        alNoObject
+        alClassIsNotSet
+        alUnableToActivateObject
+        alUnableToCreateEmbeddedObject
+        alErrorSavingToFile
+        alErrorLoadingFromFile
+        
+        
+        'ToDo: Reorganise the enum below to be more coherent
+        /*
+        The first enum for this library is double stacked 
+        to make it easier to determine Lib specific messages
+        */
+            
+        alLibMessages
+        'TypeIssues
+        alIsNotSameType = alLibMessages
+        alIsNotNumber
+        alIsNotString
+        alIsNotArray
+        alHasNoItems
+        alIsSingleItem
+        alIsNotCountable
+        alInvalidRank
+        
+        'NoCountMethod
+
+        alKeys
+        alItems
+        
+        
+        'Class issues
+        alInvalidMethod
+        alUsePredeclaredIdInstance
+        alInvalidNew
+        alUseNewInstance
+        alHasNoInstance
+        alInvalidInstanceCreation
+        alDisallowedOverwrite
+        
+
+        alDoubleInitialisation
+        alNullReference
+        alBoxesCannotBeBoxed
+
+        ' Dictionary Issues
+        alAutoKeyResetNotAllowed
+        alInvalidKey
+        alAdjusterIsZero
+
+        ' Iterable issues
+        alIsNotIterable
+        alIsNotIterableKeysByEnum
+        alIsNotIterableByMethod
+        alIsNotIterableOneBased
+        alIsNotIterableZeroBased
+        alDoesNotIterateByIndex
+        alInvalidType
+        alIterableHasNoItems
+        alIndexBeforeFirstIndex
+        alIndexAfterLastIndex
+        alIterableObjectCountIsNotValid
+        IsNotSameSize
+        alIsNotSameRanks
+        alIsNotSameShape
+        alLacksItem
+        
+        ' Variant Issues
+        alParamArrayIsNotAllocated
+        alIterableHasNoExtent
+        alArrayIsNotAllocated
+        
+        'Array Issues
+        alArrayIsNotValid
+        alBoxHasNoItems
+        alArrayLacksRank
+        alInvalidCoordinates
+        alHasNoRanks
+        alIsNotTableArray
+        alIsNotListArray
+        alInvalidArrayMarkup
+        alInvalidArray
+        alRankLessThanFirstRank
+        alRankMorethanLastRank
+        alItemDoesNotSupportRanks
+        alUnexpectedItem
+        alRankOfZeroResetToOne
+        
+            
+        ' Enum Issues
+        alIsNotMember
+        'Parameter issues
+        alUnexpectedEmpty
+        alMissingParameter
+        alStringIsEmpty
+        alZeroIsInvalidParameter
+        alIterableIsEmpty
+        alInsideBounds
+        alOutsideBounds
+        
+        'Result messages
+        alResultOkayInputSelectorIsInvalid
+        
+        'General messages
+        alNotEqual
+        alUnspecified
+    
+
+        alStartIndexWasZeroResetToOne
+        alStartIndexExceedsItemCount
+        alEndIndexResetToCount
+        alEndIndexWasZeroResetToOne
+        alRunLengthTooLong
+        alIndexWillOverrun
+        alDestinationTooSmall
+        
+        alInvalidInsertCountZero
+        alRunLengthIsZero
+        alCountCannotBeLessThanOne
+
+
+        'Enumeration issues
+        alActionNotExecutable
+        alEnumLacksMember
+        alDisAllowedEnumerationMember
+        alAttachedItemIsNothing
+        
+        'KvpIsssues
+        alAutoKeyIsNotValid
+        alKvpSecondParamterIsNotValid
+        alKeyNotFound
+        alIncrementIsNotValid
+        alDecrementIsNotValid
+    End Enum
+
+
+
+    Private Type State
+            
+        AlertOrdToName           As Hkvp
+        AlertOrdToMessage        As Hkvp
+        AlertOrdTovbError        As Hkvp
+            
+    End Type
+
+    Private s                       As State
+
+
+    Private Sub Class_Initialise()
+        If s.AlertOrdToMessage Is Nothing Then
+            SetupDictionaries
+        End If
+        
+    End Sub
+
+
+    Private Sub SetupDictionaries()
+
+        SetupAlertOrdToName          'The enumeration name
+        SetupAlertOrdTovbErrorCode   ' If a alError the corresponding alError code
+        SetupAlertOrdToMessage       ' The message string
+            
+    End Sub
+
+
+    Private Sub SetupAlertOrdTovbErrorCode()
+    	
+        Set s.AlertOrdTovbError = Hkvp.Deb
+        With s.AlertOrdTovbError
+            .Add alReturnWithoutGoSub, 3
+            .Add alInvalidProcedureCall, 5
+            .Add alOverflow, 6
+            .Add alOutOfMemory, 7
+            .Add alSubscriptOutOfRange, 9
+            .Add alThisArrayIsFixedOrTemporarilyLocked, 10
+            .Add alDivisionByZero, 11
+            .Add alTypeMisAreSame, 13
+            .Add alOutOfStringSpace, 14
+            .Add alExpressionTooComplex, 16
+            .Add alCannotPerformRequestedOperation, 17
+            .Add alUserInterruptOccurred, 18
+            .Add alResumeWithoutError, 20
+            .Add alOutOfStackSpace, 28
+            .Add alSubFunctionOrPropertyNotDefined, 35
+            .Add alTooManyCodeResourceOrDLLApplicationClients, 47
+            .Add alErrorInLoadingCodeResourceOrDLL, 48
+            .Add alBadCodeResourceOrDLLCallingConvention, 49
+            .Add alInternalError, 51
+            .Add alBadFileNameOrNumber, 52
+            .Add alFileNotFound, 53
+            .Add alBadFileMode, 54
+            .Add alFileAlreadyOpen, 55
+            .Add alDeviceIOError, 57
+            .Add alFileAlreadyExists, 58
+            .Add alBadRecordLength, 59
+            .Add alDiskFull, 61
+            .Add alInputPastEndOfFile, 62
+            .Add alBadRecordNumber, 63
+            .Add alTooManyFiles, 67
+            .Add alDeviceUnavailable, 68
+            .Add alPermissionDenied, 70
+            .Add alDiskNotReady, 71
+            .Add alCannotRenameWithDifferentDrive, 74
+            .Add alPathFileAccessError, 75
+            .Add alPathNotFound, 76
+            .Add alObjectVariableOrWithBlockVariableNotSet, 91
+            .Add alForLoopNotInitialized, 92
+            .Add alInvalidPatternString, 93
+            .Add alInvalidUseOfNull, 94
+            .Add alCannotCallFriendProcedureOnAnObjectThatIsNotAnInstanceOfTheDefiningClass, 97
+            .Add alAPropertyOrMethodCallCannotIncludeAReferenceToAPrivateObjectEitherAsAnArgumentOrAsAReturnValue, 98
+            .Add alSystemResourceOrDLLCouldNotBeLoaded, 298
+            .Add alCannotUseCharacterDeviceOrdNamesInSpecifiEdfileOrdNames, 320
+            .Add alInvalidFileFormat, 321
+            .Add alCannotMakeNecessaryTemporaryFile, 322
+            .Add alInvalidFormatInResourceFile, 325
+            .Add alDataValueNamedNotFound, 327
+            .Add alIllegalParameterCannotWriteArrays, 328
+            .Add alCouldNotAccessSystemRegistry, 335
+            .Add alComponentNotCorrectlyRegistered, 336
+            .Add alComponentNotFound, 337
+            .Add alComponentDidNotRunCorrectly, 338
+            .Add alObjectAlreadyLoaded, 360
+            .Add alCannotLoadOrUnloadThisObject, 361
+            .Add alControlSpecifiEdnotFound, 363
+            .Add alObjectWasUnloaded, 364
+            .Add alUnableToUnloadWithinThisContext, 365
+            .Add alTheSpecifiEdfileIsOutOfDateThisProgramRequiresALaterVersion, 368
+            .Add alTheSpecifiedObjectCannotBeUsEdasAnOwnerFormForShow, 371
+            .Add alInvalidPropertyValue, 380
+            .Add alInvalidPropertyArrayIndex, 381
+            .Add alPropertySetCannotBeExecutedAtRunTime, 382
+            .Add alPropertySetCannotBeUsedWithAReadOnlyProperty, 383
+            .Add alNeedPropertyArrayIndex, 385
+            .Add alPropertySetNotPermitted, 387
+            .Add alPropertyGetCannotBeExecutEdatRunTime, 393
+            .Add alPropertyGetCannotBeExecutEdonWriteOnlyProperty, 394
+            .Add alFormAlreadyDisplayEdcannotShowModally, 400
+            .Add alCodeMustCloseTopmostModalFormFirst, 402
+            .Add alPermissionToUseObjectDenied, 419
+            .Add alPropertyNotFound, 422
+            .Add alPropertyOrMethodNotFound, 423
+            .Add alObjectRequired, 424
+            .Add alInvalidObjectUse, 425
+            .Add alComponentCannotMakeObjectOrReturnReferenceToThisObject, 429
+            .Add alClassDoesNotSupportAutomation, 430
+            .Add alFileNameOrClassNameNotFoundDuringAutomationOperation, 432
+            .Add alObjectDoesNotSupportThisPropertyOrMethod, 438
+            .Add alAutomationError, 440
+            .Add alConnectionToTypeLibraryOrObjectLibraryForRemoteProcessHasBeenLost, 442
+            .Add alAutomationObjectDoesNotHaveADefaultValue, 443
+            .Add alObjectDoesNotSupportThisAction, 445
+            .Add alObjectDoesNotSupportNamEdarguments, 446
+            .Add alObjectDoesNotSupportCurrentLocaleSetting, 447
+            .Add alNamedArgumentNotFound, 448
+            .Add alArgumentNotOptionalOrInvalidPropertyAssignment, 449
+            .Add alWrongNumberOfArgumentsOrInvalidPropertyAssignment, 450
+            .Add alObjectNotACollection, 451
+            .Add alInvalidOrdinal, 452
+            .Add alSpecifiEdcodeResourceNotFound, 453
+            .Add alCodeResourceNotFound, 454
+            .Add alCodeResourceLockError, 455
+            .Add alThisKeyIsAlreadyAssociatedWithAnElementOfThisCollection, 457
+            .Add alVariableUsesATypeNotSupportEdinVisualBasic, 458
+            .Add alThisComponentDoesNotSupportTheSetOfEvents, 459
+            .Add alInvalidClipboardFormat, 460
+            .Add alMethodOrDataMemberNotFound, 461
+            .Add alTheRemoteServerMachineDoesNotExistOrIsUnavailable, 462
+            .Add alClassNotRegisterEdonLocalMachine, 463
+            .Add alCannotMakeAutoRedrawImage, 480
+            .Add alInvalidPicture, 481
+            .Add alPrinterError, 482
+            .Add alPrinterDriverDoesNotSupportSpecifiEdproperty, 483
+            .Add alProblemGettingPrinterInformationFromTheSystemMakeSureThePrinterIsSetUpCorrectly, 484
+            .Add alInvalidPictureType, 485
+            .Add alCannotPrintFormImageToThisTypeOfPrinter, 486
+            .Add alCannotEmptyClipboard, 520
+            .Add alCannotOpenClipboard, 521
+            .Add alCannotSaveFileToTEMPDirectory, 735
+            .Add alSearchTextNotFound, 744
+            .Add alReplacementsTooLong, 746
+            .Add alApplicationDefinedOrObjectDefinedError, 1004
+            .Add alSystemOutOfMemory, 31001
+            .Add alNoObject, 31004
+            .Add alClassIsNotSet, 31018
+            .Add alUnableToActivateObject, 31027
+            .Add alUnableToCreateEmbeddedObject, 31032
+            .Add alErrorSavingToFile, 31036
+            .Add alErrorLoadingFromFile, 31037
+        End With
+    End Sub
+        
+    Private Sub SetupAlertOrdToName()
+        Set s.AlertOrdToName = Hkvp.Deb
+        With s.AlertOrdToName
+
+            .Add alOkay, "alOkay"
+            .Add alNotOkay, "alNotOkay"
+            .Add _
+            alReturnWithoutGoSub, _
+            "alReturnWithoutGoSub"
+        
+            .Add _
+            alInvalidProcedureCall, _
+            "alInvalidProcedureCall"
+        
+            .Add _
+            alOverflow, _
+            "alOverflow"
+        
+            .Add _
+            alOutOfMemory, _
+            "alOutOfMemoryOrd"
+        
+            .Add _
+            alSubscriptOutOfRange, _
+            "alSubscriptOutOfRangeOrd"
+        
+            .Add _
+            alThisArrayIsFixedOrTemporarilyLocked, _
+            "alThisArrayIsFixedOrTemporarilyLocked"
+        
+            .Add _
+            alDivisionByZero, _
+            "Division by zero"
+        
+            .Add _
+            alTypeMisAreSame, _
+            "alDivisionByZero"
+        
+            .Add _
+            alOutOfStringSpace, _
+            "alOutOfStringSpace"
+        
+            .Add _
+            alExpressionTooComplex, _
+            "alExpressionTooComplex"
+        
+            .Add _
+            alCannotPerformRequestedOperation, _
+            "alCannotPerformRequestedOperation"
+        
+            .Add _
+            alUserInterruptOccurred, _
+            "alUserInterruptOccurred"
+        
+            .Add _
+            alResumeWithoutError, _
+            "alResumeWithoutError"
+        
+            .Add _
+            alOutOfStackSpace, _
+            "alOutOfStackSpace"
+        
+            .Add _
+            alSubFunctionOrPropertyNotDefined, _
+            "alSubFunctionOrPropertyNotDefined"
+        
+            .Add _
+            alTooManyCodeResourceOrDLLApplicationClients, _
+            "alTooManyCodeResourceOrDLLApplicationClients"
+        
+            .Add _
+            alErrorInLoadingCodeResourceOrDLL, _
+            "alErrorInLoadingCodeResourceOrDLL"
+        
+            .Add _
+            alBadCodeResourceOrDLLCallingConvention, _
+            "alBadCodeResourceOrDLLCallingConvention"
+        
+            .Add _
+            alInternalError, _
+            "alInternalError"
+        
+            .Add _
+            alBadFileNameOrNumber, _
+            "alBadFileNameOrNumber"
+        
+            .Add _
+            alFileNotFound, _
+            "alFileNotFound"
+        
+            .Add _
+            alBadFileMode, _
+            "alBadFileMode"
+        
+            .Add _
+            alFileAlreadyOpen, _
+            "alFileAlreadyOpen"
+        
+            .Add _
+            alDeviceIOError, _
+            "alDeviceIOError"
+        
+            .Add _
+            alFileAlreadyExists, _
+            "alFileAlreadyExists"
+        
+            .Add _
+            alBadRecordLength, _
+            "alBadRecordLength"
+        
+            .Add _
+            alDiskFull, _
+            "alDiskFull"
+        
+            .Add _
+            alInputPastEndOfFile, _
+            "alInputPastEndOfFile"
+        
+            .Add _
+            alBadRecordNumber, _
+            "alBadRecordNumber"
+        
+            .Add _
+            alTooManyFiles, _
+            "alTooManyFiles"
+        
+            .Add _
+            alDeviceUnavailable, _
+            "alDeviceUnavailable"
+        
+            .Add _
+            alPermissionDenied, _
+            "alPermissionDenied"
+        
+            .Add _
+            alDiskNotReady, _
+            "alDiskNotReady"
+        
+            .Add _
+            alCannotRenameWithDifferentDrive, _
+            "alCannotRenameWithDifferentDrive"
+        
+            .Add _
+            alPathFileAccessError, _
+            "alPathFileAccessError"
+        
+            .Add _
+            alPathNotFound, _
+            "alPathNotFound"
+        
+            .Add _
+            alObjectVariableOrWithBlockVariableNotSet, _
+            "alObjectVariableOrWithBlockVariableNotSet"
+        
+            .Add _
+            alForLoopNotInitialized, _
+            "alForLoopNotInitialized"
+        
+            .Add _
+            alInvalidPatternString, _
+            "alInvalidPatternString"
+        
+            .Add _
+            alInvalidUseOfNull, _
+            "alInvalidUseOfNull"
+        
+            .Add _
+            alCannotCallFriendProcedureOnAnObjectThatIsNotAnInstanceOfTheDefiningClass, _
+            "alCannotCallFriendProcedureOnAnObjectThatIsNotAnInstanceOfTheDefiningClass"
+        
+            .Add _
+            alAPropertyOrMethodCallCannotIncludeAReferenceToAPrivateObjectEitherAsAnArgumentOrAsAReturnValue, _
+            "alAPropertyOrMethodCallCannotIncludeAReferenceToAPrivateObjectEitherAsAnArgumentOrAsAReturnValue"
+        
+            .Add _
+            alSystemResourceOrDLLCouldNotBeLoaded, _
+            "alSystemResourceOrDLLCouldNotBeLoaded"
+        
+            .Add _
+            alCannotUseCharacterDeviceOrdNamesInSpecifiEdfileOrdNames, _
+            "alCannotUseCharacterDeviceOrdNamesInSpecifiEdfileOrdNames"
+        
+            .Add _
+            alInvalidFileFormat, _
+            "alInvalidFileFormat"
+        
+            .Add _
+            alCannotMakeNecessaryTemporaryFile, _
+            "alCannotMakeNecessaryTemporaryFile"
+        
+            .Add _
+            alInvalidFormatInResourceFile, _
+            "alInvalidFormatInResourceFile"
+        
+            .Add _
+            alDataValueNamedNotFound, _
+            "alDataValueNamedNotFound"
+        
+            .Add _
+            alIllegalParameterCannotWriteArrays, _
+            "alIllegalParameterCannotWriteArrays"
+        
+            .Add _
+            alCouldNotAccessSystemRegistry, _
+            "alCouldNotAccessSystemRegistry"
+        
+            .Add _
+            alComponentNotCorrectlyRegistered, _
+            "alComponentNotCorrectlyRegistered"
+        
+            .Add _
+            alComponentNotFound, _
+            "alComponentNotFound"
+        
+            .Add _
+            alComponentDidNotRunCorrectly, _
+            "alComponentDidNotRunCorrectly"
+        
+            .Add _
+            alObjectAlreadyLoaded, _
+            "alObjectAlreadyLoaded"
+        
+            .Add _
+            alCannotLoadOrUnloadThisObject, _
+            "alCannotLoadOrUnloadThisObject"
+        
+            .Add _
+            alControlSpecifiEdnotFound, _
+            "alControlSpecifiEdnotFound"
+        
+            .Add _
+            alObjectWasUnloaded, _
+            "alObjectWasUnloaded"
+        
+            .Add _
+            alUnableToUnloadWithinThisContext, _
+            "alUnableToUnloadWithinThisContext"
+        
+            .Add _
+            alTheSpecifiEdfileIsOutOfDateThisProgramRequiresALaterVersion, _
+            "alTheSpecifiEdfileIsOutOfDateThisProgramRequiresALaterVersion"
+        
+            .Add _
+            alTheSpecifiedObjectCannotBeUsEdasAnOwnerFormForShow, _
+            "alTheSpecifiedObjectCannotBeUsEdasAnOwnerFormForShow"
+        
+            .Add _
+            alInvalidPropertyValue, _
+            "alInvalidPropertyValue"
+        
+            .Add _
+            alInvalidPropertyArrayIndex, _
+            "alInvalidPropertyArrayIndex"
+        
+            .Add _
+            alPropertySetCannotBeExecutedAtRunTime, _
+            "alPropertySetCannotBeExecutedAtRunTime"
+        
+            .Add _
+            alPropertySetCannotBeUsedWithAReadOnlyProperty, _
+            "alPropertySetCannotBeUsedWithAReadOnlyProperty"
+        
+            .Add _
+            alNeedPropertyArrayIndex, _
+            "alNeedPropertyArrayIndex"
+        
+            .Add _
+            alPropertySetNotPermitted, _
+            "alPropertySetNotPermitted"
+        
+            .Add _
+            alPropertyGetCannotBeExecutEdatRunTime, _
+            "alPropertyGetCannotBeExecutEdatRunTime"
+        
+            .Add _
+            alPropertyGetCannotBeExecutEdonWriteOnlyProperty, _
+            "alPropertyGetCannotBeExecutEdonWriteOnlyProperty"
+        
+            .Add _
+            alFormAlreadyDisplayEdcannotShowModally, _
+            "alFormAlreadyDisplayEdcannotShowModally"
+        
+            .Add _
+            alCodeMustCloseTopmostModalFormFirst, _
+            "alCodeMustCloseTopmostModalFormFirst"
+        
+            .Add _
+            alPermissionToUseObjectDenied, _
+            "alPermissionToUseObjectDenied"
+        
+            .Add _
+            alPropertyNotFound, _
+            "alPropertyNotFound"
+        
+            .Add _
+            alPropertyOrMethodNotFound, _
+            "alPropertyOrMethodNotFound"
+        
+            .Add _
+            alObjectRequired, _
+            "alObjectRequired"
+        
+            .Add _
+            alInvalidObjectUse, _
+            "alInvalidObjectUse"
+        
+            .Add _
+            alComponentCannotMakeObjectOrReturnReferenceToThisObject, _
+            "alComponentCannotMakeObjectOrReturnReferenceToThisObject"
+        
+            .Add _
+            alClassDoesNotSupportAutomation, _
+            "alClassDoesNotSupportAutomation"
+        
+            .Add _
+            alFileNameOrClassNameNotFoundDuringAutomationOperation, _
+            "alFileNameOrClassNameNotFoundDuringAutomationOperation"
+        
+            .Add _
+            alObjectDoesNotSupportThisPropertyOrMethod, _
+            "alObjectDoesNotSupportThisPropertyOrMethod"
+        
+            .Add _
+            alAutomationError, _
+            "alAutomationError"
+        
+            .Add _
+            alConnectionToTypeLibraryOrObjectLibraryForRemoteProcessHasBeenLost, _
+            "alConnectionToTypeLibraryOrObjectLibraryForRemoteProcessHasBeenLost"
+        
+            .Add _
+            alAutomationObjectDoesNotHaveADefaultValue, _
+            "alAutomationObjectDoesNotHaveADefaultValue"
+        
+            .Add _
+            alObjectDoesNotSupportThisAction, _
+            "alObjectDoesNotSupportThisAction"
+        
+            .Add _
+            alObjectDoesNotSupportNamEdarguments, _
+            "alObjectDoesNotSupportNamEdarguments"
+        
+            .Add _
+            alObjectDoesNotSupportCurrentLocaleSetting, _
+            "alObjectDoesNotSupportCurrentLocaleSetting"
+        
+            .Add _
+            alNamedArgumentNotFound, _
+            "alNamedArgumentNotFound"
+        
+            .Add _
+            alArgumentNotOptionalOrInvalidPropertyAssignment, _
+            "alArgumentNotOptionalOrInvalidPropertyAssignment"
+        
+            .Add _
+            alWrongNumberOfArgumentsOrInvalidPropertyAssignment, _
+            "alWrongNumberOfArgumentsOrInvalidPropertyAssignment"
+        
+            .Add _
+            alObjectNotACollection, _
+            "alObjectNotACollection"
+        
+            .Add _
+            alInvalidOrdinal, _
+            "alInvalidOrdinal"
+        
+            .Add _
+            alSpecifiEdcodeResourceNotFound, _
+            "alSpecifiEdcodeResourceNotFound"
+        
+            .Add _
+            alCodeResourceNotFound, _
+            "alCodeResourceNotFound"
+        
+            .Add _
+            alCodeResourceLockError, _
+            "alCodeResourceLockError"
+        
+            .Add _
+            alThisKeyIsAlreadyAssociatedWithAnElementOfThisCollection, _
+            "alThisKeyIsAlreadyAssociatedWithAnElementOfThisCollection"
+        
+            .Add _
+            alVariableUsesATypeNotSupportEdinVisualBasic, _
+            "alVariableUsesATypeNotSupportEdinVisualBasic"
+        
+            .Add _
+            alThisComponentDoesNotSupportTheSetOfEvents, _
+            "alThisComponentDoesNotSupportTheSetOfEvents"
+        
+            .Add _
+            alInvalidClipboardFormat, _
+            "alInvalidClipboardFormat"
+        
+            .Add _
+            alMethodOrDataMemberNotFound, _
+            "alMethodOrDataMemberNotFound"
+        
+            .Add _
+            alTheRemoteServerMachineDoesNotExistOrIsUnavailable, _
+            "alTheRemoteServerMachineDoesNotExistOrIsUnavailable"
+        
+            .Add _
+            alClassNotRegisterEdonLocalMachine, _
+            "alClassNotRegisterEdonLocalMachine"
+        
+            .Add _
+            alCannotMakeAutoRedrawImage, _
+            "alCannotMakeAutoRedrawImage"
+        
+            .Add _
+            alInvalidPicture, _
+            "alInvalidPicture"
+        
+            .Add _
+            alPrinterError, _
+            "alPrinterError"
+        
+            .Add _
+            alPrinterDriverDoesNotSupportSpecifiEdproperty, _
+            "alPrinterDriverDoesNotSupportSpecifiEdproperty"
+        
+            .Add _
+            alProblemGettingPrinterInformationFromTheSystemMakeSureThePrinterIsSetUpCorrectly, _
+            "alProblemGettingPrinterInformationFromTheSystemMakeSureThePrinterIsSetUpCorrectly"
+        
+            .Add _
+            alInvalidPictureType, _
+            "alInvalidPictureType"
+        
+            .Add _
+            alCannotPrintFormImageToThisTypeOfPrinter, _
+            "alCannotPrintFormImageToThisTypeOfPrinter"
+        
+            .Add _
+            alCannotEmptyClipboard, _
+            "alCannotEmptyClipboard"
+        
+            .Add _
+            alCannotOpenClipboard, _
+            "alCannotOpenClipboard"
+        
+            .Add _
+            alCannotSaveFileToTEMPDirectory, _
+            "alCannotSaveFileToTEMPDirectory"
+        
+            .Add _
+            alSearchTextNotFound, _
+            "alSearchTextNotFound"
+        
+            .Add _
+            alReplacementsTooLong, _
+            "alReplacementsTooLong"
+        
+            .Add _
+            alApplicationDefinedOrObjectDefinedError, _
+            "alApplicationDefinedOrObjectDefinedError"
+        
+            .Add _
+                alSystemOutOfMemory, _
+               "alSystem Out of memory"
+        
+            .Add _
+                alNoObject, _
+               "alNo object"
+        
+            .Add _
+                alClassIsNotSet, _
+               "Class is not set"
+        
+            .Add _
+                alUnableToActivateObject, _
+               "Unable to activate object"
+        
+            .Add _
+                alUnableToCreateEmbeddedObject, _
+               "alUnable to create embedded object"
+        
+            .Add _
+                alErrorSavingToFile, _
+               "alError saving to file"
+        
+            .Add _
+                alErrorLoadingFromFile, _
+               "alError loading from file"
+            
+            '.add alUnspecified, "An unspecified error has occurred"
+            
+            ' .Add alOkay, "Okay"
+            ' .Add alNotOkay, "NotOkay"
+            'Type Messages
+            .Add alIsNotSameType, "IsNotSameType"
+            .Add alIsNotNumber, "IsNotNumber"
+            .Add alIsNotString, "IsNotString"
+            .Add alIsNotArray, "IsNotArray"
+            .Add alIsSingleItem, "IsSingleItem"
+            .Add alHasNoItems, "HasNoItems"
+            ' .Add alIsNotIterableKeysByEnum, "IsNotIterableKeysByEnum"
+            ' .Add alIsNotIterableByMethod, "IsNotIterableByMethod"
+            ' .Add alIsNotIterableOneBased, "IsNotIterableOneBased"
+            ' .Add alIsNotIterableZeroBased, "IsNotIterableZeroBased"
+            .Add alIsNotCountable, "IsNotCounttable"
+            'Class Messages
+            .Add alInvalidMethod, "InvalidMethod"
+            '.add alNoCountMethod, "Object '{0}' has no Count method"
+            ' .Add alHasNoInstance, "HasNoInstance"
+            .Add alInvalidRank, "InvalidRank"
+            ' .Add alBoxesCannotBeBoxed, "BoxesCannotBeBoxed"
+            ' .Add alUnexpectedEmpty, "UnexpectedEmpty"
+            ' .Add alMissingParameter, "MissingParameter"
+            ' .Add alDisallowedOverwrite, "DisallowedOverwrite"
+
+            ' Variant Issues
+            ' .Add alParamArrayIsNotAllocated, "ParamArrayHasNoExtent"
+            ' .Add alIterableHasNoExtent, "HasNoExtent"
+            ' .Add alArrayIsNotAllocated, "ArrayHasNoExtent"
+            
+            'Array Messages
+            ' .Add alArrayIsNotValid, "ParamArrayIsNotValid"
+            ' .Add alBoxHasNoItems, "BoxHasNoItems"
+            ' .Add alArrayLacksRank, "ArrayLacksRank"
+            ' .Add alHasNoRanks, "HasNoRanks"
+            ' .Add alInvalidCoordinates, "InvalidCoordinates"
+            ' .Add alRankOfZeroResetToOne, "RankOfZeroResetToOne"
+            'Enum Messages
+            ' .Add alIsNotMember, "InvalidMember"
+            ' .Add alAttachedItemIsNothing, "AttachedItemIsNothing"
+            
+            ' Iterables Messages
+            ' .Add alIsNotIterable, "IsNotIterable"
+            ' .Add alDoesNotIterateByIndex, "DoesNotIterateByIndex"
+            ' .Add alIterableHasNoItems, "IterableHasNoItems"
+            ' .Add alIsNotSameSize, "NotSameSize"
+        
+            ' .Add alIsNotSameRanks, "IsNotSameRanks"
+            ' .Add alIsNotSameShape, "IsNotSameShape"
+            
+            ' .Add alLacksItem, "LacksItem"
+            '.add alInvalidDimensions, "Not a '{0}' dimensional array"
+            '.add alNotSingleDimension, "Item '{0}' is not a single dimension array"
+            ' .Add alRankLessThanFirstRank, "RankLessThanArrayFirstRank"
+            ' .Add alRankMorethanLastRank, "RankMorethanLastRank"
+            ' .Add alItemDoesNotSupportRanks, "ItemDoesNotSupportRanks"
+            ' .Add alKeys, "Keys"
+            ' .Add alItems, "Items"
+            ' .Add alIterableObjectCountIsNotValid, "IterableObjectCountIsNotValid"
+            ' AutoKey Messages
+            ' .Add alAutoKeyResetNotAllowed, "AutoKeyResetNotAllowed"
+            ' .Add alAutoKeyIsNotValid, "AutoKeyIsNotValid"
+            
+            ' Dictionary Messages
+            '.Add alInvalidKey, "InvalidKey"
+
+            '.add alNotIterableType, "Type '{0}' is not iterable"
+            '.Add alAdjusterIsZero, "AdjusterIsZero"
+            'Range  Messages
+            '.Add alInsideBounds, "InsideBounds"
+             .Add alOutsideBounds, "OutsideBounds"
+            
+            ' .Add alRunLengthIsZero, "RunLengthIsZero"
+            ' .Add alDestinationTooSmall, "DestinationTooSmall"
+            
+            'Fmt, Stringifier messages
+           ' .Add alInvalidArrayMarkup, "InvalidArrayMarkup"
+            
+            ' .Add alInvalidType, "InvalidType"
+            ' .Add alInvalidArray, "InvalidArray"
+            
+            ' .Add alStartIndexWasZeroResetToOne, "StartIndexWasZeroResetToOne"
+            ' .Add alStartIndexExceedsItemCount, "StartIndexExceedsItemCount"
+            ' .Add alEndIndexWasZeroResetToOne, "EndIndexWasZeroResetToOne"
+            ' .Add alEndIndexResetToCount, "EndIndexExceedsItemCount"
+            ' .Add alRunLengthTooLong, "RunLengthTooLong"
+            '.add alIndexWillOverrun, "Index will exceed size"
+            ' .Add alKeyNotFound, "KeyNotFound"
+            ' .Add alInvalidInsertCountZero, "InvalidInsertCountZero"
+            ' .Add alIndexBeforeFirstIndex, "IndexBeforeFirstIndex"
+            ' .Add alIndexAfterLastIndex, "IndexAfterLastIndex"
+            
+            ' .Add alUsePredeclaredIdInstance, "UsePredeclaredIdInstance"
+            ' .Add alUseNewInstance, "UseNewInstance"
+            ' .Add alInvalidNew, "InvalidNew"
+            ' .Add alInvalidInstanceCreation, "InvalidInstanceCreation"
+
+            ' .Add alDoubleInitialisation, "DoubleInitialisation"
+            ' .Add alNullReference, "NullReference"
+            ' .Add alStringIsEmpty, "StringIsEmpty"
+
+            ' .Add alActionNotExecutable, "ActionNotExecutable"
+            ' .Add alEnumLacksMember, "LacksMember"
+            ' .Add alDisAllowedEnumerationMember, "DisAllowedEnumerationMember"
+            ' .Add alUnexpectedItem, "UnexpectedItemInParamArray"
+            
+            '
+            
+            ' Parameter messages
+            ' .Add alZeroIsInvalidParameter, "ZeroIsInvalidParameter"
+            ' .Add alIterableIsEmpty, "IterableIsEmpty"
+            'Result messages
+            
+          '  .Add alResultOkayInputSelectorIsInvalid, "ResultOkayInputSelectorIsInvalid"
+            'kvp issues
+            
+           ' .Add alKvpSecondParamterIsNotValid, "KvpSecondParamterIsNotValid"
+            
+            'General Messages
+            ' .Add alNotEqual, "notequal"
+            ' .Add alUnspecified, "Unspecified"
+            ' .Add alCountCannotBeLessThanOne, "CountCannotBeLessThanOne"
+            
+        End With
+    End Sub
+    
+    Private Sub SetupAlertOrdToMessage()
+    
+        ' OrdValues associated with the enumeration member may be defined at runtime
+        Set s.AlertOrdToMessage = Hkvp.Deb
+        With s.AlertOrdToMessage
+            .Add alOkay, "Okay"
+            .Add alNotOkay, "NotOkay"
+        
+            
+            .Add _
+            alReturnWithoutGoSub, _
+            "Return without GoSub"
+        
+            .Add _
+            alInvalidProcedureCall, _
+            "Invalid procedure call"
+        
+            .Add _
+            alOverflow, _
+            "Overflow"
+        
+            .Add _
+            alOutOfMemory, _
+            "Out of memory"
+        
+            .Add _
+            alSubscriptOutOfRange, _
+            "Subscript out of range"
+        
+            .Add _
+            alThisArrayIsFixedOrTemporarilyLocked, _
+            "This array is fixed or temporarily locked"
+        
+            .Add _
+            alDivisionByZero, _
+            "Division by zero"
+        
+            .Add _
+            alTypeMisAreSame, _
+            "Type misAreSame"
+        
+            .Add _
+            alOutOfStringSpace, _
+            "Out of string space"
+        
+            .Add _
+            alExpressionTooComplex, _
+            "Expression too complex"
+        
+            .Add _
+            alCannotPerformRequestedOperation, _
+            "Cannot perform requested operation"
+        
+            .Add _
+            alUserInterruptOccurred, _
+            "User interrupt occurred"
+        
+            .Add _
+            alResumeWithoutError, _
+            "Resume without error"
+        
+            .Add _
+            alOutOfStackSpace, _
+            "Out of stack space"
+        
+            .Add _
+            alSubFunctionOrPropertyNotDefined, _
+            "Sub  Function  or Property not defined"
+        
+            .Add _
+            alTooManyCodeResourceOrDLLApplicationClients, _
+            "Too many code resource or DLL application clients"
+        
+            .Add _
+            alErrorInLoadingCodeResourceOrDLL, _
+            "Error in loading code resource or DLL"
+        
+            .Add _
+            alBadCodeResourceOrDLLCallingConvention, _
+            "Bad code resource or DLL calling convention"
+        
+            .Add _
+            alInternalError, _
+            "Internal error"
+        
+            .Add _
+            alBadFileNameOrNumber, _
+            "Bad file name or number"
+        
+            .Add _
+            alFileNotFound, _
+            "File not found"
+        
+            .Add _
+            alBadFileMode, _
+            "Bad file mode"
+        
+            .Add _
+            alFileAlreadyOpen, _
+            "File already open"
+        
+            .Add _
+            alDeviceIOError, _
+            "Device I O error"
+        
+            .Add _
+            alFileAlreadyExists, _
+            "File already exists"
+        
+            .Add _
+            alBadRecordLength, _
+            "Bad record length"
+        
+            .Add _
+            alDiskFull, _
+            "Disk full"
+        
+            .Add _
+            alInputPastEndOfFile, _
+            "Input past end of file"
+        
+            .Add _
+            alBadRecordNumber, _
+            "Bad record number"
+        
+            .Add _
+            alTooManyFiles, _
+            "Too many files"
+        
+            .Add _
+            alDeviceUnavailable, _
+            "Device unavailable"
+        
+            .Add _
+            alPermissionDenied, _
+            "Permission denied"
+        
+            .Add _
+            alDiskNotReady, _
+            "Disk not ready"
+        
+            .Add _
+            alCannotRenameWithDifferentDrive, _
+            "Cannot rename with different drive"
+        
+            .Add _
+            alPathFileAccessError, _
+            "Path File access error"
+        
+            .Add _
+            alPathNotFound, _
+            "Path not found"
+        
+            .Add _
+            alObjectVariableOrWithBlockVariableNotSet, _
+            "Object variable or With block variable not set"
+        
+            .Add _
+            alForLoopNotInitialized, _
+            "For loop not initialized"
+        
+            .Add _
+            alInvalidPatternString, _
+            "Invalid pattern string"
+        
+            .Add _
+            alInvalidUseOfNull, _
+            "Invalid use of Null"
+        
+            .Add _
+            alCannotCallFriendProcedureOnAnObjectThatIsNotAnInstanceOfTheDefiningClass, _
+            "Cannot call Friend procedure on an object that is not an instance of the defining class"
+        
+            .Add _
+            alAPropertyOrMethodCallCannotIncludeAReferenceToAPrivateObjectEitherAsAnArgumentOrAsAReturnValue, _
+            "A property or method call cannot include a reference to a private object  either as an argument or as aop value"
+        
+            .Add _
+            alSystemResourceOrDLLCouldNotBeLoaded, _
+            "System resource or DLL could not be loaded"
+        
+            .Add _
+            alCannotUseCharacterDeviceOrdNamesInSpecifiEdfileOrdNames, _
+            "Cannot use character device OrdNames in specifiEdfile OrdNames"
+        
+            .Add _
+            alInvalidFileFormat, _
+            "Invalid file format"
+        
+            .Add _
+            alCannotMakeNecessaryTemporaryFile, _
+            "Cannot Make necessary temporary file"
+        
+            .Add _
+            alInvalidFormatInResourceFile, _
+            "Invalid format in resource file"
+        
+            .Add _
+            alDataValueNamedNotFound, _
+            "Data value namEdnot found"
+        
+            .Add _
+            alIllegalParameterCannotWriteArrays, _
+            "Illegal parameter cannot write arrays"
+        
+            .Add _
+            alCouldNotAccessSystemRegistry, _
+            "Could not access system registry"
+        
+            .Add _
+            alComponentNotCorrectlyRegistered, _
+            "Component not correctly registered"
+        
+            .Add _
+            alComponentNotFound, _
+            "Component not found"
+        
+            .Add _
+            alComponentDidNotRunCorrectly, _
+            "Component did not run correctly"
+        
+            .Add _
+            alObjectAlreadyLoaded, _
+            "Object already loaded"
+        
+            .Add _
+            alCannotLoadOrUnloadThisObject, _
+            "Cannot load or unload this object"
+        
+            .Add _
+            alControlSpecifiEdnotFound, _
+            "Control specifiEdnot found"
+        
+            .Add _
+            alObjectWasUnloaded, _
+            "Object was unloaded"
+        
+            .Add _
+            alUnableToUnloadWithinThisContext, _
+            "Unable to unload within this context"
+        
+            .Add _
+            alTheSpecifiEdfileIsOutOfDateThisProgramRequiresALaterVersion, _
+            "The specifiEdfile is out of date This program requires a later version"
+        
+            .Add _
+            alTheSpecifiedObjectCannotBeUsEdasAnOwnerFormForShow, _
+            "The specifiEdobject Cannot be usEdas an owner form for Show"
+        
+            .Add _
+            alInvalidPropertyValue, _
+            "Invalid property value"
+        
+            .Add _
+            alInvalidPropertyArrayIndex, _
+            "Invalid property array index"
+        
+            .Add _
+            alPropertySetCannotBeExecutedAtRunTime, _
+            "Property Set Cannot be executEdat run time"
+        
+            .Add _
+            alPropertySetCannotBeUsedWithAReadOnlyProperty, _
+            "Property Set Cannot be usEdwith a read only property"
+        
+            .Add _
+            alNeedPropertyArrayIndex, _
+            "NeEdproperty array index"
+        
+            .Add _
+            alPropertySetNotPermitted, _
+            "Property Set not permitted"
+        
+            .Add _
+            alPropertyGetCannotBeExecutEdatRunTime, _
+            "Property Get Cannot be executEdat run time"
+        
+            .Add _
+            alPropertyGetCannotBeExecutEdonWriteOnlyProperty, _
+            "Property Get Cannot be executEdon write only property"
+        
+            .Add _
+            alFormAlreadyDisplayEdcannotShowModally, _
+            "Form already displayEdcannot show modally"
+        
+            .Add _
+            alCodeMustCloseTopmostModalFormFirst, _
+            "Code must close topmost modal form First"
+        
+            .Add _
+            alPermissionToUseObjectDenied, _
+            "Permission to use object denied"
+        
+            .Add _
+            alPropertyNotFound, _
+            "Property not found"
+        
+            .Add _
+            alPropertyOrMethodNotFound, _
+            "Property or method not found"
+        
+            .Add _
+            alObjectRequired, _
+            "Object required"
+        
+            .Add _
+            alInvalidObjectUse, _
+            "Invalid object use"
+        
+            .Add _
+            alComponentCannotMakeObjectOrReturnReferenceToThisObject, _
+            "Component Cannot Make object orop reference to this object"
+        
+            .Add _
+            alClassDoesNotSupportAutomation, _
+            "Class does not support Automation"
+        
+            .Add _
+            alFileNameOrClassNameNotFoundDuringAutomationOperation, _
+            "File name or class name not found during Automation operation"
+        
+            .Add _
+            alObjectDoesNotSupportThisPropertyOrMethod, _
+            "Object does not support this property or method"
+        
+            .Add _
+            alAutomationError, _
+            "Automation error"
+        
+            .Add _
+            alConnectionToTypeLibraryOrObjectLibraryForRemoteProcessHasBeenLost, _
+            "Connection to type library or object library for remote process has been lost"
+        
+            .Add _
+            alAutomationObjectDoesNotHaveADefaultValue, _
+            "Automation object does not have a default value"
+        
+            .Add _
+            alObjectDoesNotSupportThisAction, _
+            "Object does not support this action"
+        
+            .Add _
+            alObjectDoesNotSupportNamEdarguments, _
+            "Object does not support namEdarguments"
+        
+            .Add _
+            alObjectDoesNotSupportCurrentLocaleSetting, _
+            "Object does not support current locale setting"
+        
+            .Add _
+            alNamedArgumentNotFound, _
+            "NamEdargument not found"
+        
+            .Add _
+            alArgumentNotOptionalOrInvalidPropertyAssignment, _
+            "Argument not optional or invalid property assignment"
+        
+            .Add _
+            alWrongNumberOfArgumentsOrInvalidPropertyAssignment, _
+            "Wrong number of arguments or invalid property assignment"
+        
+            .Add _
+            alObjectNotACollection, _
+            "Object not a collection"
+        
+            .Add _
+            alInvalidOrdinal, _
+            "Invalid ordinal"
+        
+            .Add _
+            alSpecifiEdcodeResourceNotFound, _
+            "SpecifiEdcode resource not found"
+        
+            .Add _
+            alCodeResourceNotFound, _
+            "Code resource not found"
+        
+            .Add _
+            alCodeResourceLockError, _
+            "Code resource lock error"
+        
+            .Add _
+            alThisKeyIsAlreadyAssociatedWithAnElementOfThisCollection, _
+            "This Key is already associatEdwith an element of this collection"
+        
+            .Add _
+            alVariableUsesATypeNotSupportEdinVisualBasic, _
+            "Variable uses a type not supportEdin Visual Basic"
+        
+            .Add _
+            alThisComponentDoesNotSupportTheSetOfEvents, _
+            "This component does not support the set of events"
+        
+            .Add _
+            alInvalidClipboardFormat, _
+            "Invalid Clipboard format"
+        
+            .Add _
+            alMethodOrDataMemberNotFound, _
+            "Method or data member not found"
+        
+            .Add _
+            alTheRemoteServerMachineDoesNotExistOrIsUnavailable, _
+            "The remote server machine does not exist or is unavailable"
+        
+            .Add _
+            alClassNotRegisterEdonLocalMachine, _
+            "Class not registerEdon local machine"
+        
+            .Add _
+            alCannotMakeAutoRedrawImage, _
+            "Cannot Make AutoRedraw image"
+        
+            .Add _
+            alInvalidPicture, _
+            "Invalid picture"
+        
+            .Add _
+            alPrinterError, _
+            "Printer error"
+        
+            .Add _
+            alPrinterDriverDoesNotSupportSpecifiEdproperty, _
+            "Printer driver does not support specifiEdproperty"
+        
+            .Add _
+            alProblemGettingPrinterInformationFromTheSystemMakeSureThePrinterIsSetUpCorrectly, _
+            "Problem getting printer information from the system Make sure the printer is set up correctly"
+        
+            .Add _
+            alInvalidPictureType, _
+            "Invalid picture type"
+        
+            .Add _
+            alCannotPrintFormImageToThisTypeOfPrinter, _
+            "Cannot print form image to this type of printer"
+        
+            .Add _
+            alCannotEmptyClipboard, _
+            "Cannot empty Clipboard"
+        
+            .Add _
+            alCannotOpenClipboard, _
+            "Cannot open Clipboard"
+        
+            .Add _
+            alCannotSaveFileToTEMPDirectory, _
+            "Cannot save file to TEMP directory"
+        
+            .Add _
+            alSearchTextNotFound, _
+            "Search text not found"
+        
+            .Add _
+            alReplacementsTooLong, _
+            "Replacements too long"
+        
+            .Add _
+            alApplicationDefinedOrObjectDefinedError, _
+            "Application-defined or object-defined error"
+        
+            .Add _
+                alSystemOutOfMemory, _
+               "System Out of memory"
+        
+            .Add _
+                alNoObject, _
+               "No object"
+        
+            .Add _
+                alClassIsNotSet, _
+               "Class is not set"
+        
+            .Add _
+                alUnableToActivateObject, _
+               "Unable to activate object"
+        
+            .Add _
+                alUnableToCreateEmbeddedObject, _
+               "Unable to create embeddEdobject"
+        
+            .Add _
+                alErrorSavingToFile, _
+               "Error saving to file"
+        
+            .Add _
+                alErrorLoadingFromFile, _
+               "Error loading from file"
+            
+            '.add alUnspecified, "An unspecified error has occurred"
+            
+            'Type Messages
+            .Add alIsNotSameType, "The types do not AreSame '{0}','{1}"
+            .Add alIsNotNumber, "Expected a number"
+            .Add alIsNotString, "Expected a string"
+            .Add alIsNotArray, "Expecting an array: Found '{0}'"
+            .Add alIsSingleItem, "Is a single Item"
+            .Add alHasNoItems, "Entity has no items"
+            ' .Add alIsNotIterableKeysByEnum, "Does not iterate by Keys"
+            ' .Add alIsNotIterableByMethod, "Does not iterate by method"
+            ' .Add alIsNotIterableOneBased, "Object does not interate from index 0"
+            ' .Add alIsNotIterableZeroBased, "Object does not iterate from 0"
+            .Add alIsNotCountable, "Rank cannot be counted"
+            .Add alInvalidRank, "Rank is not valid"
+         '   .Add alBoxesCannotBeBoxed, "Box instances cannot be Boxed"
+            'Class Messages
+            .Add alInvalidMethod, "Object '{0}' does not have a '{1}' method"
+            '.add alNoCountMethod, "Object '{0}' has no Count method"
+            ' .Add alHasNoInstance, "The object has no instance"
+            
+            ' .Add alUnexpectedEmpty, "Unexpected Empty in '{0}'"
+
+            ' .Add alMissingParameter, "An optional parameter has been omitted"
+            ' .Add alDisallowedOverwrite, "The current instance of '{0}' cannot be overridden by a new instance"
+
+            
+            ' Variant Issues
+            ' .Add alParamArrayIsNotAllocated, "ParamArray Has No Extent"
+            ' .Add alIterableHasNoExtent, "Iterable Has No Extent"
+            ' .Add alArrayIsNotAllocated, "Array Has No Extent"
+            
+            'Array Messages
+            ' .Add alArrayIsNotValid, "The paramter array was empty"
+            ' .Add alBoxHasNoItems, "Uninitialised array '{0}'"
+            ' .Add alArrayLacksRank, "Array does not have Rank {0}"
+            ' .Add alHasNoRanks, "Item has no Ranks"
+            ' .Add alInvalidCoordinates, "The coordinates are not located withing the bounds of the array"
+            ' .Add alRankOfZeroResetToOne, "A rank of 0 was reset to 1"
+            'Enum Messages
+            ' .Add alIsNotMember, "The value is not a valid enumeration ordinal"
+            ' .Add alAttachedItemIsNothing, "The EnumerationName AttachedItemIsNothing Item is nothing"
+            
+            ' Iterables Messages
+            ' .Add alIsNotIterable, "Type '{0}' is not Iterable"
+            ' .Add alDoesNotIterateByIndex, "Type '{0}' does not iterate by Index"
+            ' .Add alIterableHasNoItems, "The iterable {0} does not contain any items"
+            ' .Add alIsNotSameSize, "The two iterables are not the same size {0}, {1}"
+            ' .Add alIsNotSameRanks, "The number of Ranks do not AreSame"
+            ' .Add alIsNotSameShape, "The number of Ranks and/or the size of the Ranks so not AreSame"
+            ' .Add alLacksItem, "The item is not present"
+            '.add alInvalidDimensions, "Not a '{0}' dimensional array"
+            '.add alNotSingleDimension, "Item '{0}' is not a single dimension array"
+            ' .Add alRankLessThanFirstRank, "The requested Rank is less than the first Rank"
+            ' .Add alRankMorethanLastRank, "Type requested Rank is more than the last Rank'"
+            ' .Add alItemDoesNotSupportRanks, "Object does not support ranks '{0}'"
+            ' .Add alKeys, alNullString
+            ' .Add alItems, alNullString
+        '   .Add alIterableObjectCountIsNotValid, "Iterable does not have a valid count"
+            ' AutoKey Messages
+          '  .Add alAutoKeyResetNotAllowed, "Second attempty at initialising Autokey"
+          '  .Add alAutoKeyIsNotValid, "The provided autokey is not known {0}"
+            
+            ' Dictionary Messages
+         '   .Add alInvalidKey, "The specified key Type '{0}' does not mast the Host Kvp Key Type '{1}'"
+
+            '.add alNotIterableType, "Type '{0}' is not iterable"
+          '  .Add alAdjusterIsZero, "The Increment/Decrement value is zero"
+            'Range  Messages
+        
+            
+            ' .Add alRunLengthIsZero, "Invalid Run of 0"
+            ' .Add alDestinationTooSmall, "Cannot copy {0} items to array of {1}"
+            ' .Add alInsideBounds, "Specified number is inside the bounds"
+            .Add alOutsideBounds, "Specified value is outside the bounds"
+            'Fmt, Stringifier messages
+            ' .Add alInvalidArrayMarkup, "The Array Markup was invalid"
+            
+            ' .Add alInvalidType, "Type error: expecting {0} found '{1} in '{2}''"
+            ' .Add alInvalidArray, "Invalid Array, incorrect number of ranks"
+            
+            ' .Add alStartIndexWasZeroResetToOne, "The start index was zero.  Reset to one"
+            ' .Add alStartIndexExceedsItemCount, "The start index was more than the last index"
+            ' .Add alEndIndexWasZeroResetToOne, "The end index was zero.  Reset to one"
+            ' .Add alEndIndexResetToCount, "The end index was more than the last index"
+            ' .Add alRunLengthTooLong, "Run length was reduced to AreSame last index"
+            '.add alIndexWillOverrun, "Index will exceed size"
+            ' .Add alKeyNotFound, "Key of '{0}' was not found"
+            ' .Add alInvalidInsertCountZero, "Cannot insert if count is zero"
+            ' .Add alIndexBeforeFirstIndex, "Index less than FirstIndex"
+            ' .Add alIndexAfterLastIndex, "Index morethans LastIndex"
+            
+            .Add alUsePredeclaredIdInstance, "Method should be invoked from the default/predeclared instance of this class."
+            .Add alUseNewInstance, "Method should be invoked from a new instance of this class."
+            .Add alInvalidNew, "New should no be used for with this predecalredIs '{0}'"
+          '  .Add alInvalidInstanceCreation, "Use the PredeclaredId of this class only"
+
+            ' .Add alDoubleInitialisation, "Raises a run-time error if the specified object reference is already set."
+            ' .Add alNullReference, "Object reference '{0}' cannot be Nothing."
+            ' .Add alStringIsEmpty, "String cannot be empty."
+
+            ' .Add alActionNotExecutable, "The enumeration action is not an executable object"
+            ' .Add alEnumLacksMember, "Not a member of Enumeration '{0}'"
+            ' .Add alDisAllowedEnumerationMember, "Method does not allow enummeration member at index {0}"
+            ' .Add alUnexpectedItem, "Don't know how to parse Type '{0}'"
+            
+            '
+            
+            ' Parameter messages
+            ' .Add alZeroIsInvalidParameter, "A value of zero is not valid"
+            ' .Add alIterableIsEmpty, "The parameter array is empty"
+            'Result messages
+            
+            '.Add alResultOkayInputSelectorIsInvalid, "The value for the input type for Results.SetOkay is not valid"
+            'kvp issues
+            
+            '.Add alKvpSecondParamterIsNotValid, "The second parameter could not be used to construct a Kvp"
+            
+            'General Messages
+            ' .Add alNotEqual, "Not equal"
+            ' .Add alUnspecified, "The type of error was not specified"
+            ' .Add alCountCannotBeLessThanOne, "Count cannot be zero"
+        End With
+            
+    End Sub
+
+
+    Private Sub ValidateOrdinal(ByVal ipAlertOrd As AlertOrd)
+        
+        If s.AlertOrdToMessage Is Nothing Then SetupDictionaries
+            
+        If s.AlertOrdToMessage.LacksKey(ipAlertOrd) Then
+            
+            '@Ignore FunctionReturnValueDiscarded
+            'Res.SetNotOkay EnumLacksMember
+                
+            Exit Sub
+            
+        End If
+        
+    End Sub
+
+    Public Sub EnsureDictionariesExist()
+        If s.AlertOrdToName Is Nothing Then
+            SetupDictionaries
+        End If
+    End Sub
+    
+    Public Function Names() As Variant
+        EnsureDictionariesExist
+        Return s.AlertOrdToName.Items
+    End Function
+
+    Public Function vbErrors() As Variant
+        EnsureDictionariesExist
+        Return s.AlertOrdToName.Keys
+    End Function
+
+    Public Function Messages() As Variant
+        EnsureDictionariesExist
+        Return s.AlertOrdToMessage.Items
+    End Function
+
+    '@Returns the ordinal value of an enum
+    Public Property Get Ord(ByVal ipAlertOrd As AlertOrd) As AlertOrd
+        EnsureDictionariesExist
+        If s.AlertOrdToName.HoldsKey(ipAlertOrd) Then
+            Return ipAlertOrd
+        End If
+        
+    End Property
+
+
+    Public Property Get Message(ByVal ipAlertOrd As AlertOrd) As Variant
+        EnsureDictionariesExist
+        ValidateOrdinal ipAlertOrd
+        Return s.AlertOrdToMessage.HoldsKey(ipAlertOrd)
+    
+        
+    End Property
+
+    Public Property Get Name(ByVal ipAlertOrd As AlertOrd) As String
+        EnsureDictionariesExist
+        ValidateOrdinal ipAlertOrd
+        Return s.AlertOrdToName.Item(ipAlertOrd)
+    End Property
+
+
+    Public Function HoldsOrd(ByVal ipAlertOrd As AlertOrd) As Boolean
+        Return s.AlertOrdToName.HoldsKey(ipAlertOrd)
+    End Function
+
+    Public Function LacksOrd(ByVal ipAlertOrd As AlertOrd) As Boolean
+        Return s.AlertOrdToName.LacksKey(ipAlertOrd)
+    End Function
+
+
+    Public Property Get TypeName() As String
+        Return MY_TYPENAME
+    End Property
+
+
+    Public Property Get Count() As Long
+        Return s.AlertOrdToName.Count
+    End Property
+End Class

@@ -1,0 +1,51 @@
+Class oF32
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oF32"
+    
+    Private Type State
+    
+        Item                                        As Single
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipSingle As Single) As oF32
+        With New oF32
+            Return .ConstructInstance(ipSingle)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipSingle As Single) As oF32
+        s.Item = ipSingle
+    End Function
+    
+    
+    Public Property Get Val() As Single
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipSingle As Single)
+        s.Item = ipSingle
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+
+End Class

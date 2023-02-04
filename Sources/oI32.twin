@@ -1,0 +1,52 @@
+Class oI32
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oI32"
+    
+    Private Type State
+    
+        Item                                        As long
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipLong As Long) As oI32
+        With New oI32
+            Return .ConstructInstance(ipLong)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipLong As Long) As oI32
+        s.Item = ipLong
+        Return Me
+    End Function
+    
+    
+    Public Property Get Val() As Long
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipLong As Long)
+        s.Item = ipLong
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+    
+End Class

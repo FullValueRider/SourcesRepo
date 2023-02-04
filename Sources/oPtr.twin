@@ -1,0 +1,50 @@
+Class oPtr
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oPtr"
+    
+    Private Type State
+    
+        Item                                        As LongPtr
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipLongPtr As LongPtr) As oPtr
+        With New oPtr
+            Return .ConstructInstance(ipLongPtr)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipLongPtr As LongPtr) As oPtr
+        s.Item = ipLongPtr
+    End Function
+    
+    
+    Public Property Get Val() As LongPtr
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipLongPtr As LongPtr)
+        s.Item = ipLongPtr
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+End Class

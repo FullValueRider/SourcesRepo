@@ -1,0 +1,50 @@
+Class At
+
+    Attribute VB_GlobalNameSpace = False
+    Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+    '@Description("A class to allow a single variable to provide coordinates for multidimensional arrays")
+    Option Explicit
+
+
+    Private Type Properties
+    	Address()                                           As Long
+    End Type
+    
+    Private p                               As Properties
+    
+    
+    Public Function deb([ TypeHint (Long) ] ParamArray ipAddress() As Variant) As At
+        'Dim myAddress As oArr = oArr.deb(ipAddress)
+        With New At
+            Return .ConstructInstance(ipAddress)
+        End With
+    End Function
+    
+    Friend Function ConstructInstance(ByRef ipFPA As Variant) As At
+        ' We may need to reverse the array below
+        ReDim p.Address(0 To UBound(ipFPA) - LBound(ipFPA) + 1)
+        Dim myIndex As Long = 0
+        Dim myItem As Variant
+        For Each myItem In ipFPA
+            p.Address(myIndex) = CInt(myItem)
+            myIndex += 1
+        Next
+        Return Me
+    End Function
+    
+    'The safe array Get and Put calls require a pointer to a cstyle array of integers.
+    Public Function AddressPtr() As LongPtr
+        Return CLngPtr(Unsafe.GetSafeArrayPtr(p.Address) + Unsafe.SafeArrayOffset.pvdata)
+    End Function
+    
+    
+    Public Property Get Item() As Long()
+        Return p.Address
+    End Property
+    
+    Public Property Let Item(ByRef ipArray() As Long)
+        p.Address = ipArray
+    End Property
+End Class

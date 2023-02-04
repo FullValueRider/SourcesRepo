@@ -1,0 +1,51 @@
+Class oDec
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oDec"
+    
+    Private Type State
+    
+        Item                                        As Decimal
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipDecimal As Decimal) As oDec
+        With New oDec
+            Return .ConstructInstance(ipDecimal)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipDecimal As Decimal) As oDec
+        s.Item = ipDecimal
+    End Function
+    
+    
+    Public Property Get Val() As Decimal
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipDecimal As Decimal)
+        s.Item = ipDecimal
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+
+End Class

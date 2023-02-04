@@ -1,0 +1,1657 @@
+Module TestSER
+
+	
+    Option Explicit
+    Option Private Module
+    '@IgnoreModule
+    '@TestModule
+
+
+    #If twinbasic Then
+        'Do nothing
+    #Else
+
+    '@ModuleInitialize
+    Public Sub ModuleInitialize()
+        'this method runs once per module.
+        
+    End Sub
+
+    '@ModuleCleanup
+    Public Sub ModuleCleanup()
+        'this method runs once per module.
+        Set Assert = Nothing
+        Set Fakes = Nothing
+    End Sub
+
+    '@TestInitialize
+    Public Sub TestInitialize()
+        'This method runs before every test in the module..
+    End Sub
+
+    '@TestCleanup
+    Public Sub TestCleanup()
+        'this method runs after every test in the module.
+    End Sub
+    #End If
+
+
+    Public Sub SERTests()
+
+    #If twinbasic Then
+        Debug.Print CurrentProcedureName ; vbTab, vbTab, vbTab,
+    #Else
+        Debug.Print ErrEx.LiveCallstack.ProcedureName; vbTab, vbTab,
+    #End If
+    
+        ' Test no Start/End/Run
+        Test0_NativeFirst0NativeEnd9
+        
+        ' Test  Start Only
+        Test01a_NativeFirst0NativeEnd9NormStart3
+        Test01b_NativeFirst0NativeEnd9NormStartNeg3
+        Test01c_NativeFirst0NativeEnd9NormStartPastBounds
+        Test01d_NativeFirst0NativeEnd9NormStartNegPastBounds
+        Test01e_NativeFirstNeg4NativeEnd9NormStart3
+        Test01f_NativeFirstNeg4NativeEnd9NormStartNeg3
+        Test01g_NativeFirstNeg12NativeEndNeg2NormStart3
+        Test01h_NativeFirstNeg12NativeEndNeg2NormStartNeg3
+        
+        'Test End Only
+        Test02a_NativeFirst0NativeEnd9NormEnd7
+        Test02b_NativeFirst0NativeEnd9NormEndNeg3
+        Test02c_NativeFirst0NativeEnd9NormEndPastBounds
+        Test02d_NativeFirst0NativeEnd9NormEndNegPastBounds
+        Test02e_NativeFirstNeg4NativeEnd9NormEnd7
+        Test02f_NativeFirstNeg4NativeEnd9NormEndNeg4
+        Test02g_NativeFirstNeg12NativeEndNeg2NormEnd3
+        Test02h_NativeFirstNeg12NativeEndNeg2NormStartNeg4
+        
+        'Test Run Only
+        Test03a_NativeFirst0NativeEnd9Run3
+        Test03b_NativeFirst0NativeEnd9RunNeg4
+        Test03c_NativeFirst0NativeEnd9RunPastBounds
+        Test03d_NativeFirst0NativeEnd9NegRunPastBounds
+        Test03e_NativeFirstNeg4NativeEnd9Run7
+        Test03f_NativeFirstNeg4NativeEnd9RunNeg4
+        Test03g_NativeFirstNeg12NativeEndNeg2Run3
+        Test03h_NativeFirstNeg12NativeEndNeg2NormStartNeg4
+        
+        Test04a_NativeFirst0NativeEnd9NormStart3NormEnd8
+        Test04b_NativeFirst0NativeEnd9NormStart3NormEndNeg3
+        Test04c_NativeFirstNeg4NativeEnd9NormStartNeg9NormEndNeg3
+        
+        Test05b_NativeFirstneg4NativeLast9NormStart3NormRun7
+        Test05c_NativeFirstneg4NativeLast9NormStartneg8NormRun7
+        Test05d_NativeFirstneg4NativeLast9NormStartneg3RunNeg7
+       
+        Test06a_NativeFirst0NativeLast9NormEnd8Run7
+        Test06b_NativeFirst0NativeLast9NormEndneg3Run7
+        Debug.Print "Testing completed "
+        
+    End Sub
+
+      '@TestMethod("Ranges")
+    Public Sub Test0_NativeFirst0NativeEnd9()
+        
+    #If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+    #Else
+        myProcedureName = ErrEx.LiveCallstack.ProcedureName
+        myComponentName = ErrEx.LiveCallstack.ModuleName
+    #End If
+        
+    'On Error GoTo TestFail
+        
+    '      With mySer
+    '     ' Known, fixed values
+    '     .NativeFirst = -2
+    '     .NativeLast = 7
+    '     .NormFirst = 1
+        
+    '     ' calculated fom known values
+    '     .Size = .NativeLast - .NativeFirst + 1
+    '     .NormLast = mySer.NormFirst + mySer.Size - 1
+        
+    '     ' the optional parameters that we have to calculate
+    '     .NormStart = 1
+    '     .NormEnd = 5
+    '     .Run = 4
+        
+    '     ' values that are best calculated once the Norm start/end/run values are established
+    '     .NativeStart = 3
+    '     .NativeEnd = 8
+        
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 0&, 9&, 1&, 10&, 1&, 10&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+
+    '@TestMethod("Ranges")
+    Public Sub Test01a_NativeFirst0NativeEnd9NormStart3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 2
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 10
+    '       IsNormFirst     = 1
+    '       IsRun           = 8
+    '       IsNormLast      = 10
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 2&, 9&, 3&, 10&, 1&, 8&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+    '@TestMethod("Ranges")
+    Public Sub Test01b_NativeFirst0NativeEnd9NormStartNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' Normstart = -3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 7
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 8
+    '       IsNormEnd       = 10
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 7&, 9&, 8&, 10&, 1&, 3&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+    '@TestMethod("Ranges")
+    Public Sub Test01c_NativeFirst0NativeEnd9NormStartPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 15
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+    
+    '@TestMethod("Ranges")
+    Public Sub Test01d_NativeFirst0NativeEnd9NormStartNegPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -15
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+
+ '@TestMethod("Ranges")
+    Public Sub Test01e_NativeFirstNeg4NativeEnd9NormStart3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart = 3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = -3
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 14
+    '       IsNormFirst     = 1
+    '       IsRun           = 12
+    '       IsNormLast      = 14
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, -2&, 9&, 3&, 14&, 1&, 12&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test01f_NativeFirstNeg4NativeEnd9NormStartNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart =-3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = 7
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 12
+    '       IsNormEnd       = 14
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 14
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, 7&, 9&, 12&, 14&, 1&, 3&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test01g_NativeFirstNeg12NativeEndNeg2NormStart3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart =3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =-10
+    '       IsNativeEnd     = -2
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 11
+    '       IsNormFirst     = 1
+    '       IsRun           = 9
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -10&, -2&, 3&, 11&, 1&, 9&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test01h_NativeFirstNeg12NativeEndNeg2NormStartNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart =3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =-4
+    '       IsNativeEnd     = -2
+    '       IsNormStart     = 9
+    '       IsNormEnd       = 11
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -4&, -2&, 9&, 11&, 1&, 3&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = -3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+   '@TestMethod("Ranges")
+    Public Sub Test02a_NativeFirst0NativeEnd9NormEnd7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =7
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 0
+    '       IsNativeEnd     = 6
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 7
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 0&, 6&, 1&, 7&, 1&, 7&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 7
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test02b_NativeFirst0NativeEnd9NormEndNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =-3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 0
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 8
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 0&, 7&, 1&, 8&, 1&, 8&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = -3
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+ '@TestMethod("Ranges")
+    Public Sub Test02c_NativeFirst0NativeEnd9NormEndPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 15
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+    
+    '@TestMethod("Ranges")
+    Public Sub Test02d_NativeFirst0NativeEnd9NormEndNegPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = -15
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+
+   '@TestMethod("Ranges")
+    Public Sub Test02e_NativeFirstNeg4NativeEnd9NormEnd7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =7
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = -4
+    '       IsNativeEnd     = 2
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 7
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, -4&, 2&, 1&, 7&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 7
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test02f_NativeFirstNeg4NativeEnd9NormEndNeg4()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =-4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = -4
+    '       IsNativeEnd     = 6
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 11
+    '       IsNormFirst     = 1
+    '       IsRun           = 11
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, -4&, 6&, 1&, 11&, 1&, 11&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = -4
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+
+Public Sub Test02g_NativeFirstNeg12NativeEndNeg2NormEnd3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart =3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =-12
+    '       IsNativeEnd     = -10
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 3
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -12&, -10&, 1&, 3&, 1&, 3&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 3
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test02h_NativeFirstNeg12NativeEndNeg2NormStartNeg4()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormEnd =-4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =-12
+    '       IsNativeEnd     = -5
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 8
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -12&, -5&, 1&, 8&, 1&, 8&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = -4
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test03a_NativeFirst0NativeEnd9Run3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormRun =4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 0
+    '       IsNativeEnd     = 2
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 3
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 0&, 2&, 1&, 3&, 1&, 3&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 3
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test03b_NativeFirst0NativeEnd9RunNeg4()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormRun =-4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 6
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 7
+    '       IsNormEnd       = 10
+    '       IsNormFirst     = 1
+    '       IsRun           = 4
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 6&, 9&, 7&, 10&, 1&, 4&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = -4
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test03c_NativeFirst0NativeEnd9RunPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = 15
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+    
+    '@TestMethod("Ranges")
+    Public Sub Test03d_NativeFirst0NativeEnd9NegRunPastBounds()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+ 
+        'Arrange:
+        Dim myExpected As AlertOrd = AlertOrd.alOutsideBounds
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = -15
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.Reason
+
+        'Assert:
+        AssertStrictAreEqual myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+    End Sub
+    
+    '@TestMethod("Ranges")
+    Public Sub Test03e_NativeFirstNeg4NativeEnd9Run7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =7
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = -4
+    '       IsNativeEnd     = 2
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 7
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, -4&, 2&, 1&, 7&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = 7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test03f_NativeFirstNeg4NativeEnd9RunNeg4()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd =-4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = 6
+    '       IsNativeEnd     = 9
+    '       IsNormStart     = 11
+    '       IsNormEnd       = 14
+    '       IsNormFirst     = 1
+    '       IsRun           = 4
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, 6&, 9&, 11&, 14&, 1&, 4&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = -4
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+
+Public Sub Test03g_NativeFirstNeg12NativeEndNeg2Run3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormStart =3
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =-12
+    '       IsNativeEnd     = -10
+    '       IsNormStart     = 1
+    '       IsNormEnd       = 3
+    '       IsNormFirst     = 1
+    '       IsRun           = 3
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -12&, -10&, 1&, 3&, 1&, 3&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = 3
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test03h_NativeFirstNeg12NativeEndNeg2NormStartNeg4()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    'NormEnd =-4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -12
+    '       IsNativeLast    =-2
+    '       IsSize          = 11
+    '       IsNativeStart   =--5
+    '       IsNativeEnd     = -2
+    '       IsNormStart     = 8
+    '       IsNormEnd       = 11
+    '       IsNormFirst     = 1
+    '       IsRun           = 4
+    '       IsNormLast      = 11
+    ' End With
+    
+        
+        'Arrange:
+        Dim myExpected As Variant = Array(-12&, -2&, 11&, -5&, -2&, 8&, 11&, 1&, 4&, 11&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -12
+        Dim myNativeLastIndex As Long = -2
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = -4
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test04a_NativeFirst0NativeEnd9NormStart3NormEnd8()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 2
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 6
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 2&, 7&, 3&, 8&, 1&, 6&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = 8
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test04b_NativeFirst0NativeEnd9NormStart3NormEndNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 2
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 6
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 2&, 7&, 3&, 8&, 1&, 6&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = -3
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test04c_NativeFirstNeg4NativeEnd9NormStartNeg9NormEndNeg3()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = 1
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 6
+    '       IsNormEnd       = 12
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, 1&, 7&, 6&, 12&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -9
+        Dim myNormEndIndex As Variant = -3
+        Dim myRun As Variant = Empty
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test05b_NativeFirstneg4NativeLast9NormStart3NormRun7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = -2
+    '       IsNativeEnd     = 4
+    '       IsNormStart     = 3
+    '       IsNormEnd       = 9
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, -2&, 4&, 3&, 9&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = 3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = 7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test05c_NativeFirstneg4NativeLast9NormStartneg8NormRun7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = 2
+    '       IsNativeEnd     = 8
+    '       IsNormStart     = 7
+    '       IsNormEnd       = 13
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, 2&, 8&, 7&, 13&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -8
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = 7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test05d_NativeFirstneg4NativeLast9NormStartneg3RunNeg7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormStart = 3 Normend=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = -4
+    '       IsNativeLast    = 9
+    '       IsSize          = 14
+    '       IsNativeStart   = 1
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 6
+    '       IsNormEnd       = 12
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 14
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(-4&, 9&, 14&, 1&, 7&, 6&, 12&, 1&, 7&, 14&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = -4
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = -3
+        Dim myNormEndIndex As Variant = Empty
+        Dim myRun As Variant = -7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+
+'@TestMethod("Ranges")
+    Public Sub Test06a_NativeFirst0NativeLast9NormEnd8Run7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd = 8 Run=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 1
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 2
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 1&, 7&, 2&, 8&, 1&, 7&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = 8
+        Dim myRun As Variant = 7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+
+'@TestMethod("Ranges")
+    Public Sub Test06b_NativeFirst0NativeLast9NormEndneg3Run7()
+        
+#If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+#Else
+    myProcedureName = ErrEx.LiveCallstack.ProcedureName
+    myComponentName = ErrEx.LiveCallstack.ModuleName
+#End If
+    ' NormEnd = -3 Run=4
+    'On Error GoTo TestFail
+        
+    '       IsNativeFirst   = 0
+    '       IsNativeLast    = 9
+    '       IsSize          = 10
+    '       IsNativeStart   = 1
+    '       IsNativeEnd     = 7
+    '       IsNormStart     = 2
+    '       IsNormEnd       = 8
+    '       IsNormFirst     = 1
+    '       IsRun           = 7
+    '       IsNormLast      = 10
+    ' End With
+
+        'Arrange:
+        Dim myExpected As Variant = Array(0&, 9&, 10&, 1&, 7&, 2&, 8&, 1&, 7&, 10&)
+        
+        Dim myResult As Variant
+        Dim myNativeFirstIndex As Long = 0
+        Dim myNativeLastIndex As Long = 9
+        Dim myNormStartIndex As Variant = Empty
+        Dim myNormEndIndex As Variant = -3
+        Dim myRun As Variant = 7
+        
+        Dim mySer As SER = Ranges.ResolveStartEndRun(myNativeFirstIndex, myNativeLastIndex, myNormStartIndex, myNormEndIndex, myRun)
+        
+        myResult = mySer.ToArray
+
+        'Assert:
+        AssertStrictSequenceEquals myExpected, myResult, myProcedureName
+
+    TestExit:
+        Exit Sub
+    TestFail:
+        Debug.Print myComponentName, myProcedureName, " raised an error: #" & Err.Number & " - " & Err.Description
+        Resume TestExit
+End Sub
+End Module

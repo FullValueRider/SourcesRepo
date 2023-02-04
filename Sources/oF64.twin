@@ -1,0 +1,51 @@
+Class oF64
+
+	Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Const MY_TYPENAME                               As String = "oF64"
+    
+    Private Type State
+    
+        Item                                        As Double
+        
+    End Type
+    
+    Private s                                       As State
+    
+    
+    [ DefaultMember ]
+    Public Function Deb(ByVal ipDouble As Double) As oF64
+        With New oF64
+            Return .ConstructInstance(ipDouble)
+        End With
+        
+    End Function
+    
+    Friend Function ConstructInstance(ByVal ipDouble As Double) As oF64
+        s.Item = ipDouble
+    End Function
+    
+    
+    Public Property Get Val() As Double
+        Return s.Item
+    End Property
+    
+    Public Property Let Val(ByVal ipDouble As Double)
+        s.Item = ipDouble
+    End Property
+    
+    
+    Public Function ToString() As String
+        Return VBA.CStr(s.Item)
+    End Function
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+
+End Class

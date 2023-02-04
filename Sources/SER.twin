@@ -1,0 +1,191 @@
+Class SER
+    ' it would be possible to emulate this class using a seq
+    ' so I guess to make it a proper independent class I need to move the startrunend
+    ' code from ranges nto this class.
+    ' That's a todo
+    Attribute VB_GlobalNameSpace = False
+    Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+
+    Option Explicit
+    
+    Public Enum SerField
+        
+        ' for the moment just concentrate on start and run values
+        IsNativeFirst = 1
+        IsNativeLast
+        IsSize
+        IsNativeStart
+        IsNativeEnd
+        IsNormStart
+        IsNormEnd
+        IsNormFirst
+        IsRun
+        IsNormLast
+        
+    End Enum
+    
+    Public Enum ReasonInvalid
+    
+        StartBeforeFirst
+        StartAfterLast
+        EndBeforeFirst
+        EndAfterLast
+        
+    End Enum
+    
+    Private Type properties
+        Fields                                      As Seq
+        Invalid                                     As Boolean
+        Reason                                      As AlertOrd
+        Message                                     As String
+        
+    End Type
+
+    Private p                                       As Properties
+
+    [ DefaultMember ]
+    Public Function Deb(ByRef ipSeq As Seq) As SER
+        With New SER
+            Set Deb = .ConstructInstance(ipSeq)
+        End With
+    End Function
+
+    Public Function Deb() As SER
+        Dim mySeq As Seq = Seq.Deb.AddItems(Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty)
+        With New SER
+            Return .ConstructInstance(mySeq)
+        End With
+    End Function
+    
+    Friend Function ConstructInstance(ipSeq As Seq) As SER
+        Set p.Fields = ipSeq
+        p.Invalid = False
+        Return Me
+    End Function
+
+
+    Public Sub SetInvalid(Optional ipAlertOrd As AlertOrd = AlertOrd.alNotOkay, Optional ByRef ipMessage As String = vbnullstring)
+        p.Invalid = True
+        p.Reason = ipAlertOrd
+        If VBA.Len(ipMessage) > 0 Then
+            p.Message = "Lib.Ranges.ResolveStrartEndRun:" & Char.twSpace & ipMessage
+        Else
+            p.Message = "Lib.Ranges.ResolveStrartEndRun:" & Char.twSpace & enums.Alert.Message(p.Reason)
+        End If
+    End Sub
+    
+    Public Property Get IsInvalid() As Boolean
+        Return p.Invalid
+    End Property
+    
+    Public Property Get Reason() As AlertOrd
+        Return p.Reason
+    End Property
+ 
+    
+    Public Property Get Message() As String
+        Return p.Message
+    End Property
+    
+    
+    Public Property Get NativeFirst() As Long
+        Return CLng(p.Fields.Item(IsNativeFirst))
+    End Property
+    
+    Public Property Let NativeFirst(ByRef ipNativeFirst As Long)
+        p.Fields.Item(IsNativeFirst) = ipNativeFirst
+    End Property
+    
+    
+    Public Property Get NativeLast() As Long
+        Return CLng(p.Fields.Item(IsNativeLast))
+    End Property
+    
+    Public Property Let NativeLast(ByRef ipNativeLast As Long)
+        p.Fields.Item(IsNativeLast) = ipNativeLast
+    End Property
+    
+    
+    Public Property Get Size() As Long
+        Return CLng(p.Fields.Item(IsSize))
+    End Property
+    
+    Public Property Let Size(ByRef ipSize As Long)
+        p.Fields.Item(IsSize) = ipSize
+    End Property
+    
+    
+    Public Property Get NativeStart() As Long
+         Return CLng(p.Fields.Item(IsNativeStart))
+    End Property
+    
+    Public Property Let NativeStart(ByRef ipNativeStart As Long)
+        p.Fields.Item(IsNativeStart) = ipNativeStart
+    End Property
+    
+    
+    Public Property Get NativeEnd() As Long
+        Return CLng(p.Fields.Item(IsNativeEnd))
+    End Property
+    
+    Public Property Let NativeEnd(ByRef ipNativeEnd As Long)
+        p.Fields.Item(IsNativeEnd) = ipNativeEnd
+    End Property
+    
+    
+    Public Property Get NormStart() As Long
+        Return CLng(p.Fields.Item(IsNormStart))
+    End Property
+    
+    Public Property Let NormStart(ByRef ipNormStart As Long)
+        p.Fields.Item(IsNormStart) = ipNormStart
+    End Property
+    
+    
+    Public Property Get NormEnd() As Long
+         Return CLng(p.Fields.Item(IsNormEnd))
+    End Property
+    
+    Public Property Let NormEnd(ByRef ipNormEnd As Long)
+        p.Fields.Item(IsNormEnd) = ipNormEnd
+    End Property
+    
+    
+    Public Property Get NormFirst() As Long
+        Return CLng(p.Fields.Item(IsNormFirst))
+    End Property
+    
+    Public Property Let NormFirst(ByRef ipNormFirst As Long)
+        p.Fields.Item(IsNormFirst) = ipNormFirst
+    End Property
+    
+    
+    Public Property Get Run() As Long
+        Return CLng(p.Fields.Item(IsRun))
+    End Property
+    
+    Public Property Let Run(ByRef ipRun As Long)
+        p.Fields.Item(IsRun) = ipRun
+    End Property
+    
+    
+    Public Property Get NormLast() As Long
+        Return CLng(p.Fields.Item(IsNormLast))
+    End Property
+        
+    Public Property Let NormLast(ByRef ipNormLast As Long)
+        p.Fields.Item(IsNormLast) = ipNormLast
+    End Property
+    
+    
+     Public Property Get ToArray() As Variant
+        Return p.Fields.ToArray
+    End Property
+    
+    Public Property Get ToSeq() As Seq
+        Return p.Fields.Clone
+    End Property
+    
+End Class
