@@ -1,5 +1,7 @@
 Class gSeq(Of T)
-
+    ' can we make a generic version of the seq class
+    ' currently gets stuck with duplicate definition of the oArr class (which eludes me!!)
+    
 	' Emulates the MS ArrayList as follows
     ' 
     ' Constructors:     Implemented with enhancement
@@ -20,7 +22,7 @@ Class gSeq(Of T)
     ' Add:              Implemented see also AddItems
     ' AddRange:         Implemented with enhancement
     ' BinarySearch:     Not Implemented See CountIt, FilterIt
-    ' Clear             Implemented Sugar foir RemoveAll 
+    ' Clear             Implemented Sugar for RemoveAll 
     ' Clone:            Implemented - shallow copy of objects
     ' Contains          Implemented Sugar for HoldsItem, See Also LacksItem
     ' CopyTo:           Implemented with enhancement, see also Slice
@@ -123,12 +125,12 @@ Class gSeq(Of T)
 
     Friend Function ConstructInstance(ByVal ipArray As oArr(Of T)) As Object
     	s.LastIndex = 0
-        s.Size = ArrayInfo.Count(ipArray.Val)
+        s.Size = ipArray.Count
         Resize
         
         Dim myIndex As Long
         For myIndex = 1 To s.Size
-            Add ipArray.Val.val(myIndex)
+            Add ipArray.Val(myIndex)
         Next
         Return Me
     End Function
@@ -303,14 +305,14 @@ Class gSeq(Of T)
     '@Description("Adds one or more items as is")
     Public Function AddItems(ByRef ipItems As oArr(Of T)) As Object
         ' Revised 2022 Nov 25: To use for next
-        If ArrayInfo.IsNotAllocated(ipItems.Val) Then
+        If ipItems.IsNotAllocated Then
             Return Me
         End If
         
         ' for add items we don't try to interpret what an item is, we just add it
         Dim myIndex As Long
-        For myIndex = 0 To ArrayInfo.Count(ipItems.Val.val) - 1
-            Add ipItems.Val.val(myIndex)
+        For myIndex = 0 To ipItems.Count - 1
+            Add ipItems.Val(myIndex)
         Next
         
         Return Me

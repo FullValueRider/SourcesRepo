@@ -33,26 +33,34 @@ Class oArr(Of T)
   
     Friend Function ConstructInstance(ByRef ipArray As pArray) As Object
         
-        If arrayinfo.IsNotArray(ipArray.Val) Then
-            return Nothing
+        If ArrayInfo.IsNotArray(ipArray.Val) Then
+            Return Nothing
         End If
         s.Items = ipArray.Val
         
         Return Me
     End Function
     
+    Public Function Count() As Long
+        Return ArrayInfo.Count(s.Items)
+    End Function
     
-    Public Property Get Val() As Variant
-        Return s.Items
+    Public Function IsNotAllocated() As Boolean
+        Return ArrayInfo.IsNotAllocated(s.Items)
+    End Function
+    
+    Public Property Get Val(ByVal ipIndex As Long) As T
+        Return s.Items(ipIndex)
     End Property
     
-    Public Property Let Val(ByVal ipVariant As Variant)
-        s.Items = ipVariant
+    Public Property Let Val(ByVal ipIndex As Long, ByVal ipItem As Variant(Of T))
+        s.Items(ipIndex) = ipItem
     End Property
     
     
+        
     Public Function ToString() As String
-        Return fmt.Text("{0}", s.Items)
+        Return Fmt.Text("{0}", s.Items)
     End Function
     
     
