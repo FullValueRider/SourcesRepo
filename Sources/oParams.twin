@@ -1,0 +1,69 @@
+Class oParams
+
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+    ' a Class to formalise a ParamArray type
+    ' part of the effort to eliminate variants from method signatures.
+    
+    Const MY_TYPENAME                                       As String = "oParams"
+    
+    Private Type State
+        oParams()                                      As Variant
+    End Type
+    
+    Private s                                           As State
+
+
+    [ DefaultMember ]
+    Public Function Deb(ParamArray ipParams() As Variant) As oParams
+        With New oParams
+            Return .ConstructInstance(VBA.CVar(ipParams))
+        End With
+    End Function
+    
+    
+    Friend Function ConstructInstance(ByRef ipParams As Variant) As oParams
+    
+        Select Case True
+        
+            Case ArrayInfo.IsNotAllocated(ipParams)
+                s.oParams = Array()
+        
+            Case ArrayInfo.HasOneItem(ipParams)
+                
+                If VBA.TypeName(ipParams(0)) = MY_TYPENAME Then
+                	
+                    Return ipParams(0)
+                
+                Else
+                	
+                    s.oParams = ipParams(0)
+               
+                End If
+            
+        End Select
+        
+        Return Me
+        
+    End Function
+    
+    
+    Public Property Get Items() As Variant()
+        Return s.oParams
+    End Property
+    
+    
+    Public Property Let Items(ByRef ipItems() As Variant)
+        s.oParams = ipItems
+    End Property
+    
+    
+    Public Function Typename() As String
+        Return MY_TYPENAME
+    End Function
+    
+End Class

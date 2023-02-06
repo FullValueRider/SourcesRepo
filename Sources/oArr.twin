@@ -10,7 +10,7 @@ Class oArr(Of T)
     
     Private Type State
     
-        Items                                       As variant
+        Item                                        As Variant
         
     End Type
     
@@ -18,49 +18,29 @@ Class oArr(Of T)
     
     
     [ DefaultMember ]
-    Public Function Deb(ByRef ipArray As pArray) As Object
-        With New oArr(Of T)
-            Return .ConstructInstance(ipArray)
+    Public Function Deb(ByVal ipVariant As Variant) As oArr
+        With New oArr
+            Return .ConstructInstance(ipVariant)
         End With
-    End Function
-    
-    ' Public function Deb(byref  ipArray as object ) as Object
-    '     with new oArr(of T)
-    '         return .ConstructInstance(ipArray)
-    '     end with
-    ' end function
-    
-  
-    Friend Function ConstructInstance(ByRef ipArray As pArray) As Object
         
-        If ArrayInfo.IsNotArray(ipArray.Val) Then
-            Return Nothing
-        End If
-        s.Items = ipArray.Val
-        
-        Return Me
     End Function
     
-    Public Function Count() As Long
-        Return ArrayInfo.Count(s.Items)
+    Friend Function ConstructInstance(ByVal ipVariant As Variant) As oArr
+        s.Item = ipVariant
     End Function
     
-    Public Function IsNotAllocated() As Boolean
-        Return ArrayInfo.IsNotAllocated(s.Items)
-    End Function
     
-    Public Property Get Val(ByVal ipIndex As Long) As T
-        Return s.Items(ipIndex)
+    Public Property Get Val() As Variant
+        Return s.Item
     End Property
     
-    Public Property Let Val(ByVal ipIndex As Long, ByVal ipItem As Variant(Of T))
-        s.Items(ipIndex) = ipItem
+    Public Property Let Val(ByVal ipVariant As Variant)
+        s.Item = ipVariant
     End Property
     
     
-        
     Public Function ToString() As String
-        Return Fmt.Text("{0}", s.Items)
+        Return fmt.dbg(s.Item)
     End Function
     
     

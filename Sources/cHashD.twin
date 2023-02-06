@@ -5,9 +5,11 @@ Class cHashD
     Attribute VB_PredeclaredId = False
     Attribute VB_Exposed = True
     Option Explicit
-    '@Description("DIctionary based on cHashD by Olaf Schmidt August 2016 (enhanced about mixed, variable KeyTypes and Remove-functions in 2020")
-
-    Private Const NoEntry As Variant = Empty
+    '@Description("Dictionary based on cHashD by Olaf Schmidt August 2016 (enhanced about mixed, variable KeyTypes and Remove-functions in 2020")
+    ' https://www.vbforums.com/showthread.php?834515-Simple-and-fast-lightweight-HashList-Class-(no-APIs)
+    ' some updates were required due to errors found in the original code.  see #53 of the above link
+    
+    Private Const NoEntry                               As Variant = Empty
     Private Const DynTakeOver As Long = 4, HMul As Long = 3727 'fixed HashSlot-amount and Hash-Multiplikator
 
     Private Type HashTableEntry
@@ -82,16 +84,42 @@ Class cHashD
         mCompareMode = RHS
     End Property
     
-    Public Function Keys() As Variant()
-        If mCount = 0 Then Keys = Array(): Exit Function
+    ' Public Function Keys() As Variant()
+    '     If mCount = 0 Then Keys = Array(): Exit Function
         
-        Dim i As Long, j As Long, V() As Variant: ReDim V(0 To mCount - 1)
+    '     Dim i As Long, j As Long, V() As Variant: ReDim V(0 To mCount - 1)
+    '     For i = 0 To mCount - 1
+    '         Do While IsEmpty(mKeys(j)): j = j + 1: Loop
+    '         VariantCopy V(i), ByVal VarPtr(mKeys(j)): j = j + 1
+    '     Next
+        
+    '     Return V
+    ' End Function
+
+    Public Function Keys() As Variant()
+    
+        If mCount = 0 Then
+            Return Array()
+        End If
+        
+        Dim i As Long = 0
+        Dim j As Long = 0
+        Dim V() As Variant
+        ReDim V(0 To mCount - 1)
+        
         For i = 0 To mCount - 1
-            Do While IsEmpty(mKeys(j)): j = j + 1: Loop
-            VariantCopy V(i), ByVal VarPtr(mKeys(j)): j = j + 1
+        
+            Do While VBA.IsEmpty(mKeys(j))
+                j += 1
+            Loop
+            
+            VariantCopy V(i), ByVal VBA.VarPtr(mKeys(j))
+            j += 1
+            
         Next
         
         Return V
+        
     End Function
 
     Public Function Items() As Variant()

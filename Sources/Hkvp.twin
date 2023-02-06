@@ -4,12 +4,12 @@ Class Hkvp
     Attribute VB_PredeclaredId = True
     Attribute VB_Exposed = True
     Option Explicit
-    '@Description("Dictionary derived from cHashD by Olaf Schmidt")
+    '@Description("Dictionary derived from cHashD2 by Olaf Schmidt")
     
     Private Const MY_TYPENAME                       As String = "Hkvp"
     
     
-    Implements Chashd Via Host
+    Implements cHashD2 Via Host
   
 
     Private CurrentIndex As Long
@@ -27,7 +27,7 @@ Class Hkvp
     End Enum
     
     ' Private Sub New()
-    '     Set Host = cHashD.Deb
+    '     Set Host = cHashD2.Deb
     ' End Sub
 
     Public Function Deb() As Hkvp
@@ -37,7 +37,7 @@ Class Hkvp
     End Function
 
     Friend Function ConstructInstance() As Hkvp
-        Set Host = New cHashD
+        Set Host = New cHashD2
         Return Me
     End Function
 
@@ -224,29 +224,111 @@ Class Hkvp
     End Function
     
     
-    Public Function FirstKey() As Variant
-        Return KeyByIndex(0)
+    Public Function PairsSeq() As Seq
+        Return Seq.Deb(Host.Pairs)
     End Function
     
-    Public Function LastKey() As Variant
-        Return KeyByIndex(Count - 1)
-    End Function
     
-    Public Function FirstItem() As Variant
-        Return Item(0)
-    End Function
     
-    Public Function LastItem() As Variant
-        Return Item(Count - 1)
-    End Function
+    Public Property Get FirstKey() As Variant
+        If Count = 0 Then
+             Err.Raise 17, "Lib.Hkvp.FirstKey: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(0)
+        	Return myKey
+        End If
+    End Property
     
-    Public Function FirstPair() As KVPair
-        Return KVPair.Deb(FirstKey, FirstItem)
-    End Function
+    Public Property Get LastKey() As Variant
+        If Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.LastKey: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(Host.Count - 1)
+        	Return myKey
+        End If
+    End Property
     
-    Public Function LastPair() As KVPair
-        Return KVPair.Deb(LastKey, LastItem)
-    End Function
+    Public Property Get FirstItem() As Variant
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(0)
+            Return Host.Item(myKey)
+        End If
+    End Property
+    
+    
+    Public Property Set FirstItem(ByRef ipItem As Variant)
+        
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(0)
+        	Item(myKey) = ipItem
+        End If
+           
+    End Property
+    
+    Public Property Let FirstItem(ByRef ipItem As Variant)
+        
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(0)
+        	Item(myKey) = ipItem
+        End If
+           
+    End Property
+    
+    Public Property Get LastItem() As Variant
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+        Else
+            Dim myKey As Variant = Host.KeyByIndex(Host.Count - 1)
+        	Return Host.Item(myKey)
+        End If
+    End Property
+    
+    Public Property Set LastItem(ByRef ipItem As Variant)
+        
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(Host.Count - 1)
+        	Item(myKey) = ipItem
+        End If
+           
+    End Property
+    
+    
+    Public Property Let LastItem(ByRef ipItem As Variant)
+        
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+        Else
+            Dim myKey As Variant = KeyByIndex(Host.Count - 1)
+        	Item(myKey) = ipItem
+        End If
+           
+    End Property
+    
+    
+    Public Property Get FirstPair() As KVPair
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.FirstPair: Seq has no items"
+        Else
+            Return KVPair.Deb(FirstKey, FirstItem)
+        End If
+    End Property
+    
+    
+    Public Property Get LastPair() As KVPair
+        If Host.Count = 0 Then
+            Err.Raise 17, "Lib.Hkvp.LastPair: Seq has no items"
+        Else
+            Return KVPair.Deb(LastKey, LastItem)
+        End If
+    End Property
     
     '@Description( returns a Kvp with values as keys.  Each Value is linked to a Kvp of Key vs Index for the host value
     Public Function Mirror(Optional ByVal ipMirrorType As MirrorType = MirrorType.ByAllValues) As Hkvp
@@ -374,7 +456,7 @@ Class Hkvp
     End Function
     
    
-    Private Function LHSOnly(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Seq
+    Private Function LHSOnly(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Hkvp
 
         Dim myResult As Hkvp = Hkvp.Deb
         Dim myH As IterItems = IterItems(ipLHS)

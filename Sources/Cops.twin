@@ -209,7 +209,8 @@ Class Cops
     Private Function Both(ByRef ipLHS As Seq, ByRef ipRHS As Seq) As Seq
 
         Dim myResult As Seq = Seq.Deb
-        Dim myLHS As IterItems = IterItems.Deb(ipLHS)
+        
+        Dim myLHS As IterItems = IterItems(ipLHS)
         Do
             Dim myItem As Variant = myLHS.Item(0)
             If ipRHS.HoldsItem(myItem) Then

@@ -4,19 +4,18 @@ Class At
     Attribute VB_Creatable = True
     Attribute VB_PredeclaredId = True
     Attribute VB_Exposed = True
-    '@Description("A class to allow a single variable to provide coordinates for multidimensional arrays")
+    '@Description("A class to allow a single variable to provide coordinates for multidimensional arrays when wrapped in IterItems")
     Option Explicit
 
 
     Private Type Properties
-    	Address()                                           As Long
+    	Address()                             As Integer
     End Type
     
     Private p                               As Properties
     
     
-    Public Function deb([ TypeHint (Long) ] ParamArray ipAddress() As Variant) As At
-        'Dim myAddress As oArr = oArr.deb(ipAddress)
+    Public Function deb(ParamArray ipAddress() As Variant) As At
         With New At
             Return .ConstructInstance(ipAddress)
         End With
@@ -40,11 +39,4 @@ Class At
     End Function
     
     
-    Public Property Get Item() As Long()
-        Return p.Address
-    End Property
-    
-    Public Property Let Item(ByRef ipArray() As Long)
-        p.Address = ipArray
-    End Property
 End Class

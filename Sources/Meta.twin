@@ -1,4 +1,18 @@
 Class Meta
+    /* Class meta corrals a number of other class functions to 
+       allow simpler syntax
+       E.g.
+       Instead of 
+       
+       if TypeInfo.IsItemByIndex0(myContainer)...
+       
+       we can write
+       
+       set myMeta = Meta(myContainer)
+       if myMeta.IsItemsByIndex0
+       
+       This is particularly useful where many tests on the type of meta are required.
+       */
 
 	Attribute VB_Creatable = True
     Attribute VB_PredeclaredId = True
@@ -16,7 +30,6 @@ Class Meta
         Ranks                                   As wCollection
         ' The number of elements in ipCargo
         Size                                    As Long
-        'HoldsCargo                              As Boolean
         IsArray                                 As boolean
         GroupOrd                                As TypeOrd
         TypeOrd                                 As TypeOrd
@@ -35,7 +48,6 @@ Class Meta
     End Function
 
     Friend Function ConstructInstance(ByRef ipCargo As Variant) As Meta
-    
         
         SetupMetaData ipCargo
         Return Me

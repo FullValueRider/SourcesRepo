@@ -1,0 +1,68 @@
+Class mpStringFn
+
+Attribute VB_Name = "mpStrConv"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+'========1=========2=========3=========4=========5=========6=========7=========8=========9=========A=========B=========C
+    Option Explicit
+        
+    Implements IMapper
+
+    Public Enum StringFn
+        ToAsc
+        ToAscB
+        ToAscW
+        ToChr
+        ToChrW
+    End Enum
+    
+    Private Const MY_TYPENAME       As String = "mpStringFn"
+    
+    
+    Private Type State
+        StringFn                    As StringFn
+    End Type
+
+    Private s                       As State
+
+    Public Function ExecMap(ByRef ipHostItem As Variant) As Variant Implements IMapper.ExecMapper
+            
+        If VBA.TypeName(ipHostItem) <> "String" Then
+                
+            Return ipHostItem
+            
+        End If
+            
+        Select Case s.StringFn
+            
+            Case StringFn.ToAsc:     Return VBA.Asc(ipHostItem)
+            Case StringFn.ToAscB:    Return VBA.AscB(ipHostItem)
+            Case StringFn.ToAscW:    Return VBA.AscW(ipHostItem)
+            Case StringFn.ToChr:     Return VBA.Chr(ipHostItem)
+            Case StringFn.ToChrW:    Return VBA.ChrW(ipHostItem)
+            Case Else
+                Err.Raise 17, "mpStringFn: Function not known"
+        End Select
+        
+    End Function
+
+
+    '@DefaultMember
+    Public Function Deb(ByVal ipStringFn As StringFn) As mpStringFn
+        With New mpStringFn
+            Return .ConstructInstance(ipStringFn)
+        End With
+    End Function
+
+    Friend Function ConstructInstance(ByVal ipStringFn As StringFn) As mpStringFn
+        s.StringFn = ipStringFn
+        Return Me
+    End Function
+
+    Public Property Get TypeName() As String Implements IMapper.TypeName
+        Return MY_TYPENAME
+    End Property
+
+End Class

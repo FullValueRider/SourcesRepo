@@ -39,8 +39,8 @@ Class Fmt
 
     Private Type State
 
-        FormatFields                                As hkvp
-
+        FormatFields                                As Lookup
+        Stringifier                                 As Stringifier
     End Type
 
     Private s                                       As State
@@ -62,20 +62,31 @@ Class Fmt
     Private Const FIELD_COUNT_IS_ZERO               As String = "0}"
     Private Const FIELD_COUNT_IS_ONE                      As String = "1}"
 
-   
-    Public Sub Class_Initialize()
-
-            
-        If s.FormatFields Is Nothing Then
-            
-            Set s.FormatFields = Hkvp.Deb
-            
-        Else
-            
+    [ DefaultMember ]
+    Public Function Deb() As Fmt
+        With New Fmt
+            Return .ConstructInstance
+        End With
+    End Function
+    
+    
+    Public Function ConstructInstance() As Fmt
+    
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+    
+        Return Me
+        
+    End Function
+    
+    Private Sub EnsureFormatFieldsDictionary()
+        
+        If s.FormatFields IsNot Nothing Then
             Exit Sub
-                
         End If
-            
+        
+        Set s.FormatFields = Lookup.Deb
+       
         With s.FormatFields
             
             .Add NEWLINES, vbCrLf                           ' {nl
@@ -89,13 +100,22 @@ Class Fmt
             .Add SMART_DQUOTE_CLOSE, Char.twRSmartDQuote    ' {dc
                 
         End With
-            
+    
     End Sub
 
+    Private Sub EnsureStringifier()
+        If s.Stringifier Is Nothing Then
+            Set s.Stringifier = Stringifier.Deb
+        End If
+    End Sub
+    
+    
     '@Description("Sends the formatted output to Debug.Print")
     Public Function Dbg(ByRef ipFormatTemplate As String, ParamArray ipParamArray() As Variant) As String
     
-       
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+            
     	Dim myresult As String
         If ArrayInfo.IsNotAllocated(ipParamArray) Then
             myresult = ipFormatTemplate
@@ -109,6 +129,9 @@ Class Fmt
     '@Description("Returns a string representing the paramArray")
     Public Function Text(ByRef ipformatTemplate As String, ParamArray ipParamarray() As Variant) As String
        
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+        
         If ArrayInfo.IsNotAllocated(ipParamarray) Then
             Return ipformatTemplate
         Else
@@ -118,7 +141,10 @@ Class Fmt
         
     Private Function TextByVar(ByRef ipFormatTemplate As String, ParamArray ipParamarray() As Variant) As String
         
-       Dim myParamArray As Variant = VarOp.ResolveParamArray(ipParamarray)
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+        
+        Dim myParamArray As Variant = VarOp.ResolveParamArray(ipParamarray)
         
         Dim mys As Seq = Seq.Deb
         
@@ -128,7 +154,7 @@ Class Fmt
         
             Dim myIter As IterItems = IterItems(myParamArray)
             Do
-                mys.Add Stringifier.ToString(myIter.Item(0))
+                mys.Add s.Stringifier.ToString(myIter.Item(0))
             Loop While myIter.MoveNext
             
         End If
@@ -141,7 +167,6 @@ Class Fmt
             Return ipFormatTemplate
         End If
         
-        
         Dim myReturn  As String
         myReturn = ReplaceFormatFieldWithZeroCountByvbNullString(ipFormatTemplate)
         myReturn = ReplaceFormatFieldWithNoCountByFormatFieldWithCountOfOne(myReturn)
@@ -153,20 +178,6 @@ Class Fmt
     End Function
 
  
-    
-
-    ' Friend Function GetFormattedParameters(ByVal ipFormatTemplate As String, ByVal ipFPA As Variant) As String
-
-    '     Dim myReturn  As String
-    '     myReturn = ReplaceFormatFieldWithZeroCountByvbNullString(ipFormatTemplate)
-    '     myReturn = ReplaceFormatFieldWithNoCountByFormatFieldWithCountOfOne(myReturn)
-    '     myReturn = ReplaceFormatFieldWithCountByControlCharacters(myReturn)
-    '     myReturn = ReplaceVariableFieldsToStringRepresentations(myReturn, ipFPA)
-            
-    '     GetFormattedParameters = myReturn
-            
-    ' End Function
-
     '========1=========2=========3=========4=========5=========6=========7=========8=========9=========A=========B=========C
     '
     ' Methods below need to be made public for the test module to run correctly
@@ -179,6 +190,9 @@ Class Fmt
         Dim myLayoutTemplate                        As String
         Dim myItem                                  As Variant
 
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+            
         myLayoutTemplate = ipLayoutTemplate
             
         For Each myItem In s.FormatFields.Keys
@@ -198,7 +212,10 @@ Class Fmt
     Attribute ReplaceFormatFieldWithNoCountByFormatFieldWithCountOfOne.VB_Description = "Replace non numbered LayoutObj.Format fields {XX} to {XX1}"
 
         Dim myItem                              As Variant
-
+    
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+            
         For Each myItem In s.FormatFields.Keys
             
             ipFormatTemplate = VBA.Replace(ipFormatTemplate, myItem & FIELD_COUNT_IS_NONE, myItem & FIELD_COUNT_IS_ONE)
@@ -215,7 +232,10 @@ Class Fmt
 
         Dim myFormatFieldRepeatLocation         As Long
         Dim myRepeatCount                       As String
-
+    
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+            
         myFormatFieldRepeatLocation = InStr(ipFormatTemplate, ipFormatField) + Len(ipFormatField)
             
         Do While VBA.Mid$(ipFormatTemplate, myFormatFieldRepeatLocation, 1) Like "#"
@@ -238,6 +258,9 @@ Class Fmt
         Dim myField                             As String
         Dim myCount                             As Long
 
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
+            
         For Each myItem In s.FormatFields.Keys
                     
             If InStr(ipFormatTemplate, myItem) > 0 Then
@@ -257,6 +280,9 @@ Class Fmt
 
     '@Description("Returns a string of formatting characters in line with the formatting tag")
     Friend Function GetFormattingFieldReplacementString(ByVal ipFormatString As String, ByVal ipRepeatCount As Long) As String
+
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
             
         Dim myReturn As String = VBA.String$(ipRepeatCount, s.FormatFields.Item(ipFormatString))
         
@@ -277,10 +303,10 @@ Class Fmt
         ByVal ipSeq As Seq _
     ) As String
 
-        Dim myReturn                        As String
-
-        myReturn = ipFormatTemplate
-        
+        Dim myReturn As String = ipFormatTemplate
+    
+        EnsureStringifier
+        EnsureFormatFieldsDictionary
             
         Dim myIter As IterItems = IterItems(ipSeq)
         Do
@@ -292,6 +318,52 @@ Class Fmt
             
         Return myReturn
             
+    End Function
+    
+     Public Function DM _
+    ( _
+        Optional ByVal ipLeft As Variant = Char.twPlainDQuote, _
+        Optional ByVal ipSeparator As Variant = Char.twSpace, _
+        Optional ByVal ipRight As Variant = Char.twPlainDQuote _
+    ) As Fmt
+        EnsureStringifier
+        s.Stringifier.SetDictionaryItemMarkup ipLeft, ipSeparator, ipRight
+        EnsureFormatFieldsDictionary
+        Return Me
+    End Function
+    
+    
+    Public Function AM _
+    ( _
+        Optional ByVal ipLeft As Variant = Char.twLBracket, _
+        Optional ByVal ipSeparator As Variant = Char.twComma, _
+        Optional ByVal ipRight As Variant = Char.twRBracket _
+    ) As Fmt
+        EnsureStringifier
+        s.Stringifier.SetArrayMarkup ipLeft, ipSeparator, ipRight
+        EnsureFormatFieldsDictionary
+        Return Me
+    End Function
+
+
+    Public Function OM _
+    ( _
+        Optional ByVal ipLeft As Variant = Char.twLCurly, _
+        Optional ByVal ipSeparator As Variant = Char.twComma, _
+        Optional ByVal ipRight As Variant = Char.twRCurly _
+    ) As Fmt
+        EnsureStringifier
+        s.Stringifier.SetObjectMarkup ipLeft, ipSeparator, ipRight
+        EnsureFormatFieldsDictionary
+        Return Me
+    End Function
+
+
+    Public Function IS(Optional ByVal ipSeparator As Variant = char.twcomma) As Fmt
+        EnsureStringifier
+        s.Stringifier.SetItemSeparator ipSeparator
+        EnsureFormatFieldsDictionary
+        Return Me
     End Function
 
 End Class

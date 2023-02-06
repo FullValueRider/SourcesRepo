@@ -15,97 +15,243 @@ Class Coord
     End Enum
     
     Private Type State
-        X                               As long ' ToDo: do we want to allow decimal values?
-        Y                               As long
+        Col                                     As long ' ToDo: do we want to allow decimal values?
+        Row                                     As long
+        Item                                    As variant
+    
+        MinCol                      As long
+        MinRow                      As long
+        MaxCol                      As long
+        MaxRow                      As long
+    
+    
     End Type
 
-    Private s                           As State
+    Private s                                   As State
     
     [ DefaultMember ]
-    Public Function Deb() As Coord
-            Return Deb(0, 0)
+    Public Function Deb(Optional ByRef ipItem As Variant = Empty) As Coord
+            Return Deb(0, 0, ipItem)
     End Function
 
-    Public Function Deb(ByVal ipX As Long, ByVal ipY As Long) As Coord
+    Public Function Deb(ByVal ipX As Long, ByVal ipY As Long, Optional ByRef ipItem As Variant = Empty) As Coord
     	With New Coord
-            Return .ConstructInstance(ipX, ipY)
+            Return .ConstructInstance(ipX, ipY, ipItem)
         End With
     End Function
         
-    Public Function Deb(ByRef ipString As String) As Coord
+    Public Function Deb(ByRef ipString As String, Optional ByRef ipItem As Variant = Empty) As Coord
         Dim myArray As Variant = VBA.Split(ipString, Char.twComma)
-        Return Deb(CLng(myArray(0)), CLng(myArray(1)))
+        Return Deb(CLng(myArray(0)), CLng(myArray(1)), ipItem)
     End Function
         
-    Public Function Deb(ByRef ipArray As Variant) As Coord
-        Return Deb(CLng(ipArray(0)), CLng(ipArray(1)))
+    Public Function Deb(ByRef ipArray As Variant, Optional ByRef ipItem As Variant = Empty) As Coord
+        Return Deb(CLng(ipArray(0)), CLng(ipArray(1)), ipItem)
     End Function
         
-    Public Function Deb(ByRef ipKVPair As KVPair) As Coord
-        Return Deb(CLng(ipKVPair.Key(0)), CLng(ipKVPair.Item(0)))
+    Public Function Deb(ByRef ipKVPair As KVPair, Optional ByRef ipItem As Variant = Empty) As Coord
+        Return Deb(CLng(ipKVPair.Key(0)), CLng(ipKVPair.Item(0)), ipItem)
     End Function
+    
+    
+    Friend Function ConstructInstance(ByVal ipX As Long, ByVal ipY As Long, ByRef ipitem As Variant) As Coord
+    
+        s.Col = ipX
+        s.Row = ipY
         
+        If VBA.IsObject(ipitem) Then
+            Set s.Item = ipitem
+        Else
+        	s.Item = ipitem
+        End If
         
-    Friend Function ConstructInstance(ByVal ipX As Long, ByVal ipY As Long) As Coord
-        s.X = ipX
-        s.Y = ipY
+        Return Me
+        
+    End Function
+    
+    Public Function SetBounds(ByVal ipMinCol As Long, ByVal ipMaxCol As Long, ByVal ipMinRow As Long, ByVal ipMaxRow As Long) As Coord
+        s.MinCol = ipMinCol
+        s.MaxCol = ipMaxCol
+        s.MinRow = ipMinRow
+        s.MaxRow = ipMaxRow
         Return Me
     End Function
     
     Public Property Get ToString() As String
-        Return CStr(s.X) & Char.twComma & CStr(s.Y)
+        Return CStr(s.Col) & Char.twComma & CStr(s.Row)
     End Property
     
     Public Function ToArray() As Variant
-        Return Array(s.X, s.Y)
+        Return Array(s.Col, s.Row)
     End Function
     
     ' property for debugging QOL (Quality of Life)
     Public Function ToSeq() As Variant
-        Return Seq.Deb.AddItems(s.X, s.Y)
+        Return Seq.Deb.AddItems(s.Col, s.Row)
     End Function
     
     Public Property Get X() As Long
-        Return s.X
+        Return s.Col
     End Property
     
     Friend Property Let X(ByVal ipValue As Long)
-        s.X = ipValue
+        s.Col = ipValue
     End Property
     
     Public Property Get Y() As Long
-        Return s.Y
+        Return s.Row
     End Property
     
     Friend Property Let Y(ByVal ipValue As Long)
-        s.Y = ipValue
+        s.Row = ipValue
+    End Property
+    
+    Public Property Get Item() As Variant
+        Return s.Item
+    End Property
+    
+    Public Property Let Item(ByRef ipItem As Variant)
+        s.Item = ipItem
+    End Property
+    
+    Public Property Set Item(ByRef ipItem As Variant)
+        Set s.Item = ipItem
     End Property
     
     Public Function Clone() As Coord
-        Return Me.Deb(s.X, s.Y)
+        Return Me.Deb(s.Col, s.Row, s.Item)
     End Function
     
-    '@Description("Returns a seq of the coordinates of the adjacent points")
-    Public Function Neighbours(Optional ByVal ipPoints As AdjacentPoints = ordinalpoints) As Seq
+    ' '@Description("Returns a seq of the coordinates of the adjacent points")
+    ' Public Function Neighbours(Optional ByVal ipPoints As AdjacentPoints = ordinalpoints) As Seq
     
-        Dim mySeq As Seq = Seq.Deb
+    '     Dim mySeq As Seq = Seq.Deb
         
-        mySeq.AddItems Fmt.Text("{0},{1}", s.X, s.Y + 1)
-        mySeq.AddItems Fmt.Text("{0},{1}", s.X + 1, s.Y)
-        mySeq.AddItems Fmt.Text("{0},{1}", s.X, s.Y - 1)
-        mySeq.AddItems Fmt.Text("{0},{1}", s.X - 1, s.Y)
+    '     mySeq.AddItems Coord.Deb(s.Col, s.Row + 1)
+    '     mySeq.AddItems Coord.Deb(s.Col + 1, s.Row)
+    '     mySeq.AddItems Coord.Deb(s.Col, s.Row - 1)
+    '     mySeq.AddItems Coord.Deb(s.Col - 1, s.Row)
         
-        If ipPoints = AdjacentPoints.AllPoints Then
+    '     If ipPoints = AdjacentPoints.AllPoints Then
         
-            mySeq.AddItems Fmt.Text("{0},{1}", s.X + 1, s.Y + 1)
-            mySeq.AddItems Fmt.Text("{0},{1}", s.X + 1, s.Y - 1)
-            mySeq.AddItems Fmt.Text("{0},{1}", s.X - 1, s.Y + 1)
-            mySeq.AddItems Fmt.Text("{0},{1}", s.X - 1, s.Y - 1)
+    '         mySeq.AddItems Coord.Deb(s.Col + 1, s.Row + 1)
+    '         mySeq.AddItems Coord.Deb(s.Col + 1, s.Row - 1)
+    '         mySeq.AddItems Coord.Deb(s.Col - 1, s.Row + 1)
+    '         mySeq.AddItems Coord.Deb(s.Col - 1, s.Row - 1)
             
+    '     End If
+        
+    '     Return mySeq
+        
+    ' End Function
+    
+    '@DEscription("Get adjacent coorinates irrespective of any bounds)")
+    Public Function GetAdjacentCoordinates _
+    ( _
+        ByVal ipCol As Long, _
+        ByVal ipRow As Long, _
+        Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay, _
+        Optional ByVal ipCoordType As CoordType = coordtype.asarray _
+    ) As Hkvp
+      
+        Dim myCoords As Hkvp = Hkvp.Deb
+        	
+        Dim myOffsets As Variant
+        If ipSearchArea = FourWay Then
+            myOffsets = Area.GetFourWayOffsets
+        Else
+        	myOffsets = Area.GetEightWayOffsets
         End If
         
-        Return mySeq
+        Dim myOffset As Variant
+        For Each myOffset In myOffsets
+       
+            If ipCol + myOffset(0) < s.MinCol Then Continue For
+            If ipCol + myOffset(0) > s.MaxCol Then Continue For
+            If ipRow + myOffset(1) < s.MinRow Then Continue For
+            If ipRow + myOffset(1) > s.MaxRow Then Continue For
+            
+            Dim myCoord As Coord = Coord.Deb(ipCol + myOffsets(0), myOffsets(1))
+            myCoords.Add myCoord.ToString, myCoord
+            
+        Next
+            
+        Return myCoords
+            
+    End Function
+    
+     '@DEscription("Get adjacent coorinates irrespective of any bounds)")
+    Public Function GetAdjacentCoordinatesWithValue _
+    ( _
+        ByRef ipData As Hkvp, _
+        Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay _
+    ) As Hkvp
+      
+        Dim myOffsets As Variant
+        If ipSearchArea = FourWay Then
+            myOffsets = Area.GetFourWayOffsets
+        Else
+        	myOffsets = Area.GetEightWayOffsets
+        End If
         
+        Dim myAdjacentCoords As Hkvp = Hkvp.Deb
+        	
+        Dim myOffset As Variant
+        For Each myOffset In myOffsets
+       
+            Dim myCoord As Coord = Coord.Deb(VBA.CLng(s.Col + myOffset(0)), VBA.CLng(s.Row + myOffset(1)), 0)
+            Dim myCoordstr As String = myCoord.ToString
+            ' Ensure we only return valid coordinates 
+            If ipData.HoldsKey(myCoordstr) Then
+                Set myCoord = ipData.Item(myCoordstr)
+                myAdjacentCoords.Add myCoord.ToString, myCoord
+            End If
+            
+        Next
+            
+        Return myAdjacentCoords
+            
+    End Function
+    
+    '@Description("Returns an array of valid coordinates based on the provided x,y coordinate and the specified boundaries.")
+    Public Function GetBoundedAdjacentCoordinates _
+    ( _
+        ByVal ipCol As Long, _
+        ByVal ipRow As Long, _
+        Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay, _
+        Optional ByVal ipCoordType As CoordType = coordtype.asarray _
+    ) As Hkvp
+      
+        Dim myCoords As Hkvp = Hkvp.Deb
+        
+        'Ignore requests for points that are outside the set bounds
+        If ipCol < s.MinCol Then Return myCoords
+        If ipCol > s.MaxCol Then Return myCoords
+        If ipRow < s.MinRow Then Return myCoords
+        If ipRow > s.MaxRow Then Return myCoords
+        	
+        Dim myOffsets As Variant
+        If ipSearchArea = FourWay Then
+            myOffsets = Area.GetFourWayOffsets
+        Else
+        	myOffsets = Area.GetEightWayOffsets
+        End If
+        
+        Dim myOffset As Variant
+        For Each myOffset In myOffsets
+       
+            If ipCol + myOffset(0) < s.MinCol Then Continue For
+            If ipCol + myOffset(0) > s.MaxCol Then Continue For
+            If ipRow + myOffset(1) < s.MinRow Then Continue For
+            If ipRow + myOffset(1) > s.MaxRow Then Continue For
+            
+            Dim myCoord As Coord = Coord.Deb(ipCol + myOffsets(0), myOffsets(1))
+            myCoords.Add myCoord.ToString, myCoord
+            
+        Next
+            
+        Return myCoords
+            
     End Function
     
 End Class

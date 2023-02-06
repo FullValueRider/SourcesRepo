@@ -892,7 +892,7 @@ Private Sub Test14_DuplicateKeys()
    
     ' This line fails
     Dim myHkvp As Hkvp = Hkvp.Deb
-    myHkvp.ReInit(ensureuniquekeys:=False)
+    myHkvp.ReInit(ipensureuniquekeys:=False)
     
     ' These two lines work OK
     'Dim myHkvp As Hkvp = Hkvp.Deb
@@ -948,7 +948,7 @@ Private Sub Test15_UniqueKeys()
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
     Dim myHkvp As Hkvp = Hkvp.Deb
    
-    myHkvp.ReInit EnsureUniqueKeys:=True
+    myHkvp.ReInit ipEnsureUniqueKeys:=True
     
     With myHkvp
         .Add "Hello", 10

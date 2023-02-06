@@ -108,6 +108,20 @@ Public Sub SeqTests()
     
     Test17a_RemoveAtItem4
     
+    Test18a_SeqInBoth
+    Test18b_SeqInLHSOnly
+    Test18c_SeqInRHSOnly
+    Test18d_SeqNotInBoth
+    Test18e_SetUnique
+    
+    Test19a_PopSingleItem
+    Test19B_PopMultipleItems
+    
+    Test20a_SlicePositiveStart
+    Test20b_SliceNegativeStart
+    
+    Test21a_SlicePositiveStartRunOf2
+    Test21b_SliceNegativeStartRunOf2
     Debug.Print "Testing completed"
 
 End Sub
@@ -2529,136 +2543,151 @@ TestFail:
     
 End Sub
 
-'     '@TestMethod("RemoveRange")
-'     Private Sub Test27_RemoveRangeItem3Count4()
-'        'On Error GoTo TestFail
-    
-'         'Arrange:
-'         Dim myExpected  As Seq
-'         Set myExpected = Seq.Deb.Add(10, 20, 30, 50)
+'@TestMethod("seq")
+Private Sub Test20a_SlicePositiveStart()
 
-'         '@Ignore IntegerDataType
-'         Dim mySeq As Seq
-'         Set mySeq = Seq.Deb.Add(10, 20, 30, 40, 40, 40, 40, 50)
+    #If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+    #Else
+        myProcedureName = ErrEx.LiveCallstack.ProcedureName
+        myComponentName = ErrEx.LiveCallstack.ModuleName
+    #End If
     
-'         Dim myResult As Seq
+   'On Error GoTo TestFail
     
-'         'Act:
-'         Set myResult = mySeq.RemoveRange(3, 4)
+    'Arrange:
+    
+    Dim myExpectedSlice As Variant = Array(35, 40, 45, 50)
+    '@Ignore IntegerDataType
+    Dim mySeq As Seq = Seq.Deb.AddItems(10, 15, 20, 25, 30, 35, 40, 45, 50)
+   
+    
+    'Act:
+    Dim myResultSlice As Variant = mySeq.Slice(6).ToArray
+    
+    
+    'Assert:
+    
+    AssertStrictSequenceEquals myExpectedSlice, myResultSlice, myProcedureName
+    
+TestExit:
+    Exit Sub
+    
+TestFail:
+    Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+    
+End Sub
 
-'         'Assert:
-'         Assert.Exact.SequenceEquals myExpected.ToArray, myResult.ToArray, myProcedureName
+'@TestMethod("seq")
+Private Sub Test20b_SliceNegativeStart()
+
+    #If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+    #Else
+        myProcedureName = ErrEx.LiveCallstack.ProcedureName
+        myComponentName = ErrEx.LiveCallstack.ModuleName
+    #End If
     
-' TestExit:
-'         Exit Sub
+   'On Error GoTo TestFail
     
-' TestFail:
-'         Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
-'         Resume TestExit
+    'Arrange:
     
-'     End Sub
+    Dim myExpectedSlice As Variant = Array(35, 40, 45, 50)
+    '@Ignore IntegerDataType
+    Dim mySeq As Seq = Seq.Deb.AddItems(10, 15, 20, 25, 30, 35, 40, 45, 50)
+   
+    
+    'Act:
+    Dim myResultSlice As Variant = mySeq.Slice(-4).ToArray
+    
+    
+    'Assert:
+    
+    AssertStrictSequenceEquals myExpectedSlice, myResultSlice, myProcedureName
+    
+TestExit:
+    Exit Sub
+    
+TestFail:
+    Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+    
+End Sub
 
 
-' '@TestMethod("Reverse")
-' Private Sub Test28_ReverseAll()
+'@TestMethod("seq")
+Private Sub Test21a_SlicePositiveStartRunOf2()
 
-'     #If twinbasic Then
+    #If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+    #Else
+        myProcedureName = ErrEx.LiveCallstack.ProcedureName
+        myComponentName = ErrEx.LiveCallstack.ModuleName
+    #End If
     
-'         myProcedureName = CurrentProcedureName
-'         myComponentName = CurrentComponentName
-        
-        
-'     #Else
+   'On Error GoTo TestFail
     
-'         myProcedureName = ErrEx.LiveCallstack.ProcedureName
-'         myComponentName = ErrEx.LiveCallstack.ModuleName
-        
+    'Arrange:
     
-'     #End If
+    Dim myExpectedSlice As Variant = Array(35, 40)
+    '@Ignore IntegerDataType
+    Dim mySeq As Seq = Seq.Deb.AddItems(10, 15, 20, 25, 30, 35, 40, 45, 50)
+   
     
+    'Act:
+    Dim myResultSlice As Variant = mySeq.Slice(6, ipRun:=2).ToArray
+    
+    
+    'Assert:
+    
+    AssertStrictSequenceEquals myExpectedSlice, myResultSlice, myProcedureName
+    
+TestExit:
+    Exit Sub
+    
+TestFail:
+    Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+    
+End Sub
 
-'    'On Error GoTo TestFail
-    
-'     'Arrange:
-'     Dim myExpected  As Seq
-'     Set myExpected = Seq.Deb.Add(50, 40, 40, 40, 40, 30, 20, 10)
+'@TestMethod("seq")
+Private Sub Test21b_SliceNegativeStartRunOf2()
 
-'     '@Ignore IntegerDataType
-'     Dim mySeq As Seq
-'     Set mySeq = Seq.Deb.Add(10, 20, 30, 40, 40, 40, 40, 50)
+    #If twinbasic Then
+        myProcedureName = CurrentProcedureName
+        myComponentName = CurrentComponentName
+    #Else
+        myProcedureName = ErrEx.LiveCallstack.ProcedureName
+        myComponentName = ErrEx.LiveCallstack.ModuleName
+    #End If
     
-'     Dim myResult As Seq
+   'On Error GoTo TestFail
     
-'     'Act:
-'     Set myResult = mySeq.Reverse
-
-'     'Assert:
-'     Assert.Exact.SequenceEquals myExpected.ToArray, myResult.ToArray, myProcedureName
+    'Arrange:
     
-' TestExit:
-'     Exit Sub
+    Dim myExpectedSlice As Variant = Array(30, 35)
+    '@Ignore IntegerDataType
+    Dim mySeq As Seq = Seq.Deb.AddItems(10, 15, 20, 25, 30, 35, 40, 45, 50)
+   
     
-' TestFail:
-'     Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
-'     Resume TestExit
+    'Act:
+    Dim myResultSlice As Variant = mySeq.Slice(-5, iprun:=2).ToArray
     
-' End Sub
-
-
-'     '@TestMethod("Reverse")
-'     Private Sub Test29_ReverseItem1Count4()
-'        'On Error GoTo TestFail
     
-'         'Arrange:
-'         Dim myExpected  As Seq
-'         Set myExpected = Seq.Deb.Add(10, 40, 40, 30, 20, 40, 40, 50)
-
-'         '@Ignore IntegerDataType
-'         Dim mySeq As Seq
-'         Set mySeq = Seq.Deb.Add(10, 20, 30, 40, 40, 40, 40, 50)
+    'Assert:
     
-'         Dim myResult As Seq
+    AssertStrictSequenceEquals myExpectedSlice, myResultSlice, myProcedureName
     
-'         'Act:
-'         Set myResult = mySeq.Reverse(1, 4)
-
-'         'Assert:
-'         Assert.Exact.SequenceEquals myExpected.ToArray, myResult.ToArray, myProcedureName
+TestExit:
+    Exit Sub
     
-' TestExit:
-'         Exit Sub
+TestFail:
+    Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
     
-' TestFail:
-'         Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
-'         Resume TestExit
-    
-'     End Sub
-
-'     '@TestMethod("Reverse")
-'     Private Sub Test30_SetRangeItem1ToFouritems()
-'        'On Error GoTo TestFail
-    
-'         'Arrange:
-'         Dim myExpected  As Seq
-'         Set myExpected = Seq.Deb.Add(10, 50, 50, 50, 50, 40, 40, 50)
-
-'         '@Ignore IntegerDataType
-'         Dim mySeq As Seq
-'         Set mySeq = Seq.Deb.Add(10, 20, 30, 40, 40, 40, 40, 50)
-    
-'         Dim myResult As Seq
-    
-'         'Act:
-'         Set myResult = mySeq.SetRange(2, Array(50, 50, 50, 50))
-
-'         'Assert:
-'         Assert.Exact.SequenceEquals myExpected.ToArray, myResult.ToArray, myPlace & CurrentProcedureName
-    
-' TestExit:
-'         Exit Sub
-    
-' TestFail:
-'         Debug.Print myComponentName, myProcedureName, " raised an Error: #" & Err.Number & " - " & Err.Description
-'         Resume TestExit
-    
-'     End Sub
+End Sub

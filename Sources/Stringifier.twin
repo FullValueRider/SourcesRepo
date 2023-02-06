@@ -9,7 +9,7 @@ Class Stringifier
     Attribute VB_Creatable = True
     Attribute VB_PredeclaredId = True
     Attribute VB_Exposed = True
-    Attribute VB_Description = "Static class: Methods to convert VBA entities to strings"
+    
     Option Explicit
  
     Private Const TRY_METHODS_LIST                 As String = "tostring,tojson,value,name,typename"

@@ -281,7 +281,7 @@ Class IterItems
                 If myIndex < 0 Or myIndex > p.Keys.Count - 1 Then
                     Return Null
                 Else
-                    Dim mykey As Variant = p.Keys(myIndex + 1)
+                    Dim mykey As Variant = p.Keys(myIndex +1)
                     Return Cargo.Item(mykey) 'Return p.Items(myIndex)
                 End If
                 
@@ -375,12 +375,12 @@ Class IterItems
             Case IsItemByKey
                 Dim myKey As Variant
                 If VBA.IsObject(ipItem) Then
-                    Set myKey = p.Keys(p.Offset + ipOffset + 1)
+                    Set myKey = p.Keys(p.Offset + ipOffset + 1)  '+ 1
                     Set Cargo.Item(myKey) = ipItem
                     'Set p.Keys(p.Offset + ipOffset) = ipItem
                     
                 Else
-                    myKey = p.Keys(p.Offset + ipOffset)
+                    myKey = p.Keys(p.Offset + ipOffset + 1)
                     Cargo.Item(p.Keys(myKey)) = ipItem
                     '.p.Keys(p.Offset + ipOffset) = ipItem
                 End If

@@ -27,7 +27,6 @@ Class oI32
     
     Friend Function ConstructInstance(ByVal ipLong As Long) As oI32
         s.Item = ipLong
-        Return Me
     End Function
     
     
