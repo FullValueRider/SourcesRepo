@@ -162,11 +162,11 @@ Public JsonOptions As json_Options
 ' ============================================= '
 
 ''
-' Convert JSON string to object (Hkvp/Collection)
+' Convert JSON string to object (KvpH/Collection)
 '
 ' @method ParseJson
 ' @param {String} json_String
-' @return {Object} (Hkvp or Collection)
+' @return {Object} (KvpH or Collection)
 ' @throws 10001 - JSON parse error
 ''
 Public Function ParseJson(ByVal JsonString As String) As Object
@@ -189,10 +189,10 @@ Public Function ParseJson(ByVal JsonString As String) As Object
 End Function
 
 ''
-' Convert object (Hkvp/Collection/Array) to JSON
+' Convert object (KvpH/Collection/Array) to JSON
 '
 ' @method ConvertToJson
-' @param {Variant} JsonValue (Hkvp, Collection, or Array)
+' @param {Variant} JsonValue (KvpH, Collection, or Array)
 ' @param {Integer|String} Whitespace "Pretty" print json with given number of spaces per indentation (Integer) or given string
 ' @return {String}
 ''
@@ -350,7 +350,7 @@ Public Function ConvertToJson(ByVal JsonValue As Variant, Optional ByVal Whitesp
 
         ConvertToJson = json_BufferToString(json_Buffer, json_BufferPosition)
 
-    ' Hkvp or Collection
+    ' KvpH or Collection
     Case VBA.VbVarType.vbObject
         If json_PrettyPrint Then
             If VBA.VarType(Whitespace) = VBA.VbVarType.vbString Then
@@ -360,8 +360,8 @@ Public Function ConvertToJson(ByVal JsonValue As Variant, Optional ByVal Whitesp
             End If
         End If
 
-        ' Hkvp
-        If VBA.TypeName(JsonValue) = "Hkvp" Then
+        ' KvpH
+        If VBA.TypeName(JsonValue) = "KvpH" Then
             json_BufferAppend json_Buffer, "{", json_BufferPosition, json_BufferLength
             For Each json_Key In JsonValue.Keys
                 ' For Objects, undefined (Empty/Nothing) is not added to object
@@ -460,12 +460,12 @@ End Function
 ' This method uses the horrible attribute of a scripting.dictionart
 ' of adding a key if one doesn't exist when assigning to an item
 ' of the scripting.dictionary
-' this behaviour is not allowed for Hkvp so .Item calls need to be changed to .add calls
-Private Function json_ParseObject(json_String As String, ByRef json_Index As Long) As Hkvp
+' this behaviour is not allowed for KvpH so .Item calls need to be changed to .add calls
+Private Function json_ParseObject(json_String As String, ByRef json_Index As Long) As KvpH
     Dim json_Key As String
     Dim json_NextChar As String
 
-    Set json_ParseObject = Hkvp.Deb
+    Set json_ParseObject = KvpH.Deb
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> "{" Then
         Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting '{'")

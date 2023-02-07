@@ -1143,7 +1143,7 @@
     
     Public Function IsUnique() As Boolean
         
-        Dim myFreqs As Hkvp = Me.Freq
+        Dim myFreqs As KvpH = Me.Freq
         Dim myIter As IterItems = IterItems(myFreqs)
         Do
         	
@@ -1164,54 +1164,54 @@
     End Function
     
     
-    Public Function Freq() As Hkvp
+    Public Function Freq() As KvpH
     
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
         Dim myIter As IterItems = IterItems(Me)
         Do
             
-            If myHkvp.HoldsKey(myIter.Item(0)) Then
+            If myKvpH.HoldsKey(myIter.Item(0)) Then
             
-                myHkvp.Item(myIter.Item(0)) += 1
+                myKvpH.Item(myIter.Item(0)) += 1
             
             
             Else
                 
-                myHkvp.Add myIter.Item(0), 1
+                myKvpH.Add myIter.Item(0), 1
                 
                 
             End If
             
         Loop While myIter.MoveNext
         
-        Return myHkvp
+        Return myKvpH
         
     End Function
     
-    '@Description(creates an hkvp of collections items where the items in the collection are bucketed based on the value at an Index)
-    Public Function Freq(ByVal ipIndex As Long) As Hkvp
+    '@Description(creates an KvpH of collections items where the items in the collection are bucketed based on the value at an Index)
+    Public Function Freq(ByVal ipIndex As Long) As KvpH
     
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
             Dim myIter As IterItems = IterItems(Me)
             Do
                 Dim myItem As Variant = myIter.Item(0)
-                If myHkvp.HoldsKey(myItem.Item(ipIndex)) Then
+                If myKvpH.HoldsKey(myItem.Item(ipIndex)) Then
                 
-                    myHkvp.Item(myItem.Item(ipIndex)).add myIter.Item(0)
+                    myKvpH.Item(myItem.Item(ipIndex)).add myIter.Item(0)
                 
                 
                 Else
                     
-                    myHkvp.Add myItem.Item(0), Seq.Deb
+                    myKvpH.Add myItem.Item(0), Seq.Deb
                     
                     
                 End If
                 
             Loop While myIter.MoveNext
         
-        Return myHkvp
+        Return myKvpH
         
     End Function
     

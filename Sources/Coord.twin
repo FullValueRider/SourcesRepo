@@ -19,10 +19,10 @@ Class Coord
         Row                                     As long
         Item                                    As variant
     
-        MinCol                      As long
-        MinRow                      As long
-        MaxCol                      As long
-        MaxRow                      As long
+        MinCol                                  As long
+        MinRow                                  As long
+        MaxCol                                  As long
+        MaxRow                                  As long
     
     
     End Type
@@ -152,9 +152,9 @@ Class Coord
         ByVal ipRow As Long, _
         Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay, _
         Optional ByVal ipCoordType As CoordType = coordtype.asarray _
-    ) As Hkvp
+    ) As KvpH
       
-        Dim myCoords As Hkvp = Hkvp.Deb
+        Dim myCoords As KvpH = KvpH.Deb
         	
         Dim myOffsets As Variant
         If ipSearchArea = FourWay Then
@@ -183,9 +183,9 @@ Class Coord
      '@DEscription("Get adjacent coorinates irrespective of any bounds)")
     Public Function GetAdjacentCoordinatesWithValue _
     ( _
-        ByRef ipData As Hkvp, _
+        ByRef ipData As KvpH, _
         Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay _
-    ) As Hkvp
+    ) As KvpH
       
         Dim myOffsets As Variant
         If ipSearchArea = FourWay Then
@@ -194,7 +194,7 @@ Class Coord
         	myOffsets = Area.GetEightWayOffsets
         End If
         
-        Dim myAdjacentCoords As Hkvp = Hkvp.Deb
+        Dim myAdjacentCoords As KvpH = KvpH.Deb
         	
         Dim myOffset As Variant
         For Each myOffset In myOffsets
@@ -220,9 +220,9 @@ Class Coord
         ByVal ipRow As Long, _
         Optional ByVal ipSearchArea As SearchArea = Searcharea.FourWay, _
         Optional ByVal ipCoordType As CoordType = coordtype.asarray _
-    ) As Hkvp
+    ) As KvpH
       
-        Dim myCoords As Hkvp = Hkvp.Deb
+        Dim myCoords As KvpH = KvpH.Deb
         
         'Ignore requests for points that are outside the set bounds
         If ipCol < s.MinCol Then Return myCoords

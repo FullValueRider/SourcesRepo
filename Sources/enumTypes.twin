@@ -164,7 +164,7 @@ Class enumTypes
         idCollection
         idDictionary
         idExtent
-        idHkvp
+        idKvpH
         idIterArray
         idIterConst
         idIterItems
@@ -212,10 +212,10 @@ Class enumTypes
 
     Private Type Properties
 
-        OrdToValue                          As Hkvp
-        OrdToOrdName                        As Hkvp
-        OrdToTypeName                       As Hkvp
-        TypeNameToOrd                       As Hkvp
+        OrdToValue                          As KvpH
+        OrdToOrdName                        As KvpH
+        OrdToTypeName                       As KvpH
+        TypeNameToOrd                       As KvpH
         
         
     End Type
@@ -246,7 +246,7 @@ Class enumTypes
 
 
         ' Values associated with the enumeration member may be defined at runtime
-        Set p.OrdToValue = Hkvp.Deb
+        Set p.OrdToValue = KvpH.Deb
         
         With p.OrdToValue
             
@@ -317,7 +317,7 @@ Class enumTypes
             .Add idDictionary, NextOrd
             .Add idExtent, NextOrd
             .Add idcHashD, NextOrd
-            .Add idHkvp, NextOrd
+            .Add idKvpH, NextOrd
             
             .Add idIterArray, NextOrd
             .Add idIterConst, NextOrd
@@ -354,7 +354,7 @@ Class enumTypes
     '
         End With
             
-        Set p.OrdToOrdName = Hkvp.Deb
+        Set p.OrdToOrdName = KvpH.Deb
         With p.OrdToOrdName
             
             .Add idEmpty, "idempty"                              ' Not specified.
@@ -424,7 +424,7 @@ Class enumTypes
             .Add idCollection, "idcollection"
             .Add idDictionary, "iddictionary"
             .Add idExtent, "idextent"
-            .Add idHkvp, "idhkvp"
+            .Add idKvpH, "idKvpH"
             
             .Add idIterArray, "iditerarray"
             .Add idIterConst, "iditerconst"
@@ -455,7 +455,7 @@ Class enumTypes
             
         End With
         
-        Set p.OrdToTypeName = Hkvp.Deb
+        Set p.OrdToTypeName = KvpH.Deb
         With p.OrdToTypeName
             
             .Add idEmpty, VBA.LCase("Empty")                                    ' Not specified.
@@ -522,7 +522,7 @@ Class enumTypes
             .Add idCollection, "collection"
             .Add idDictionary, "dictionary"
             .Add idExtent, "extent"
-            .Add idHkvp, "hkvp"
+            .Add idKvpH, "KvpH"
             .Add idIterArray, "iterarray"
             .Add idIterConst, "iterconst"
             .Add idIterItems, "iteritems"
@@ -553,7 +553,7 @@ Class enumTypes
         End With
         
         ' also compile the reverse lookup
-        Set p.TypeNameToOrd = Hkvp.Deb
+        Set p.TypeNameToOrd = KvpH.Deb
         Dim myItem As Variant
         Dim myPairs() As Variant
         myPairs = p.OrdToTypeName.Pairs
@@ -580,20 +580,20 @@ Class enumTypes
     End Sub
 
 
-    Public Function OrdToTypeName() As Hkvp
+    Public Function OrdToTypeName() As KvpH
         Return p.OrdToTypeName
     End Function
 
-    Public Function OrdToValue() As Hkvp
+    Public Function OrdToValue() As KvpH
         Return p.OrdToValue
     End Function
 
-    Public Function OrdToOrdName() As Hkvp
+    Public Function OrdToOrdName() As KvpH
         Return p.OrdToValue
     End Function
 
     '@Description("Returns the Typename to Ord dictionary")
-    Public Function TypeNameToOrd() As Hkvp
+    Public Function TypeNameToOrd() As KvpH
         Return p.TypeNameToOrd
     End Function
 

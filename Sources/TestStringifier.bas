@@ -62,7 +62,7 @@ Test04b_StringifyItemByIndex_Seq
 Test04c_StringifyItemByToArrayByIndex_Queue
 'Test04d_IterableItemByToArrayForEachStack
 
-Test05a_StringifyKeyByIndex_Hkvp
+Test05a_StringifyKeyByIndex_KvpH
 Test05b_StringifyItemByKey_KVPair
 Test05c_StringifyArray_Array_1_2_3
 
@@ -499,7 +499,7 @@ End Sub
 
 
 '@TestMethod("Stringifier")
-Public Sub Test05a_StringifyKeyByIndex_Hkvp()
+Public Sub Test05a_StringifyKeyByIndex_KvpH()
 
     #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -516,16 +516,16 @@ Public Sub Test05a_StringifyKeyByIndex_Hkvp()
     Dim myExpected  As String
    myExpected = Char.twLCurly & """Ten"" 10,""Twenty"" 20,""Thirty"" 30,""Forty"" 40" & Char.twRCurly
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
-    myHkvp.Add "Ten", 10
-    myHkvp.Add "Twenty", 20
-    myHkvp.Add "Thirty", 30
-    myHkvp.Add "Forty", 40
+    Dim myKvpH As KvpH = KvpH.Deb
+    myKvpH.Add "Ten", 10
+    myKvpH.Add "Twenty", 20
+    myKvpH.Add "Thirty", 30
+    myKvpH.Add "Forty", 40
     
     Dim myResult As String
     
     'Act:
-    myResult = Stringifier.StringifyItembyKey(myHkvp)
+    myResult = Stringifier.StringifyItembyKey(myKvpH)
     
     'Assert:
     AssertStrictAreEqual myExpected, myResult, myProcedureName
@@ -909,7 +909,7 @@ End Sub
 
 
 '@TestMethod("Stringifier")
-Public Sub Test08f_ToString_Hkvp()
+Public Sub Test08f_ToString_KvpH()
 
     #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -924,7 +924,7 @@ Public Sub Test08f_ToString_Hkvp()
     'Arrange:
     Dim myExpected As String = Char.twLCurly & """Ten"" 10,""Twenty"" 20,""Thirty"" 30,""Forty"" 40" & Char.twRCurly
     
-    Dim myH As Hkvp = Hkvp.Deb
+    Dim myH As KvpH = KvpH.Deb
     myH.Add "Ten", 10
     myH.Add "Twenty", 20
     myH.Add "Thirty", 30

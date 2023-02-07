@@ -348,7 +348,7 @@ Class TypeInfo
         .Add "chashd", ikcHashD
         .Add "lookup", ikLookup
         .Add "dictionary", ikDictionary
-        .Add "hkvp", idHkvp
+        .Add "KvpH", idKvpH
         .Add "scriptingdictionary", ikScriptingDictionary
         .Add "kvpair", ikKVPair
         

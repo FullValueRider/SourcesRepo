@@ -429,8 +429,8 @@ Private Sub Test03e_AddDictionaryByDeb()
     Dim myExpected  As Variant
     myExpected = Array(10, 20, 30, 40, 50, 60, 70, 80, 90)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb.AddKnownArrayPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
-    Dim mySeq As Seq = Seq.Deb(myHkvp)
+    Dim myKvpH As KvpH = KvpH.Deb.AddKnownArrayPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
+    Dim mySeq As Seq = Seq.Deb(myKvpH)
     
     Dim myResult As Variant
     
@@ -587,9 +587,9 @@ Private Sub Test04d_AddDictionaryByAddRange()
     
    
     
-    Dim myHkvp As Hkvp = Hkvp.Deb.AddKnownArrayPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
+    Dim myKvpH As KvpH = KvpH.Deb.AddKnownArrayPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
     
-    Dim mySeq As Seq = Seq.Deb(myHkvp)
+    Dim mySeq As Seq = Seq.Deb(myKvpH)
     Dim myResult As Variant
     'Act:
     myResult = mySeq.ToArray
@@ -621,9 +621,9 @@ Private Sub Test05_Clear()
     Dim myExpectedBefore  As Long = 9
     Dim myExpectedAfter As Long = 0
     
-    Dim myHkvp As Hkvp = Hkvp.Deb.AddPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
+    Dim myKvpH As KvpH = KvpH.Deb.AddPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
     
-    Dim mySeq As Seq = Seq.Deb(myHkvp)
+    Dim mySeq As Seq = Seq.Deb(myKvpH)
     
     'Act:
     Dim myResultBefore As Long = mySeq.Count
@@ -657,9 +657,9 @@ Private Sub Test06_Clone()
     'Arrange:
     Dim myExpected  As Variant = Array(10, 20, 30, 40, 50, 60, 70, 80, 90)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb.AddPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
+    Dim myKvpH As KvpH = KvpH.Deb.AddPairs(Array("a", "b", "c", "d", "e", "f", "g", "h ", "i"), Array(10, 20, 30, 40, 50, 60, 70, 80, 90))
     
-    Dim mySeq As Seq = Seq.Deb(myHkvp)
+    Dim mySeq As Seq = Seq.Deb(myKvpH)
     
     'Act:
     Dim myResult As Variant = mySeq.Clone.ToArray
@@ -1588,7 +1588,7 @@ Private Sub Test11g_InsertRangeDictionary()
     Dim myExpected  As Variant
     myExpected = Array(10, 20, 30, 400, 500, 600, 700, 800, 40, 50, 60, 70)
     
-    Dim myH As Hkvp = Hkvp.Deb.AddPairs(Array("a", "b", "c", "d", "e"), Array(400, 500, 600, 700, 800))
+    Dim myH As KvpH = KvpH.Deb.AddPairs(Array("a", "b", "c", "d", "e"), Array(400, 500, 600, 700, 800))
     
     Dim myResult As Variant
     

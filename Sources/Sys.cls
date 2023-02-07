@@ -70,7 +70,7 @@ Public Sub Swap(ByRef iopLHS As Variant, ByRef iopRHS As Variant)
 End Sub
 
 '@Description(" = without the pain")
-Public Sub Assign(Of T)(ByRef opTo As Variant, ByRef ipFrom As T)
+Public Sub Assign(ByRef opTo As Variant, ByRef ipFrom As Variant)
     If IsObject(ipFrom) Then
         Set opTo = ipFrom
     Else

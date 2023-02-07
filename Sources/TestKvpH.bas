@@ -1,4 +1,4 @@
-Attribute VB_Name = "TestHkvp"
+Attribute VB_Name = "TestKvpH"
 Option Explicit
 Option Private Module
 '@IgnoreModule
@@ -34,7 +34,7 @@ Public Sub TestCleanup()
 End Sub
 #End If
 
-Public Sub HkvpTests()
+Public Sub KvpHTests()
     
 #If twinbasic Then
     Debug.Print CurrentProcedureName ; vbTab, vbTab, vbTab,
@@ -42,7 +42,7 @@ Public Sub HkvpTests()
     Debug.Print ErrEx.LiveCallstack.ProcedureName; vbTab, vbTab,
 #End If
 
-    Test01_IsHkvp
+    Test01_IsKvpH
     Test02_CountKeysItems
     Test03_Clear
     Test04_RemoveByKey
@@ -68,8 +68,8 @@ Public Sub HkvpTests()
 
 End Sub
 
-'@TestMethod("Hkvp")
-Private Sub Test01_IsHkvp()
+'@TestMethod("KvpH")
+Private Sub Test01_IsKvpH()
 
 #If twinbasic Then
     myProcedureName = CurrentProcedureName
@@ -83,13 +83,13 @@ Private Sub Test01_IsHkvp()
 
     'Arrange:
     Dim myExpected As Variant = Array(True, True, True)
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     Dim myResult(0 To 2)  As Boolean
 
     'Act:
-    myResult(0) = VBA.IsObject(myHkvp)
-    myResult(1) = "Hkvp" = TypeName(myHkvp)
-    myResult(2) = "Hkvp" = myHkvp.TypeName
+    myResult(0) = VBA.IsObject(myKvpH)
+    myResult(1) = "KvpH" = TypeName(myKvpH)
+    myResult(2) = "KvpH" = myKvpH.TypeName
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -100,7 +100,7 @@ Private Sub Test01_IsHkvp()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test02_CountKeysItems()
 
     #If twinbasic Then
@@ -117,9 +117,9 @@ Private Sub Test02_CountKeysItems()
         Dim myExpectedCount As Long = 6
         Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
         Dim myExpectedItems As Variant = Array(10, 20, 30, 40, 50, 60)
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
-        With myHkvp
+        With myKvpH
             .Add "Hello", 10
             .Add "World", 20
             .Add "Its", 30
@@ -133,9 +133,9 @@ Private Sub Test02_CountKeysItems()
         Dim myResultCount As Long
         
         'Act:
-        myResultCount = myHkvp.Count
-        myResultKeys = myHkvp.Keys
-        myResultItems = myHkvp.Items
+        myResultCount = myKvpH.Count
+        myResultKeys = myKvpH.Keys
+        myResultItems = myKvpH.Items
        
         'Assert.Strict:
         AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
@@ -149,7 +149,7 @@ Private Sub Test02_CountKeysItems()
         Resume TestExit
     End Sub
     
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test03_Clear()
 
     #If twinbasic Then
@@ -166,9 +166,9 @@ Private Sub Test03_Clear()
         Dim myExpected As Long = 0
         
         
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
-        With myHkvp
+        With myKvpH
             .Add "Hello", 10
             .Add "World", 20
             .Add "Its", 30
@@ -180,8 +180,8 @@ Private Sub Test03_Clear()
         Dim myResult As Long
         
         'Act:
-        myHkvp.Clear
-        myResult = myHkvp.Count
+        myKvpH.Clear
+        myResult = myKvpH.Count
         
         
         'Assert.Strict:
@@ -194,7 +194,7 @@ Private Sub Test03_Clear()
         Resume TestExit
     End Sub
     
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test04_RemoveByKey()
 
 #If twinbasic Then
@@ -212,9 +212,9 @@ Private Sub Test04_RemoveByKey()
     Dim myExpectedKeys As Variant = Split("World A Nice Day", " ")
     Dim myExpectedItems As Variant = Array(20, 40, 50, 60)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -228,11 +228,11 @@ Private Sub Test04_RemoveByKey()
     Dim myResultCount As Long
     
     'Act:
-    myHkvp.Remove "Hello"
-    myHkvp.Remove "Its"
-    myResultCount = myHkvp.Count
-    myResultKeys = myHkvp.Keys
-    myResultItems = myHkvp.Items
+    myKvpH.Remove "Hello"
+    myKvpH.Remove "Its"
+    myResultCount = myKvpH.Count
+    myResultKeys = myKvpH.Keys
+    myResultItems = myKvpH.Items
     
     'Assert.Strict:
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
@@ -246,7 +246,7 @@ Private Sub Test04_RemoveByKey()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test05_RemoveByIndex()
 
 #If twinbasic Then
@@ -264,9 +264,9 @@ Private Sub Test05_RemoveByIndex()
     Dim myExpectedKeys As Variant = Split("World Its Nice Day", " ")
     Dim myExpectedItems As Variant = Array(20, 30, 50, 60)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -280,11 +280,11 @@ Private Sub Test05_RemoveByIndex()
     Dim myResultCount As Long
     
     'Act:
-    myHkvp.RemoveByIndex 0&
-    myHkvp.RemoveByIndex 2&
-    myResultCount = myHkvp.Count
-    myResultKeys = myHkvp.Keys
-    myResultItems = myHkvp.Items
+    myKvpH.RemoveByIndex 0&
+    myKvpH.RemoveByIndex 2&
+    myResultCount = myKvpH.Count
+    myResultKeys = myKvpH.Keys
+    myResultItems = myKvpH.Items
     
     'Assert.Strict:
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
@@ -298,7 +298,7 @@ Private Sub Test05_RemoveByIndex()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test06a_Exists()
 
 #If twinbasic Then
@@ -314,9 +314,9 @@ Private Sub Test06a_Exists()
     'Arrange:
     Dim myExpected As Variant = Array(True, True, False, False)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -328,10 +328,10 @@ Private Sub Test06a_Exists()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.Exists("World")
-    myResult(1) = myHkvp.Exists("Its")
-    myResult(2) = myHkvp.Exists("Theree")
-    myResult(3) = myHkvp.Exists(" Its")
+    myResult(0) = myKvpH.Exists("World")
+    myResult(1) = myKvpH.Exists("Its")
+    myResult(2) = myKvpH.Exists("Theree")
+    myResult(3) = myKvpH.Exists(" Its")
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -343,7 +343,7 @@ Private Sub Test06a_Exists()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test06b_HoldsKey()
 
 #If twinbasic Then
@@ -359,9 +359,9 @@ Private Sub Test06b_HoldsKey()
     'Arrange:
     Dim myExpected As Variant = Array(True, True, False, False)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -373,10 +373,10 @@ Private Sub Test06b_HoldsKey()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.HoldsKey("World")
-    myResult(1) = myHkvp.HoldsKey("Its")
-    myResult(2) = myHkvp.HoldsKey("Theree")
-    myResult(3) = myHkvp.HoldsKey(" Its")
+    myResult(0) = myKvpH.HoldsKey("World")
+    myResult(1) = myKvpH.HoldsKey("Its")
+    myResult(2) = myKvpH.HoldsKey("Theree")
+    myResult(3) = myKvpH.HoldsKey(" Its")
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -388,7 +388,7 @@ Private Sub Test06b_HoldsKey()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test06c_LacksKey()
 
 #If twinbasic Then
@@ -404,9 +404,9 @@ Private Sub Test06c_LacksKey()
     'Arrange:
     Dim myExpected As Variant = Array(False, False, True, True)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -418,10 +418,10 @@ Private Sub Test06c_LacksKey()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.LacksKey("World")
-    myResult(1) = myHkvp.LacksKey("Its")
-    myResult(2) = myHkvp.LacksKey("There")
-    myResult(3) = myHkvp.LacksKey(" Its")
+    myResult(0) = myKvpH.LacksKey("World")
+    myResult(1) = myKvpH.LacksKey("Its")
+    myResult(2) = myKvpH.LacksKey("There")
+    myResult(3) = myKvpH.LacksKey(" Its")
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -434,7 +434,7 @@ Private Sub Test06c_LacksKey()
 End Sub
     
     
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test06d_HoldsItem()
 
 #If twinbasic Then
@@ -450,9 +450,9 @@ Private Sub Test06d_HoldsItem()
     'Arrange:
     Dim myExpected As Variant = Array(True, True, False, False)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -464,10 +464,10 @@ Private Sub Test06d_HoldsItem()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.HoldsItem(10)
-    myResult(1) = myHkvp.HoldsItem(50)
-    myResult(2) = myHkvp.HoldsItem(42)
-    myResult(3) = myHkvp.HoldsItem(-1)
+    myResult(0) = myKvpH.HoldsItem(10)
+    myResult(1) = myKvpH.HoldsItem(50)
+    myResult(2) = myKvpH.HoldsItem(42)
+    myResult(3) = myKvpH.HoldsItem(-1)
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -479,7 +479,7 @@ Private Sub Test06d_HoldsItem()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test06e_LacksItem()
 
 #If twinbasic Then
@@ -495,9 +495,9 @@ Private Sub Test06e_LacksItem()
     'Arrange:
     Dim myExpected As Variant = Array(False, False, True, True)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -509,10 +509,10 @@ Private Sub Test06e_LacksItem()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.LacksItem(10)
-    myResult(1) = myHkvp.LacksItem(50)
-    myResult(2) = myHkvp.LacksItem(42)
-    myResult(3) = myHkvp.LacksItem(-1)
+    myResult(0) = myKvpH.LacksItem(10)
+    myResult(1) = myKvpH.LacksItem(50)
+    myResult(2) = myKvpH.LacksItem(42)
+    myResult(3) = myKvpH.LacksItem(-1)
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -524,7 +524,7 @@ Private Sub Test06e_LacksItem()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test07_IndexByKey()
 
 #If twinbasic Then
@@ -540,9 +540,9 @@ Private Sub Test07_IndexByKey()
     'Arrange:
     Dim myExpected As Variant = Array(1, 2, -1, -1)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -554,10 +554,10 @@ Private Sub Test07_IndexByKey()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.IndexByKey("World")
-    myResult(1) = myHkvp.IndexByKey("Its")
-    myResult(2) = myHkvp.IndexByKey("Theree")
-    myResult(3) = myHkvp.IndexByKey(" Its")
+    myResult(0) = myKvpH.IndexByKey("World")
+    myResult(1) = myKvpH.IndexByKey("Its")
+    myResult(2) = myKvpH.IndexByKey("Theree")
+    myResult(3) = myKvpH.IndexByKey(" Its")
     
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -569,7 +569,7 @@ Private Sub Test07_IndexByKey()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test08_GetItemByIndex()
 
 #If twinbasic Then
@@ -585,9 +585,9 @@ Private Sub Test08_GetItemByIndex()
     'Arrange:
     Dim myExpected As Variant = Array(10, 30, 50, Null)
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -599,11 +599,11 @@ Private Sub Test08_GetItemByIndex()
     Dim myResult(0 To 3) As Variant
     
     'Act:
-    myResult(0) = myHkvp.ItemByIndex(0)
-    myResult(1) = myHkvp.ItemByIndex(2)
-    myResult(2) = myHkvp.ItemByIndex(4)
+    myResult(0) = myKvpH.ItemByIndex(0)
+    myResult(1) = myKvpH.ItemByIndex(2)
+    myResult(2) = myKvpH.ItemByIndex(4)
     ' currently cHashD errors when out of range
-   ' myResult(3) = myHkvp.ItemByIndex(7)
+   ' myResult(3) = myKvpH.ItemByIndex(7)
     
     'Assert.Strict:
     'This format is required as the VBA spec states that Null is not equal to Null
@@ -620,7 +620,7 @@ Private Sub Test08_GetItemByIndex()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test09_LetItemByIndex()
 
 #If twinbasic Then
@@ -638,9 +638,9 @@ Private Sub Test09_LetItemByIndex()
     Dim myExpectedItems As Variant = Array(10, 20, 30, 42, 50, 60)
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -650,10 +650,10 @@ Private Sub Test09_LetItemByIndex()
     End With
     
     'Act:
-    myHkvp.ItemByIndex(3) = 42
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
-    Dim myResultItems As Variant = myHkvp.Items
+    myKvpH.ItemByIndex(3) = 42
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
+    Dim myResultItems As Variant = myKvpH.Items
     
     'Assert.Strict:
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
@@ -667,7 +667,7 @@ Private Sub Test09_LetItemByIndex()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test10_SetItemByIndex()
 
 #If twinbasic Then
@@ -684,9 +684,9 @@ Private Sub Test10_SetItemByIndex()
     Dim myExpectedCount As Long = 6
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
     
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -707,16 +707,16 @@ Private Sub Test10_SetItemByIndex()
     End With
     
     'Act:
-    Set myHkvp.ItemByIndex(3) = myCollection
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
+    Set myKvpH.ItemByIndex(3) = myCollection
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
     
     
     'Assert.Strict:
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
     AssertStrictSequenceEquals myExpectedKeys, myResultKeys, myProcedureName
     'ToDO: revise class so that Item is not needed
-    AssertStrictAreEqual 40, myHkvp.Item("A")(4), myProcedureName
+    AssertStrictAreEqual 40, myKvpH.Item("A")(4), myProcedureName
     
     TestExit:
     Exit Sub
@@ -740,9 +740,9 @@ Private Sub Test11_GetItem()
         'Arrange:
         Dim myExpected As Long = 50
        
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
-        With myHkvp
+        With myKvpH
             .Add "Hello", 10
             .Add "World", 20
             .Add "Its", 30
@@ -753,7 +753,7 @@ Private Sub Test11_GetItem()
         
         
         'Act:
-        Dim myResult As Long = myHkvp.Item("Nice")
+        Dim myResult As Long = myKvpH.Item("Nice")
        
         'Assert.Strict:
         'This format is required as the VBA spec states that Null is not equal to Null
@@ -768,7 +768,7 @@ Private Sub Test11_GetItem()
         Resume TestExit
     End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test12_LetItem()
 
 #If twinbasic Then
@@ -785,9 +785,9 @@ Private Sub Test12_LetItem()
     Dim myExpectedCount As Long = 6
     Dim myExpectedItems As Variant = Array(10, 20, 30, 42, 50, 60)
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -798,10 +798,10 @@ Private Sub Test12_LetItem()
     
     
     'Act:
-    myHkvp.Item("A") = 42
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
-    Dim myResultItems As Variant = myHkvp.Items
+    myKvpH.Item("A") = 42
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
+    Dim myResultItems As Variant = myKvpH.Items
     'Assert.Strict:
     'This format is required as the VBA spec states that Null is not equal to Null
     ' so we cannot use sequence comparing
@@ -816,7 +816,7 @@ Private Sub Test12_LetItem()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test13_SetItem()
 
 #If twinbasic Then
@@ -832,9 +832,9 @@ Private Sub Test13_SetItem()
     'Arrange:
     Dim myExpectedCount As Long = 6
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -854,16 +854,16 @@ Private Sub Test13_SetItem()
         .Add 60
     End With
     'Act:
-    Set myHkvp.Item("A") = myCollection
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
+    Set myKvpH.Item("A") = myCollection
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
    
     'Assert.Strict:
     'This format is required as the VBA spec states that Null is not equal to Null
     ' so we cannot use sequence comparing
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
     AssertStrictSequenceEquals myExpectedKeys, myResultKeys, myProcedureName
-    AssertStrictAreEqual 40, myHkvp.Item("A")(4), myProcedureName
+    AssertStrictAreEqual 40, myKvpH.Item("A")(4), myProcedureName
     
     TestExit:
     Exit Sub
@@ -872,7 +872,7 @@ Private Sub Test13_SetItem()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test14_DuplicateKeys()
 
 #If twinbasic Then
@@ -891,13 +891,13 @@ Private Sub Test14_DuplicateKeys()
     Dim myExpectedKeys As Variant = Split("Hello World Its Hello A Nice Day Hello", " ")
    
     ' This line fails
-    Dim myHkvp As Hkvp = Hkvp.Deb
-    myHkvp.ReInit(ipensureuniquekeys:=False)
+    Dim myKvpH As KvpH = KvpH.Deb
+    myKvpH.ReInit(ipensureuniquekeys:=False)
     
     ' These two lines work OK
-    'Dim myHkvp As Hkvp = Hkvp.Deb
-    'myHkvp.ReInit(ensureuniquekeys:=False)
-    With myHkvp
+    'Dim myKvpH As KvpH = KvpH.Deb
+    'myKvpH.ReInit(ensureuniquekeys:=False)
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -909,9 +909,9 @@ Private Sub Test14_DuplicateKeys()
     End With
     
     'Act:
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
-    Dim myResultItems As Variant = myHkvp.Items
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
+    Dim myResultItems As Variant = myKvpH.Items
    
     'Assert.Strict:
     AssertStrictAreEqual myExpectedCount, myResultCount, myProcedureName
@@ -925,7 +925,7 @@ Private Sub Test14_DuplicateKeys()
     Resume TestExit
 End Sub
 
-'@TestMethod("Hkvp")
+'@TestMethod("KvpH")
 Private Sub Test15_UniqueKeys()
 
 #If twinbasic Then
@@ -946,11 +946,11 @@ Private Sub Test15_UniqueKeys()
     Dim myExpectedCount As Long = 6
     Dim myExpectedItems As Variant = Array(10, 20, 30, 40, 50, 60)
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day", " ")
-    Dim myHkvp As Hkvp = Hkvp.Deb
+    Dim myKvpH As KvpH = KvpH.Deb
    
-    myHkvp.ReInit ipEnsureUniqueKeys:=True
+    myKvpH.ReInit ipEnsureUniqueKeys:=True
     
-    With myHkvp
+    With myKvpH
         .Add "Hello", 10
         .Add "World", 20
         .Add "Its", 30
@@ -962,9 +962,9 @@ Private Sub Test15_UniqueKeys()
     End With
    'On Error GoTo TestFail
     'Act:
-    Dim myResultCount As Long = myHkvp.Count
-    Dim myResultKeys As Variant = myHkvp.Keys
-    Dim myResultItems As Variant = myHkvp.Items
+    Dim myResultCount As Long = myKvpH.Count
+    Dim myResultKeys As Variant = myKvpH.Keys
+    Dim myResultItems As Variant = myKvpH.Items
    
     'Assert.Strict:
     'This format is required as the VBA spec states that Null is not equal to Null
@@ -982,7 +982,7 @@ End Sub
 
 
 '** Reversing a dictionary doesn't amke sense
-' '@TestMethod("Hkvp")
+' '@TestMethod("KvpH")
 ' Private Sub Test16_Reverse()
 
 ' #If twinbasic Then
@@ -1000,11 +1000,11 @@ End Sub
 '     Dim myExpectedCount As Long = 6
 '     Dim myExpectedItems As Variant = Array(60, 50, 40, 30, 20, 10)
 '     Dim myExpectedKeys As Variant = Split("Day Nice A Its World Hello", " ")
-'     Dim myHkvp As Hkvp = Hkvp.Deb
+'     Dim myKvpH As KvpH = KvpH.Deb
    
   
     
-'     With myHkvp
+'     With myKvpH
 '         .Add "Hello", 10
 '         .Add "World", 20
 '         .Add "Its", 30
@@ -1015,7 +1015,7 @@ End Sub
 '     End With
 '    'On Error GoTo TestFail
 '     'Act:
-'     Dim myReversed As Hkvp = myHkvp.Reverse
+'     Dim myReversed As KvpH = myKvpH.Reverse
 '     Dim myResultCount As Long = myReversed.Count
 '     Dim myResultKeys As Variant = myReversed.Keys
 '     Dim myResultItems As Variant = myReversed.Items

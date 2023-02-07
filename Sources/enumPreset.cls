@@ -38,8 +38,8 @@ End Enum
 
 Private Type State
     
-    Values                      As Hkvp' values may be executable objects
-    Names                       As Hkvp
+    Values                      As KvpH' values may be executable objects
+    Names                       As KvpH
     
 End Type
 
@@ -73,7 +73,7 @@ End Function
 
 Private Sub SetupDictionaries()
   
-    Set s.Values = Hkvp.Deb
+    Set s.Values = KvpH.Deb
     With s.Values
         
         'Number related
@@ -97,7 +97,7 @@ Private Sub SetupDictionaries()
         
     End With
     
-    Set s.Names = Hkvp.Deb
+    Set s.Names = KvpH.Deb
     With s.Names
     ' Number related
         .Add NaN, "NaN"

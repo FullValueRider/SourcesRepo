@@ -58,7 +58,7 @@ Public Sub IterItemsTest()
     Test06_WCollectionItemKeyIndex
     Test07_SeqItemKeyIndex
     Test08_ArrayListItemKeyIndex
-    Test09_HkvpItemKeyIndex
+    Test09_KvpHItemKeyIndex
     Test10_StackItemKeyIndex
     Test11_QueueItemKeyIndex
     
@@ -66,7 +66,7 @@ Public Sub IterItemsTest()
     Test13_WCollectionMutate
     Test14_SeqMutate
     Test15_ArrayListMutate
-    Test16_HkvpMutate
+    Test16_KvpHMutate
     'Test17_StackMutate
    ' Test18_QueueMutate
     Debug.Print "Testing completed"
@@ -545,7 +545,7 @@ Private Sub Test04g_DictionaryWithStringKeys()
     Dim myExpectedIndexes As Variant = Array(0, 1, 2, 3, 4, 5, 6)
     Dim myExpectedKeys As Variant = Split("Hello World Its A Nice Day Today", " ")
     
-    Dim myH As Hkvp = Hkvp.Deb.AddPairs(Split("Hello World Its A Nice Day Today", " "), Array(10, 20, 30, 40, 50, 60, 70))
+    Dim myH As KvpH = KvpH.Deb.AddPairs(Split("Hello World Its A Nice Day Today", " "), Array(10, 20, 30, 40, 50, 60, 70))
 
     
     Dim myResultItems As Variant
@@ -991,7 +991,7 @@ End Sub
 
 
 '@TestMethod("IterItems")
-Private Sub Test09_HkvpItemKeyIndex()
+Private Sub Test09_KvpHItemKeyIndex()
     
 #If twinbasic Then
     myProcedureName = CurrentProcedureName
@@ -1007,7 +1007,7 @@ Private Sub Test09_HkvpItemKeyIndex()
     Dim myExpected  As Variant
     myExpected = Array(9.0, "Nine", 4, 12.0, "Twelve", 7, 6.0, "Six", 1)
 
-    Dim myH As Hkvp = Hkvp.Deb
+    Dim myH As KvpH = KvpH.Deb
     With myH
         .Add "Five", 5.0
         .Add "Six", 6.0
@@ -1482,7 +1482,7 @@ TestFail:
 End Sub
 
 '@TestMethod("IterItems")
-Private Sub Test16_HkvpMutate()
+Private Sub Test16_KvpHMutate()
     
 #If twinbasic Then
     myProcedureName = CurrentProcedureName
@@ -1498,7 +1498,7 @@ Private Sub Test16_HkvpMutate()
     Dim myExpected  As Variant
     myExpected = Array(42.0, "Nine", 4, 43.0, "Twelve", 7, 41.0, "Six", 1)
 
-    Dim myH As Hkvp = Hkvp.Deb
+    Dim myH As KvpH = KvpH.Deb
     With myH
         .Add "Five", 5.0
         .Add "Six", 6.0

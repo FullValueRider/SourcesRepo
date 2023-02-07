@@ -98,7 +98,7 @@ Class Trail
         Mover                                   As XYMovement
         TurnAngle                               As long
         
-        Visited                                 As Hkvp ' holds a list of visited coordinates as Keys and the number of visits as Items
+        Visited                                 As KvpH ' holds a list of visited coordinates as Keys and the number of visits as Items
         Track                                   As Seq  ' A sequential record of the movenent of the coord
         
         IsBounded                               As Boolean
@@ -165,7 +165,7 @@ Class Trail
         s.Mover.NS = s.MovementMap.Item(North)(1)
         
         Set s.Track = Seq.Deb
-        Set s.Visited = Hkvp.Deb
+        Set s.Visited = KvpH.Deb
         s.TurnAngle = IIf(p.CompassPoints = FourWay, 90, 45)
             
         s.IsBounded = False
@@ -543,7 +543,7 @@ Class Trail
         Return Abs(p.Current.X - ipCoord.X) + Abs(p.Current.Y - ipCoord.Y)
     End Function
 
-    Public Function Visited() As Hkvp
+    Public Function Visited() As KvpH
         Return s.Visited
     End Function
 

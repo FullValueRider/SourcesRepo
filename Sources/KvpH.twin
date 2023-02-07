@@ -1,4 +1,4 @@
-Class Hkvp
+Class KvpH
     Attribute VB_GlobalNameSpace = False
     Attribute VB_Creatable = True
     Attribute VB_PredeclaredId = True
@@ -6,7 +6,7 @@ Class Hkvp
     Option Explicit
     '@Description("Dictionary derived from cHashD2 by Olaf Schmidt")
     
-    Private Const MY_TYPENAME                       As String = "Hkvp"
+    Private Const MY_TYPENAME                       As String = "KvpH"
     
     
     Implements cHashD2 Via Host
@@ -21,8 +21,8 @@ Class Hkvp
     
     Public Enum MirrorType
     
-        ByAllValues = 0                 ' Returns a Hkvp of Hkvp where the Outer Hkvp has the Host Values as Keys, and the InnerKvp are Host Keys vs Index 
-        ByFirstValue = 0                ' Returns an Hkvp of two Hkvp.  Hkvp(1) is first found Host Value vs Key, the second is Host Key vs subsequent found host values
+        ByAllValues = 0                 ' Returns a KvpH of KvpH where the Outer KvpH has the Host Values as Keys, and the InnerKvp are Host Keys vs Index 
+        ByFirstValue = 0                ' Returns an KvpH of two KvpH.  KvpH(1) is first found Host Value vs Key, the second is Host Key vs subsequent found host values
         
     End Enum
     
@@ -30,18 +30,18 @@ Class Hkvp
     '     Set Host = cHashD2.Deb
     ' End Sub
 
-    Public Function Deb() As Hkvp
-        With New Hkvp
+    Public Function Deb() As KvpH
+        With New KvpH
             Return .ConstructInstance
         End With
     End Function
 
-    Friend Function ConstructInstance() As Hkvp
+    Friend Function ConstructInstance() As KvpH
         Set Host = New cHashD2
         Return Me
     End Function
 
-    ' Public Function ReInit(Optional ByVal ExpectedMaxCount As Long, Optional ByVal EnsureUniqueKeys As Boolean) As Hkvp
+    ' Public Function ReInit(Optional ByVal ExpectedMaxCount As Long, Optional ByVal EnsureUniqueKeys As Boolean) As KvpH
     '     Return Host.ReInit(ExpectedMaxCount, EnsureUniqueKeys)
     ' End Function
     Public Function HoldsKey(ByRef ipKey As Variant) As Boolean
@@ -92,7 +92,7 @@ Class Hkvp
         
     End Function
 
-    Public Function AddPairs(ByRef ipKeys As Variant, ByRef ipItems As Variant) As Hkvp
+    Public Function AddPairs(ByRef ipKeys As Variant, ByRef ipItems As Variant) As KvpH
         
         
         ' i.e. when ipKeys is a single item and a string it needs to be encapulated into an array
@@ -125,11 +125,11 @@ Class Hkvp
         
     End Function
     
-    Public Function Clone() As Hkvp
-        Return Hkvp.Deb.AddPairs(Me.Keys, Me.Items)
+    Public Function Clone() As KvpH
+        Return KvpH.Deb.AddPairs(Me.Keys, Me.Items)
     End Function
     
-    Friend Function AddKnownArrayPairs(ByRef ipKeysArray As Variant, ByRef ipItemsArray As Variant) As Hkvp
+    Friend Function AddKnownArrayPairs(ByRef ipKeysArray As Variant, ByRef ipItemsArray As Variant) As KvpH
     
         AddPairs ipKeysArray, ipItemsArray
         ' Dim myItemIndex As Long = LBound(ipItemsArray)
@@ -150,17 +150,17 @@ Class Hkvp
     End Function
 
     ' is this a pointless function for a dicttionary. We should only ever need to reverse the keys when extracted as an array (after sorting?)
-    Public Function Reverse() As Hkvp
-        Return Hkvp.Deb.AddPairs(Me.KeysSeq.Reverse, Me.ItemsSeq.Reverse)
+    Public Function Reverse() As KvpH
+        Return KvpH.Deb.AddPairs(Me.KeysSeq.Reverse, Me.ItemsSeq.Reverse)
     End Function
     
     Public Function TypeName() As String
         Return MY_TYPENAME
     End Function
     
-     Public Function MapIt(ByVal ipMapper As IMapper) As Hkvp
+     Public Function MapIt(ByVal ipMapper As IMapper) As KvpH
 
-        Dim myH As Hkvp = Hkvp.Deb
+        Dim myH As KvpH = KvpH.Deb
    
         'Dim myI As IterNum = IterNum(FirstIndex, LastIndex)
         Dim myI As IterItems = IterItems(Me)
@@ -173,9 +173,9 @@ Class Hkvp
     End Function
     
     
-    Public Function FilterIt(ByVal ipComparer As IComparer) As Hkvp
+    Public Function FilterIt(ByVal ipComparer As IComparer) As KvpH
 
-        Dim myH As Hkvp = Hkvp.Deb
+        Dim myH As KvpH = KvpH.Deb
         Dim myI As IterItems = IterItems(Me)
         Do
             If ipComparer.ExecCmp(myI.Item(0)) Then
@@ -232,7 +232,7 @@ Class Hkvp
     
     Public Property Get FirstKey() As Variant
         If Count = 0 Then
-             Err.Raise 17, "Lib.Hkvp.FirstKey: Seq has no items"
+             Err.Raise 17, "Lib.KvpH.FirstKey: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(0)
         	Return myKey
@@ -241,7 +241,7 @@ Class Hkvp
     
     Public Property Get LastKey() As Variant
         If Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.LastKey: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.LastKey: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(Host.Count - 1)
         	Return myKey
@@ -250,7 +250,7 @@ Class Hkvp
     
     Public Property Get FirstItem() As Variant
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.FirstItem: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(0)
             Return Host.Item(myKey)
@@ -261,7 +261,7 @@ Class Hkvp
     Public Property Set FirstItem(ByRef ipItem As Variant)
         
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.FirstItem: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(0)
         	Item(myKey) = ipItem
@@ -272,7 +272,7 @@ Class Hkvp
     Public Property Let FirstItem(ByRef ipItem As Variant)
         
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.FirstItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.FirstItem: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(0)
         	Item(myKey) = ipItem
@@ -282,7 +282,7 @@ Class Hkvp
     
     Public Property Get LastItem() As Variant
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.LastItem: Seq has no items"
         Else
             Dim myKey As Variant = Host.KeyByIndex(Host.Count - 1)
         	Return Host.Item(myKey)
@@ -292,7 +292,7 @@ Class Hkvp
     Public Property Set LastItem(ByRef ipItem As Variant)
         
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.LastItem: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(Host.Count - 1)
         	Item(myKey) = ipItem
@@ -304,7 +304,7 @@ Class Hkvp
     Public Property Let LastItem(ByRef ipItem As Variant)
         
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.LastItem: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.LastItem: Seq has no items"
         Else
             Dim myKey As Variant = KeyByIndex(Host.Count - 1)
         	Item(myKey) = ipItem
@@ -315,7 +315,7 @@ Class Hkvp
     
     Public Property Get FirstPair() As KVPair
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.FirstPair: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.FirstPair: Seq has no items"
         Else
             Return KVPair.Deb(FirstKey, FirstItem)
         End If
@@ -324,14 +324,14 @@ Class Hkvp
     
     Public Property Get LastPair() As KVPair
         If Host.Count = 0 Then
-            Err.Raise 17, "Lib.Hkvp.LastPair: Seq has no items"
+            Err.Raise 17, "Lib.KvpH.LastPair: Seq has no items"
         Else
             Return KVPair.Deb(LastKey, LastItem)
         End If
     End Property
     
     '@Description( returns a Kvp with values as keys.  Each Value is linked to a Kvp of Key vs Index for the host value
-    Public Function Mirror(Optional ByVal ipMirrorType As MirrorType = MirrorType.ByAllValues) As Hkvp
+    Public Function Mirror(Optional ByVal ipMirrorType As MirrorType = MirrorType.ByAllValues) As KvpH
         
         If ipMirrorType = MirrorType.ByAllValues Then
         
@@ -345,7 +345,7 @@ Class Hkvp
     End Function
     
     
-    ' Public Function Merge(ByRef ipInput As Hkvp) As Hkvp
+    ' Public Function Merge(ByRef ipInput As KvpH) As KvpH
     
     '     Dim myInputs As IterItems = IterItems(ipInput)
     '     Do
@@ -366,79 +366,79 @@ Class Hkvp
     
     ' End Function
     
-    '@Description("Returns an Hkvp of two Hkvp.  Item(1) is an Hkvp of the first found Host value vs Host Key. .Item(2) is a copy of the original Hkvp with the first values removed (Host Key vs Host Value).")
-    Private Function MirrorByAllValues() As Hkvp
+    '@Description("Returns an KvpH of two KvpH.  Item(1) is an KvpH of the first found Host value vs Host Key. .Item(2) is a copy of the original KvpH with the first values removed (Host Key vs Host Value).")
+    Private Function MirrorByAllValues() As KvpH
     
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         
         Dim myIter As IterItems = IterItems(Host)
         
         Do
         
-            If myHkvp.LacksKey(myIter(0)) Then
+            If myKvpH.LacksKey(myIter(0)) Then
             
-                myHkvp.Add myIter(0), Hkvp.Deb
+                myKvpH.Add myIter(0), KvpH.Deb
                 
                 
             End If
                
-            myHkvp.Item(myIter.Item(0)).add myIter.Key(0), myIter.Index(0)
+            myKvpH.Item(myIter.Item(0)).add myIter.Key(0), myIter.Index(0)
                 
         Loop While myIter.MoveNext
         
-        Return myHkvp
+        Return myKvpH
 
     End Function
     
-    Private Function MirrorByFirstValue() As Hkvp
+    Private Function MirrorByFirstValue() As KvpH
     
         Const FirstValues As Long = 1
         Const OtherValues As Long = 2
         
-        Dim myHkvp As Hkvp = Hkvp.Deb
-        myHkvp.Add FirstValues, Hkvp.Deb
-        myHkvp.Add OtherValues, Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
+        myKvpH.Add FirstValues, KvpH.Deb
+        myKvpH.Add OtherValues, KvpH.Deb
         
         Dim myIter As IterItems = IterItems(Host)
         Do
-            If myHkvp.Item(FirstValues).LacksKey(myIter.Item(0)) Then
+            If myKvpH.Item(FirstValues).LacksKey(myIter.Item(0)) Then
             
-                myHkvp.Item(FirstValues).add myIter.Item(0), myIter.Key(0)
+                myKvpH.Item(FirstValues).add myIter.Item(0), myIter.Key(0)
                 
                 
             Else
             
-                myHkvp.Item(OtherValues).add myIter.Key(0), myIter.Item(0)
+                myKvpH.Item(OtherValues).add myIter.Key(0), myIter.Item(0)
                     
                     
             End If
             
         Loop While myIter.MoveNext
                
-        Return myHkvp
+        Return myKvpH
         
     End Function
     
-    '@Description("Returns an Hkvp of Values vs Values count")
-    Public Function Freq() As Hkvp
+    '@Description("Returns an KvpH of Values vs Values count")
+    Public Function Freq() As KvpH
         
-        Dim myHkvp As Hkvp = Hkvp.Deb
+        Dim myKvpH As KvpH = KvpH.Deb
         Dim myIter As IterItems = IterItems(Host)
         Do
-        	If myHkvp.HoldsKey(myIter.Item(0)) Then
-                myHkvp.Item(myIter.Item(0)) += 1
+        	If myKvpH.HoldsKey(myIter.Item(0)) Then
+                myKvpH.Item(myIter.Item(0)) += 1
             Else
-            	myHkvp.Add myIter.Item(0), 1
+            	myKvpH.Add myIter.Item(0), 1
             End If
         Loop While myIter.MoveNext
         
-        Return myHkvp
+        Return myKvpH
         
     End Function
     
     
     '==============================
-    Public Function Set(ByVal ipSet As SetOf, ByRef ipRHS As Hkvp) As Hkvp
+    Public Function Set(ByVal ipSet As SetOf, ByRef ipRHS As KvpH) As KvpH
     
     	    ' Dim myLHS As Seq = Seq.Deb(ipLHS)
             ' Dim myRHS As Seq = Seq.Deb(ipRHS)
@@ -456,9 +456,9 @@ Class Hkvp
     End Function
     
    
-    Private Function LHSOnly(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Hkvp
+    Private Function LHSOnly(ByRef ipLHS As KvpH, ByRef ipRHS As KvpH) As KvpH
 
-        Dim myResult As Hkvp = Hkvp.Deb
+        Dim myResult As KvpH = KvpH.Deb
         Dim myH As IterItems = IterItems(ipLHS)
         Do
             If ipRHS.LacksKey(myH.Key(0)) And myResult.LacksKey(myH.Key(0)) Then
@@ -471,9 +471,9 @@ Class Hkvp
         
     End Function
 
-    Private Function Both(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Hkvp
+    Private Function Both(ByRef ipLHS As KvpH, ByRef ipRHS As KvpH) As KvpH
 
-        Dim myResult As Hkvp = Hkvp.Deb
+        Dim myResult As KvpH = KvpH.Deb
         Dim myLHS As IterItems = IterItems(ipLHS)
         Do
             If ipRHS.HoldsKey(myLHS.Key(0)) Then
@@ -486,10 +486,10 @@ Class Hkvp
     End Function
 
 
-    Private Function NotBoth(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Hkvp
+    Private Function NotBoth(ByRef ipLHS As KvpH, ByRef ipRHS As KvpH) As KvpH
 
-        'Return Hkvp.Deb(Me.LHSOnly(ipLHS, ipRHS)).MergeUnique(LHSOnly(ipRHS, ipLHS)) ' note the reversal of the parameters
-            Dim myResult As Hkvp = Hkvp.Deb
+        'Return KvpH.Deb(Me.LHSOnly(ipLHS, ipRHS)).MergeUnique(LHSOnly(ipRHS, ipLHS)) ' note the reversal of the parameters
+            Dim myResult As KvpH = KvpH.Deb
             If ipLHS.Count > 0 Then
                 Dim myLHS As IterItems = IterItems(ipLHS)
                 Do
@@ -509,8 +509,8 @@ Class Hkvp
             End If
     End Function
 
-    Private Function CombineUnique(ByRef ipLHS As Hkvp, ByRef ipRHS As Hkvp) As Hkvp
-        Dim myResult As Hkvp = Hkvp.Deb
+    Private Function CombineUnique(ByRef ipLHS As KvpH, ByRef ipRHS As KvpH) As KvpH
+        Dim myResult As KvpH = KvpH.Deb
         Dim myI As IterItems = IterItems(ipRHS)
         Do
         	DoEvents
@@ -523,7 +523,7 @@ Class Hkvp
         Return myResult
     End Function
     
-    Public Function MergeUnique(ByRef ipRHS As Hkvp) As Hkvp
+    Public Function MergeUnique(ByRef ipRHS As KvpH) As KvpH
         
         If ipRHS.Count = 0 Then
             Return Me

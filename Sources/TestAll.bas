@@ -25,7 +25,7 @@ Public Sub AllTests()
     TestStrs.StrsTests                              ' Pass
     TestMeta.MetaTests                              ' Pass
     TestSeq.SeqTests                                ' Pass
-    TestHkvp.HkvpTests                              ' pass
+    TestKvpH.KvpHTests                              ' pass
     
     TestIterNum.IterNumTests                        ' Pass
     TestIterItems.IterItemsTest                     ' Pass

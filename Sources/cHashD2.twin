@@ -11,67 +11,59 @@ Class cHashD2
     ' a feature of chasd is that it can cope with duplicate keys, we have to specifically ask for unique keys if
     ' a true dictionary is required.
 
-    ' Start: Unsafe
-    Private Type SAFEARRAY1D
-        cDims                                   As Integer
-        fFeatures                               As Integer
-        cbElements                              As Long
-        cLocks                                  As Long
-        pvData                                  As Long
-        cElements1D                             As Long
-        lLbound1D                               As Long
-    End Type
-    
-    Private Declare Sub BindArray Lib "kernel32" Alias "RtlMoveMemory" (PArr() As Any, pSrc&, Optional ByVal CB& = 4)
-    Private Declare Sub ReleaseArray Lib "kernel32" Alias "RtlMoveMemory" (PArr() As Any, Optional pSrc& = 0, Optional ByVal CB& = 4)
+    Private Declare PtrSafe Sub CopyMem Lib "kernel32" Alias "RtlMoveMemory" (ptrToDest As Any, ptrToSource As Any, ByVal Count As Long)
 
-    Private Declare Function VariantCopy Lib "oleaut32" (Dst As Any, Src As Any) As Long
-    Private Declare Function VariantCopyInd Lib "oleaut32" (Dst As Any, Src As Any) As Long
     ' End: Unsafe
     
+    ' In-Memory size of types in 16 bit words
+    Private Const varByteLen                     As long = 2
+    Private Const varIntegerLen                  As long = 2
+    Private Const varLongLen                     As Long = 2
+    Private Const varLongLongLen                 As Long = 4
+    Private Const varSingleLen                   As Long = 2
+    Private Const varDoubleLen                   As Long = 4
+    Private Const varDecimalLen                  As Long = 8 ' This value should be checked as theoretically is should be 7 as a decimal is 96 bits
+    Private Const varObjectLen                   As Long = 2
+    Private Const varCurrencyLen                 As Long = 4
+    Private Const varDateLen                     As Long = 4
 
     Private Const NoEntry                       As Variant = Empty
     Private Const DynTakeOver                   As Long = 4         ' fixed HashSlot-amount
     Private Const HMul                          As Long = 3727      ' And Hash - Multiplikator
 
+
     Private Type HashTableEntry
+    
         Count                                   As Long
         DataIdxsStat(0 To DynTakeOver - 1)      As Long
         DataIdxsDyn()                           As Long
+        
     End Type
     
+    
     Private Type State
-        W()                                     As Integer
-        saW                                     As SAFEARRAY1D
+    
         LastExpectedMaxCount                    As Long
         EnsureUniqueKeys                        As Boolean
-        LastH                                   As Long
+         LastH                                   As Long
         Count                                   As Long
         DTUB                                    As Long
         HashTableSize                           As Long
         CompareMethod                           As VbCompareMethod
         HashTable()                             As HashTableEntry
         Keys()                                  As variant
-        Values()                                As variant  'both pairing-arrays are of type Variant
+        Values()                                As variant          'both pairing-arrays are of type Variant
         FIndexes()                              As Long
         FCount                                  As Long
-        FUB                                     As Long 'three vars, to handle the deletes
+        FUB                                     As Long             'three vars, to handle the deletes
 
     End Type
 
     Private s                                   As state
  
+ 
     Private Sub Class_Initialize()
-    
-        With s.saW
-            .cDims = 1
-            .cbElements = 2
-            .cLocks = 1
-            .fFeatures = &H11                                          'FADF_AUTO=&H1 || FADF_FIXEDSIZE=&H10
-        End With
-        
-        BindArray s.W, VBA.VarPtr(s.saW)
-    
+ 
         s.CompareMethod = vbBinaryCompare
         'at startup we set it up, to behave ideally for up to 16384 Items with unique keys
         ' this means that the cHashD/Hkvp classes have a big memory footprint
@@ -82,6 +74,7 @@ Class cHashD2
         End If
    
     End Sub
+
 
     Public Sub ReInit(Optional ByVal ipExpectedMaxCount As Long, Optional ByVal ipEnsureUniqueKeys As Boolean)
     	
@@ -137,9 +130,11 @@ Class cHashD2
         Return s.CompareMethod
     End Property
 
-    Public Property Let StringCompareMode(ByVal ipCOmpareMethod As VbCompareMethod)
-        s.CompareMethod = ipCOmpareMethod
+
+    Public Property Let StringCompareMode(ByVal ipCompareMethod As VbCompareMethod)
+        s.CompareMethod = ipCompareMethod
     End Property
+    
     
     Public Function Keys() As Variant()
         If s.Count = 0 Then
@@ -165,7 +160,8 @@ Class cHashD2
                 If VBA.IsEmpty(s.Keys(j)) Then
                     j += 1
                 Else
-                    VariantCopy V(i), ByVal VBA.VarPtr(s.Keys(j))
+                    'VariantCopy V(i), ByVal VBA.VarPtr(s.Keys(j))
+                    Assign V(i), s.Keys(j)
                     j += 1
                 	Exit Do
                 End If
@@ -203,7 +199,8 @@ Class cHashD2
                 If VBA.IsEmpty(s.Keys(j)) Then
                     j += 1
                 Else
-                    VariantCopy V(i), ByVal VBA.VarPtr(s.Values(j))
+                    'VariantCopy V(i), ByVal VBA.VarPtr(s.Values(j))
+                    Assign V(i), s.Values(j)
                     j += 1
                 	Exit Do
                 End If
@@ -214,6 +211,7 @@ Class cHashD2
         
         Return V
     End Function
+    
 
     Public Function Pairs() As Variant() 'hand-out the Key-Values in a Pairs-Array
     
@@ -253,10 +251,10 @@ Class cHashD2
     End Function
     
     
-    
     Public Function Exists(Key As Variant) As Boolean
         Return FindIndex(Key) >= 0
     End Function
+
 
     Public Sub Add(Key As Variant, Item As Variant)
     
@@ -290,8 +288,10 @@ Class cHashD2
             i = s.Count
         End If
         
-        VariantCopyInd ByVal VBA.VarPtr(s.Values(i)), ByVal VBA.VarPtr(Item)
-        VariantCopyInd ByVal VBA.VarPtr(s.Keys(i)), ByVal VBA.VarPtr(Key)
+        'VariantCopyInd ByVal VBA.VarPtr(s.Values(i)), ByVal VBA.VarPtr(Item)
+        'VariantCopyInd ByVal VBA.VarPtr(s.Keys(i)), ByVal VBA.VarPtr(Key)
+        Assign s.Values(i), Item
+        Assign s.Keys(i), Key
         
         'add the new DataIndex to the proper Hash-Buckets
         Select Case s.HashTable(H).Count
@@ -317,6 +317,7 @@ Class cHashD2
         s.Count += 1
         
     End Sub
+
 
     Public Sub Remove(Key As Variant)
     
@@ -377,9 +378,11 @@ Class cHashD2
         
     End Sub
 
+
     Public Sub RemoveByIndex(ByVal IndexZeroBased As Long)
         Remove KeyByIndex(IndexZeroBased)
     End Sub
+
 
     Public Function IndexByKey(Key As Variant) As Long
     
@@ -404,7 +407,8 @@ Class cHashD2
             AdjustIndex ipIndexZeroBased
         End If
         
-        VariantCopy KeyByIndex, ByVal VarPtr(s.Keys(ipIndexZeroBased))
+        'VariantCopy KeyByIndex, ByVal VarPtr(s.Keys(ipIndexZeroBased))
+        Assign KeyByIndex, s.Keys(ipIndexZeroBased)
         
     End Property
 
@@ -419,7 +423,8 @@ Class cHashD2
             AdjustIndex ipIndexZeroBased
         End If
         
-        VariantCopy ItemByIndex, ByVal VarPtr(s.Values(ipIndexZeroBased))
+        'VariantCopy ItemByIndex, ByVal VarPtr(s.Values(ipIndexZeroBased))
+        Assign ItemByIndex, s.Values(ipIndexZeroBased)
         
     End Property
 
@@ -434,8 +439,8 @@ Class cHashD2
             AdjustIndex ipIndexZeroBased
         End If
         
-        VariantCopyInd ByVal VarPtr(s.Values(ipIndexZeroBased)), ByVal VarPtr(RHS)
-        
+        'VariantCopyInd ByVal VarPtr(s.Values(ipIndexZeroBased)), ByVal VarPtr(RHS)
+        Assign s.Values(ipIndexZeroBased), RHS
     End Property
 
 
@@ -449,7 +454,8 @@ Class cHashD2
             AdjustIndex ipIndexZeroBased
         End If
         
-        VariantCopyInd ByVal VarPtr(s.Values(ipIndexZeroBased)), ByVal VarPtr(RHS)
+        'VariantCopyInd ByVal VarPtr(s.Values(ipIndexZeroBased)), ByVal VarPtr(RHS)
+        Assign s.Values(ipIndexZeroBased), RHS
         
     End Property
 
@@ -460,10 +466,13 @@ Class cHashD2
         Dim Index As Long = FindIndex(Key)
         
         If Index >= 0 Then
-            VariantCopy Item, ByVal VarPtr(s.Values(Index))
+            'VariantCopy Item, ByVal VarPtr(s.Values(Index))
+            Assign Item, s.Values(Index)
+            
         End If
         
     End Property
+
 
     ' we don't want the property of Item adding a key if it doesn't exist
     Public Property Let Item(Key As Variant, RHS As Variant)
@@ -474,12 +483,15 @@ Class cHashD2
         If Index = -1 Then
             Err.Raise 17 + vbObjectError, "Lib.cHashD2.LetItem", "Key does not exist"
         Else
-        	VariantCopyInd ByVal VarPtr(s.Values(Index)), ByVal VarPtr(RHS)
+        	'VariantCopyInd ByVal VarPtr(s.Values(Index)), ByVal VarPtr(RHS)
+            Assign s.Values(Index), RHS
+            
         End If
         
         s.LastH = 0
         
     End Property
+
 
     Public Property Set Item(Key As Variant, RHS As Variant)
     
@@ -489,7 +501,9 @@ Class cHashD2
         If Index = -1 Then
             Err.Raise 17 + vbObjectError, "Lib.cHashD2SetItem", "Key does not exist"
         Else
-        	VariantCopyInd ByVal VarPtr(s.Values(Index)), ByVal VarPtr(RHS)
+        	'VariantCopyInd ByVal VarPtr(s.Values(Index)), ByVal VarPtr(RHS)
+            Assign s.Values(Index), RHS
+            
         End If
         
         s.LastH = 0
@@ -497,223 +511,57 @@ Class cHashD2
     End Property
     
     
-    Private Function FindIndex(Key As Variant, Optional H As Long) As Long  'return -1, when no Key can be found
-        Dim i As Long
-        Dim C As Decimal
-        Dim D As Double
-        Dim L As LongPtr
-        Dim F As Single
-        Dim VT As VbVarType
-        Dim HTUB As Long = s.HashTableSize - 1
-        FindIndex = H
-        H = HTUB 'init the HashValue (all bits to 1)
-        
-        VT = VarType(Key)
-        Select Case VT
-            Case vbString
-                s.saW.cElements1D = Len(Key)
-                s.saW.pvData = StrPtr(Key)
-                If s.CompareMethod = 0 Then
-                    For i = 0 To s.saW.cElements1D - 1
-                        H = (H + s.W(i)) * HMul And HTUB
-                    Next
-                    If FindIndex = -1 Then
-                        Exit Function                                               'it's a "Hash-Only" Calculation	
-                    End If
-                    
-                    For i = 0 To s.HashTable(H).Count - 1
-                        If i < DynTakeOver Then
-                            FindIndex = s.HashTable(H).DataIdxsStat(i)
-                        Else
-                            FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                        End If
-                        If VarType(s.Keys(FindIndex)) = VT Then
-                            If Key = s.Keys(FindIndex) Then
-                                Exit Function
-                            End If
-                        End If
-                    Next
-                Else
-                    For i = 0 To s.saW.cElements1D - 1
-                        H = (H + LWC(s.W(i))) * HMul And HTUB
-                    Next
-                    If FindIndex = -1 Then
-                        Exit Function                                               'it's a "Hash-Only" Calculation	
-                    End If
-                    
-                    For i = 0 To s.HashTable(H).Count - 1
-                        If i < DynTakeOver Then
-                            FindIndex = s.HashTable(H).DataIdxsStat(i)
-                        Else
-                            FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                        End If
-                        If VarType(s.Keys(FindIndex)) = VT Then
-                            If StrComp(Key, s.Keys(FindIndex), s.CompareMethod) = 0 Then
-                                Exit Function
-                            End If
-                        End If
-                    Next
-                End If
-            
-            Case vbObject
-                L = ObjPtr(Key)
-                s.saW.cElements1D = 2
-                s.saW.pvData = VBA.VarPtr(L)
-                H = (H + s.W(0)) * HMul And HTUB                                        'loop-unrolling (we have only 2 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                                       'it's a "Hash-Only" Calculation	
-                End If
-            
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    
-                    If VarType(s.Keys(FindIndex)) = VT Then
-                        If Key Is s.Keys(FindIndex) Then
-                            Exit Function
-                        End If
-                    End If
-                Next
-            
-            Case vbCurrency
-                C = Key
-                s.saW.cElements1D = 4
-                s.saW.pvData = VarPtr(C)
-                H = (H + s.W(0)) * HMul And HTUB                                          'loop-unrolling (we have only 4 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                H = (H + s.W(2)) * HMul And HTUB
-                H = (H + s.W(3)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                                           'it's a "Hash-Only" Calculation	
-                End If
-                
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    If VarType(s.Keys(FindIndex)) = VT Then
-                        If C = s.Keys(FindIndex) Then
-                            Exit Function
-                        End If
-                    End If
-                Next
-            
-            Case vbLong, vbInteger, vbByte
-                L = Key
-                s.saW.cElements1D = 2
-                s.saW.pvData = VarPtr(L)
-                H = (H + s.W(0)) * HMul And HTUB                                            'loop-unrolling (we have only 2 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                                           'it's a "Hash-Only" Calculation	
-                End If
-                
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    
-                    Select Case VarType(s.Keys(FindIndex))
-                        Case vbLong, vbInteger, vbByte
-                            If L = s.Keys(FindIndex) Then
-                                Exit Function
-                            End If
-                    End Select
-                Next
-        
-            Case vbDouble
-                D = Key
-                s.saW.cElements1D = 4
-                s.saW.pvData = VarPtr(D)
-                H = (H + s.W(0)) * HMul And HTUB                                    'loop-unrolling (we have only 4 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                H = (H + s.W(2)) * HMul And HTUB
-                H = (H + s.W(3)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                                   'it's a "Hash-Only" Calculation	
-                End If
-                    
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    If VarType(s.Keys(FindIndex)) = VT Then
-                        If D = s.Keys(FindIndex) Then
-                            Exit Function
-                        End If
-                    End If
-                Next
-                
-            Case vbDate
-                D = Key
-                s.saW.cElements1D = 4
-                s.saW.pvData = VarPtr(D)
-                H = (H + s.W(0)) * HMul And HTUB                                    ' loop-unrolling (we have only 4 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                H = (H + s.W(2)) * HMul And HTUB
-                H = (H + s.W(3)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                                   'it's a "Hash-Only" Calculation	
-                End If
-                        
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    If VarType(s.Keys(FindIndex)) = VT Then
-                        If D = s.Keys(FindIndex) Then
-                            Exit Function
-                        End If
-                    End If
-                Next
-            
-            Case vbSingle
-                F = Key
-                s.saW.cElements1D = 2
-                s.saW.pvData = VarPtr(F)
-                H = (H + s.W(0)) * HMul And HTUB                                        'loop-unrolling (we have only 2 16Bit integers in the array)
-                H = (H + s.W(1)) * HMul And HTUB
-                
-                If FindIndex = -1 Then
-                    Exit Function                                        'it's a "Hash-Only" Calculation	
-                End If
-                    
-                For i = 0 To s.HashTable(H).Count - 1
-                    If i < DynTakeOver Then
-                        FindIndex = s.HashTable(H).DataIdxsStat(i)
-                    Else
-                        FindIndex = s.HashTable(H).DataIdxsDyn(i)
-                    End If
-                    
-                    If VarType(s.Keys(FindIndex)) = VT Then
-                        If F = s.Keys(FindIndex) Then
-                            Exit Function
-                        End If
-                    End If
-                Next
-                
-        End Select
-        
-        FindIndex = -1
+    Public Function FindIndex(ByRef Key As Variant, Optional ipHash As Long) As Long
 
+        Dim myVarType As VbVarType = IIf(VBA.IsObject(Key), vbObject, VBA.VarType(Key))
+        
+        Dim HTUB As Long = s.HashTableSize - 1
+        Dim myResult As Long = ipHash                                           ' was FindIndex = H
+        ipHash = HTUB                                                           ' init the HashValue (all bits to 1)
+        
+        Dim myDataAsIntArr As Variant = GetDataAsIntArray(Key)
+        
+        ipHash = HashIt(ipHash, Key, s.CompareMethod)
+        
+        If myResult = -1 Then
+            Exit Function                                                       'it's a "Hash-Only" Calculation	
+        End If
+        
+        Dim myIndex As Long
+        For myIndex = 0 To s.HashTable(ipHash).Count - 1
+        
+            If myIndex < DynTakeOver Then
+                FindIndex = s.HashTable(ipHash).DataIdxsStat(myIndex)
+            Else
+                FindIndex = s.HashTable(ipHash).DataIdxsDyn(myIndex)
+            End If
+            
+            If If VarType(s.Keys(FindIndex)) = myVarType Then
+                If myVarType = vbString Then
+                    If s.CompareMethod = vbBinaryCompare Then
+                        If Key = s.Keys(FindIndex) Then
+                            Exit Function
+                        End If
+                    Else
+                        If StrComp(Key, s.Keys(FindIndex), s.CompareMethod) = 0 Then
+                            Exit Function
+                        End If
+                    End If
+                Else
+                    If Key = s.Keys(FindIndex) Then
+                        Exit Function
+                    End If
+                End If
+            End If
+        Next
+              
+        Return -1
+        
     End Function
+    
+    
+   
+   
 
     Private Sub AdjustIndex(Idx As Long, Optional ByVal Inverse As Boolean)
         Dim i As Long
@@ -755,4 +603,131 @@ Class cHashD2
         Debug.Print "Max-Entries ## " ; Max
     End Sub
 
+
+    ' Public Function HashIt(ByRef ipHash As Long, ipDataAsIntArray As Variant, Optional ipCOmparemethod As VbCompareMethod = vbtextcompare) As Long
+    Public Function HashIt(ByRef ipHash As Long, key As Variant, Optional ipCOmparemethod As VbCompareMethod = vbtextcompare) As Long
+
+        Dim myDataAsIntArray As Variant = GetDataAsIntArray(key)
+        Dim myIndex As Long
+        Dim myHash As Long = ipHash
+        Dim HTUB As Long = s.HashTableSize - 1
+        If ipCOmparemethod = vbBinaryCompare Then
+        
+            For myIndex = LBound(myDataAsIntArray) To UBound(myDataAsIntArray)
+                myHash = (ipHash + myDataAsIntArray(myIndex)) * HMul And HTUB
+            Next
+            
+        Else
+        
+            For myIndex = LBound(myDataAsIntArray) To UBound(myDataAsIntArray)
+                myHash = (ipHash + LWC(myDataAsIntArray(myIndex))) * HMul And HTUB
+            Next
+            
+        End If
+        
+        Return ipHash
+        
+    End Function
+    
+    ' Method below uses code from Module Unsafe
+    Public Function GetDataAsIntArray(ByRef ipItem As Variant) As Integer()
+
+        ' Vartype cannot be used freely with objects.
+        ' If an object has a default member then
+        ' vartype will return the type of the default member rather than vbObject.
+        ' Hence the use of an iif to set the value of vartype
+        Dim myVarType As VbVarType = IIf(VBA.IsObject(ipItem), vbObject, VBA.VarType(ipItem))
+      
+        ' The data section of a variant starts at offset 8
+        Dim mySourcePtr As LongPtr = VarPtr(ipItem) + 8
+        
+        ' myLen is the number of 16 bit words that the data of a specifi typoe will occupy
+        Dim myLen As Long
+        
+        Select Case myVarType
+            Case vbString
+                ' The data part of a variant holding a string is always a reference not actual data
+                ' dereferencing to get the actual data can be done using Strptr 
+                
+                myLen = VBA.Len(ipItem)  ' LenB would give the length in bytes which is not what we want.
+                mySourcePtr = VBA.StrPtr(ipItem)
+            
+            Case vbObject
+                ' similar to strings, variant containing onject are always by reference
+                ' so we use objPtr to get the actual address of the object
+                ' Hashing is done of the address of the object
+                myLen = varObjectLen
+                mySourcePtr = VBA.ObjPtr(ipItem)
+                
+            Case vbCurrency
+                myLen = varCurrencyLen
+            
+            Case vbLong, vbInteger, vbByte
+                myLen = varLongLen
+        
+            Case vbDouble
+                myLen = varDoubleLen
+                
+            Case vbDate
+                myLen = varDateLen
+               
+            Case vbSingle
+                myLen = varSingleLen
+                
+            Case vbLongLong
+                myLen = varLongLongLen
+                
+            Case vbDecimal
+                ' structure of a decimal is 
+                'scale byte
+                'sign byte
+                'where scale/sign are a 16 bit word
+                ' Hi long
+                ' where high is a single 32 bit word
+                ' low Long '32bit word
+                ' med long '32bit word
+                ' where low,med comprise one 64 bit value
+                ' which a 7 x 16 bit words
+                ' this means that the value ,when represented as a set of intergers,
+                ' can look odd because 12 bytes for the integer part
+                ' run 12,11,10,9,4,3,2,1,8,7,6,5
+                'Or As integers
+                ' 5,6,1,2,3,4
+                myLen = varDecimalLen
+                'mySourcePtr =
+                
+        End Select
+        
+        Dim myArray() As Integer
+        ReDim myArray(0 To myLen - 1)
+      
+        ' GetArrayInfo is a method in Module Unsafe
+        Dim myDestPtr As LongPtr = GetArrayInfo(myArray).SAUdt.pvData
+        
+        ' if a variant has the VT_BYREF flag set then the value contained by the variant
+        ' is a pointer to the actual data, not the data itself.
+        
+        ' copy the two bytes that hold the myVarType Type
+        Dim myInteger As Integer = 0
+        CopyMem myInteger, ByVal VarPtr(ipItem), 2
+        
+        ' check if we need to dereference a pointer to data
+        ' but not if we have a string or object
+        If (Not myVarType = vbString) And (Not myVarType = vbObject) Then
+            If myInteger & VT_BYREF Then
+                
+                CopyMem mySourcePtr, ByVal mySourcePtr, 4
+                
+            End If
+        End If
+        
+        ' we can now get the actual data
+        CopyMem ByVal myDestPtr, ByVal mySourcePtr, myLen * 2
+        
+        Return myArray
+        
+    End Function
+    
+    
+    
 End Class

@@ -276,9 +276,9 @@ Class enumAlert
 
     Private Type State
             
-        AlertOrdToName           As Hkvp
-        AlertOrdToMessage        As Hkvp
-        AlertOrdTovbError        As Hkvp
+        AlertOrdToName           As KvpH
+        AlertOrdToMessage        As KvpH
+        AlertOrdTovbError        As KvpH
             
     End Type
 
@@ -304,7 +304,7 @@ Class enumAlert
 
     Private Sub SetupAlertOrdTovbErrorCode()
     	
-        Set s.AlertOrdTovbError = Hkvp.Deb
+        Set s.AlertOrdTovbError = KvpH.Deb
         With s.AlertOrdTovbError
             .Add alReturnWithoutGoSub, 3
             .Add alInvalidProcedureCall, 5
@@ -430,7 +430,7 @@ Class enumAlert
     End Sub
         
     Private Sub SetupAlertOrdToName()
-        Set s.AlertOrdToName = Hkvp.Deb
+        Set s.AlertOrdToName = KvpH.Deb
         With s.AlertOrdToName
 
             .Add alOkay, "alOkay"
@@ -1045,7 +1045,7 @@ Class enumAlert
     Private Sub SetupAlertOrdToMessage()
     
         ' OrdValues associated with the enumeration member may be defined at runtime
-        Set s.AlertOrdToMessage = Hkvp.Deb
+        Set s.AlertOrdToMessage = KvpH.Deb
         With s.AlertOrdToMessage
             .Add alOkay, "Okay"
             .Add alNotOkay, "NotOkay"

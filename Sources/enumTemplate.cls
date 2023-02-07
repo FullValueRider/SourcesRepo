@@ -53,8 +53,8 @@ End Enum
 
 Private Type State
         
-    Values                  As Hkvp' Values may be executable objects
-    Names                   As Hkvp
+    Values                  As KvpH' Values may be executable objects
+    Names                   As KvpH
         
 End Type
 
@@ -86,7 +86,7 @@ End Function
 Private Sub SetupDictionaries()
         
     ' Values associated with the enumeration member may be defined at runtime
-    Set s.Values = New Hkvp
+    Set s.Values = New KvpH
     With s.Values
         
     .Add sUnspecified, Empty ' or value
@@ -118,7 +118,7 @@ Private Sub SetupDictionaries()
         
     End With
         
-    Set s.Names = New Hkvp
+    Set s.Names = New KvpH
     With s.Names
         
     .Add sUnspecified, "Member1"
@@ -157,7 +157,7 @@ Private Sub ValidateOrdinal(ByVal ipTemplateOrd As TemplateOrd)
     If s.Values.LacksKey(ipTemplateOrd) Then
         
          Err.Raise _
-            enums.alert.message(alInvalidOrdinal), _
+            enums.Alert.Message(alInvalidOrdinal), _
             "No such member", _
             "The enumeration member does not exist"
             

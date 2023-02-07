@@ -53,7 +53,7 @@ Public Declare PtrSafe Sub GetArrayElement Lib "oleaut32" Alias "SafeArrayGetEle
 Public Declare PtrSafe Sub PutArrayElement Lib "oleaut32" Alias "SafeArrayPutElement" (ByVal ipSAUdtPtr As LongPtr, ByVal ipIndexesPrt As LongPtr, ByVal ipDataPtr As LongPtr)
 Public Declare PtrSafe Function MakeArray Lib "oleaut32" Alias "SafeArrayCreate" (ByVal ipVarType As Long, ByVal ipDims As Long, ByVal ipSafeArrayBoundsPtr As LongPtr) As LongPtr
 
-Public Declare PtrSafe Function VarPtrArray Lib "VBE7.dll" Alias "VarPtr" (Var() As Any) As LongPtr
+'Public Declare PtrSafe Function VarPtrArray Lib "VBE7.dll" Alias "VarPtr" (Var() As Any) As LongPtr
 
 'https://codekabinett.com/rdumps.php?Lang=2&targetDoc=windows-api-declaration-vba-64-bit
 ' A common pitfall - The size of user-defi ned types

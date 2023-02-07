@@ -84,7 +84,7 @@ Public Sub TypeInfoTests()
 '     Test03c_IsTypeByTypeName_MultipleIntegers_True
 '     Test03d_IsTypeByTypeName_MultipleIntegers_OneSingle_False
 '     Test03e_IsTypeByIntegerType_MultipleIntegers_True
-'     Test03f_IsTypeByHkvp_MultipleIntegers_String_False
+'     Test03f_IsTypeByKvpH_MultipleIntegers_String_False
     
 '    ' Test04_MultipleIntegersWithSingleNonIntegerIsFalse
 '     ' Test05_MultipleIntegersWithIntegerArrayIsFalse
@@ -376,7 +376,7 @@ Private Sub Test02a_IsContainer()
     myResult(0) = TypeInfo.IsContainer(myS)
     myResult(1) = TypeInfo.IsContainer(42)
     myResult(2) = TypeInfo.IsContainer("Hello")
-    myResult(3) = TypeInfo.IsContainer(Hkvp.Deb)
+    myResult(3) = TypeInfo.IsContainer(KvpH.Deb)
 
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -415,7 +415,7 @@ Private Sub Test02b_IsNotContainer()
     myResult(0) = TypeInfo.IsNotContainer(myS)
     myResult(1) = TypeInfo.IsNotContainer(42)
     myResult(2) = TypeInfo.IsNotContainer("Hello")
-    myResult(3) = TypeInfo.IsNotContainer(Hkvp.Deb)
+    myResult(3) = TypeInfo.IsNotContainer(KvpH.Deb)
 
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -453,7 +453,7 @@ Private Sub Test03a_IsItemObject()
     myResult(0) = TypeInfo.IsItemObject(myMapper)
     myResult(1) = TypeInfo.IsItemObject(42)
     myResult(2) = TypeInfo.IsItemObject("Hello")
-    myResult(3) = TypeInfo.IsItemObject(Hkvp.Deb)
+    myResult(3) = TypeInfo.IsItemObject(KvpH.Deb)
 
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -491,7 +491,7 @@ Private Sub Test03b_IsNotItemObject()
     myResult(0) = TypeInfo.IsNotItemObject(myMapper)
     myResult(1) = TypeInfo.IsNotItemObject(42)
     myResult(2) = TypeInfo.IsNotItemObject("Hello")
-    myResult(3) = TypeInfo.IsNotItemObject(Hkvp.Deb)
+    myResult(3) = TypeInfo.IsNotItemObject(KvpH.Deb)
 
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
@@ -804,7 +804,7 @@ Private Sub Test07a_IsItemByIndex0()
     myResult(2) = TypeInfo.IsItemByIndex0(Seq.Deb)
     myResult(3) = TypeInfo.IsItemByIndex0(New ArrayList)
     myResult(4) = TypeInfo.IsItemByIndex0(Queue.Deb)
-    myResult(5) = TypeInfo.IsItemByIndex0(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsItemByIndex0(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -843,7 +843,7 @@ Private Sub Test07b_IsNotItemByIndex0()
     myResult(2) = TypeInfo.IsNotItemByIndex0(Seq.Deb)
     myResult(3) = TypeInfo.IsNotItemByIndex0(New ArrayList)
     myResult(4) = TypeInfo.IsNotItemByIndex0(Queue.Deb)
-    myResult(5) = TypeInfo.IsNotItemByIndex0(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsNotItemByIndex0(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -883,7 +883,7 @@ Private Sub Test08a_IsItemByIndex1()
     myResult(2) = TypeInfo.IsItemByIndex1(Seq.Deb)
     myResult(3) = TypeInfo.IsItemByIndex1(New ArrayList)
     myResult(4) = TypeInfo.IsItemByIndex1(Queue.Deb)
-    myResult(5) = TypeInfo.IsItemByIndex1(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsItemByIndex1(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -922,7 +922,7 @@ Private Sub Test08b_IsNotItemByIndex1()
     myResult(2) = TypeInfo.IsNotItemByIndex1(Seq.Deb)
     myResult(3) = TypeInfo.IsNotItemByIndex1(New ArrayList)
     myResult(4) = TypeInfo.IsNotItemByIndex1(Queue.Deb)
-    myResult(5) = TypeInfo.IsNotItemByIndex1(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsNotItemByIndex1(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -959,7 +959,7 @@ Private Sub Test09a_IsItemByKey()
     myResult(2) = TypeInfo.IsItemByKey(Seq.Deb)
     myResult(3) = TypeInfo.IsItemByKey(New ArrayList)
     myResult(4) = TypeInfo.IsItemByKey(Queue.Deb)
-    myResult(5) = TypeInfo.IsItemByKey(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsItemByKey(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -995,7 +995,7 @@ Private Sub Test09b_IsNotItemByKey()
     myResult(2) = TypeInfo.IsNotItemByKey(Seq.Deb)
     myResult(3) = TypeInfo.IsNotItemByKey(New ArrayList)
     myResult(4) = TypeInfo.IsNotItemByKey(Queue.Deb)
-    myResult(5) = TypeInfo.IsNotItemByKey(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsNotItemByKey(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -1033,7 +1033,7 @@ Private Sub Test10a_IsItemByArray()
     myResult(2) = TypeInfo.IsItemByToArray(Seq.Deb)
     myResult(3) = TypeInfo.IsItemByToArray(New ArrayList)
     myResult(4) = TypeInfo.IsItemByToArray(Queue.Deb)
-    myResult(5) = TypeInfo.IsItemByToArray(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsItemByToArray(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -1069,7 +1069,7 @@ Private Sub Test10b_IsNotItemByArray()
     myResult(2) = TypeInfo.IsNotItemByArray(Seq.Deb)
     myResult(3) = TypeInfo.IsNotItemByArray(New ArrayList)
     myResult(4) = TypeInfo.IsNotItemByArray(Queue.Deb)
-    myResult(5) = TypeInfo.IsNotItemByArray(Hkvp.Deb)
+    myResult(5) = TypeInfo.IsNotItemByArray(KvpH.Deb)
     'Assert.Strict:
     AssertStrictSequenceEquals myExpected, myResult, myProcedureName
 
@@ -1779,7 +1779,7 @@ End Sub
 ' End Sub
 
 
-' Private Sub Test03f_IsTypeByHkvp_MultipleIntegers_String_False()
+' Private Sub Test03f_IsTypeByKvpH_MultipleIntegers_String_False()
 
 ' #If twinbasic Then
 '     myProcedureName = CurrentProcedureName
