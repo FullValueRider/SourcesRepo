@@ -12,7 +12,7 @@ Class TypeInfo
     for Groups of Types.
     
     The following Enumerations are used to emulate the values provided by vbVarType
-    Data for items prefixed id comes from the enums.Types class.
+    Data for items prefixed ti_ comes from the enums.Types class.
     */
     
     Option Explicit
@@ -27,30 +27,30 @@ Class TypeInfo
     /*
         This enumeration defines the group types.  
     */
-    Public Enum TypeGroup
+    Public Enum tg__TypeGroup
 
-        tgUndefined = UNDEFINED_GROUP
-        tgAny = ANY_IN_GROUP
+        tg_Undefined = UNDEFINED_GROUP
+        tg_Any = ANY_IN_GROUP
         
-        tgNumber = idNumber
-        tgBoolean = idBoolean
-        tgPrimitive
-        tgAdmin
+        tg_Number
+        tg_Boolean
+        tg_Primitive
+        tg_Admin
 
-        tgArray
-        tgItemByIndex
-        tgItemByKey
-        tgItemByArray
+        tg_Array
+        tg_ItemByIndex
+        tg_ItemByKey
+        tg_ItemByArray
         
-        tgWrappedEnum
+        tg_WrappedEnum
         
-        tgZeroBased
-        tgOneBased
+        tg_ZeroBased
+        tg_OneBased
         
-        tgIterable
-        tgObjectItem
+        tg_Iterable
+        tg_ObjectItem
         
-        tgIterator
+        tg_Iterator
     
     End Enum
     
@@ -61,133 +61,140 @@ Class TypeInfo
         A charactertistic of a number is that its value
         fits within the data field of the Variant type
     */
-    Public Enum NumberType
+    Public Enum nt__NumberType
 
-        ntAny = ANY_IN_GROUP
-        ntByte = idUChar
-        ntCurrency = idCurrency
-        ntDate = idDate
-        ntDecimal = idDecimal
-        ntDouble = idDouble
-        ntInteger = idInteger
-        ntLong = idLong
-        ntLongLong = idLongLong
-        ntLongPtr = idLongPtr
-        ntSingle = idSingle
+        nt_Any = ANY_IN_GROUP
+        nt_Byte = ti_UChar
+        nt_Currency = ti_Currency
+        nt_Date = ti_Date
+        nt_Decimal = ti_Decimal
+        nt_Double = ti_Double
+        nt_Integer = ti_Integer
+        nt_Long = ti_Long
+        nt_LongLong = ti_LongLong
+        nt_Longptr = ti_LongPtr
+        nt_Single = ti_Single
             
     End Enum
     
     /*
         Primitives are defined as items that are
         * not an object
-        * not an AdminTYpe
+        * not an AdminType
     */
-    Public Enum PrimitiveType
+    Public Enum pt__PrimitiveType
 
-        ptAny = ANY_IN_GROUP
-        ptByte = idUChar
-        ptCurrency = idCurrency
-        ptDate = idDate
-        ptDecimal = idDecimal
-        ptDouble = idDouble
-        ptInteger = idInteger
-        ptLong = idLong
-        ptLongLong = idLongLong
-        ptLongPtr = idLongPtr
-        ptSingle = idSingle
-        ptBoolean = idBoolean
-        ptString = idString
+        pt_Any = ANY_IN_GROUP
+        pt_Byte = ti_UChar
+        pt_Currency = ti_Currency
+        pt_Date = ti_Date
+        pt_Decimal = ti_Decimal
+        pt_Double = ti_Double
+        pt_integer = ti_integer
+        pt_Long = ti_Long
+        pt_LongLong = ti_LongLong
+        pt_Longptr = ti_Longptr
+        pt_Single = ti_Single
+        pt_Boolean = ti_Boolean
+        pt_String = ti_String
             
     End Enum
     
     /*
-        Admintypes are those values which don't easily fit
+        AdminTypes are those values which don't easily fit
         the definition of a primitive or an object and are generally used
-        to control the flow of code
+        to cont_rol the flow of code
     */
-    Public Enum AdminType
+    Public Enum at__AdminType
         
-        atAny = ANY_IN_GROUP
-        atEmpty = idEmpty
-        atNull = idNull
-        atNothing = idNothing
-        atUnknown = idIUnKnownPtr
-        atError = idError
+        at_Any = ANY_IN_GROUP
+        at_Empty = ti_Empty
+        at_Null = ti_Null
+        at_Nothing = ti_Nothing
+        at_Unknown = ti_IUnKnownptr
+        at_Error = ti_Error
         
     End Enum
     
     
-    Public Enum ItemByIndex0Type
+    Public Enum i0__ItemByIndex0Type
     	
-        i0Any = ANY_IN_GROUP
-        i0ArrayList = idArrayList
+        i0_Any = ANY_IN_GROUP
+        i0_ArrayList = ti_ArrayList
         
         
     End Enum
     
-    Public Enum ItemByIndex1Type
+    Public Enum i1__ItemByIndex1Type
     	
-        i1Any = ANY_IN_GROUP
-        i1Collection = idCollection
-        i1Seq = idSeq
-        i1wCollection = idwCollection
+        i1_Any = ANY_IN_GROUP
+        i1_Collection = ti_Collection
+        i1_Seq = ti_Seq
+        i1_wCollection = ti_wCollection
     End Enum
     
     
-    Public Enum ItemByKeyType
+    Public Enum ik__ItemByKeyType
         
-        ikcHashD = idcHashD
-        ikLookup = idLookup
-        ikDictionary = idDictionary
-        ikScriptingDictionary = idScriptingDictionary
-        ikKVPair = idKVPair
+        ik_any = ANY_IN_GROUP
+        ik_cHashD = ti_cHashD
+        ik_cHashD2 = ti_cHashD2
+        ik_KvpC = ti_KvpC
+        ik_KvpH = ti_KvpH
+        ik_KvpS = ti_KvpS
+        ik_Dictionary = ti_Dictionary
+        ik_ScriptingDictionary = ti_ScriptingDictionary
+        ik_KVPair = ti_KVPair
         
     End Enum
     
-    Public Enum ItemByArrayType
+    Public Enum ia__ItemByArrayType
     
-        iaStack = idStack
-        iaQueue = idQueue
+        ia_any = ANY_IN_GROUP
+        ia_Stack = ti_Stack
+        ia_Queue = ti_Queue
     
     End Enum
     
-    Public Enum WrappedEnumType
+    Public Enum we__WrappedEnumType
     
-        weType = idEnumTypes
-        wePreset = idEnumPreset
-        weMessage = idEnumMessage
+        we_any = ANY_IN_GROUP
+        we_Type = ti_EnumTypes
+        we_Preset = ti_EnumPreset
+        we_Message = ti_EnumMessage
         
     End Enum
     
     ' Public Enum FirstIndexType
     
-    '     fiZero = idOne
+    '     fiZero = ti_One
     '     fiOne
-    '     fiAny
+    '     fia_ny
         
     ' End Enum
     
-    Public Enum IteratorTYpe
+    Public Enum it__IteratorTYpe
     
-        itArray = idIterArray
-        itConst = idIterConst
-        itItems = iditeritems
-        itString = iditerStrings
-        itNumber = iditernum
+        it_any = ANY_IN_GROUP
+        it_Array = ti_IterArray
+        it_Const = ti_IterConst
+        it_Items = ti_iteritems
+        it_String = ti_iterStrings
+        it_Number = ti_iternum
         
     End Enum
     
-    Public Enum ZeroBasedType
+    Public Enum zb__ZeroBasedType
     	
-        zbArrayList = idarraylist
+        zb_ArrayList = ti_arraylist
         
     End Enum
     
-    Public Enum OneBasedType
+    Public Enum ob__OneBasedType
     
-        obCollection = idcollection
-        obSeq = idseq
-        obwCollection = idwCollection
+        ob_Collection = ti_collection
+        ob_Seq = ti_seq
+        ob_wCollection = ti_wCollection
     End Enum
        
     
@@ -201,26 +208,20 @@ Class TypeInfo
     Private Type State
 
         
-        Number                              As Lookup
-        Primitive                           As Lookup
-        Admin                               As Lookup
+        Number                              As KvpC
+        Primitive                           As KvpC
+        Admin                               As KvpC
 
-        ItemByIndex0                        As Lookup
-        ItemByIndex1                        As Lookup
-        ItemByKey                           As Lookup
-        ItemByToArray                       As Lookup
+        ItemByIndex0                        As KvpC
+        ItemByIndex1                        As KvpC
+        ItemByKey                           As KvpC
+        ItemByToArray                       As KvpC
        
-        WrappedEnum                         As Lookup
+        WrappedEnum                         As KvpC
         
-      '  ZeroBased                           As Lookup
-      '  OneBased                            As Lookup
-        
-       ' IterableObject                      As Lookup
-        'EIterable                           As Lookup
-        
-        Iterator                            As Lookup
-        Container                           As lookup
-      '  TypeGroup                           As Lookup
+        Iterator                            As KvpC
+        Container                           As KvpC
+      
         
     End Type
     
@@ -264,21 +265,21 @@ Class TypeInfo
     
     Private Sub SetupNumber()
        
-        Set s.Number = Lookup.Deb
+        Set s.Number = KvpC.Deb
         
         ' Type which are not strings/objects and which support + 1
         With s.Number
         
-            .Add "byte", ntByte
-            .Add "currency", ntCurrency
-            .Add "date", ntDate
-            .Add "decimal", ntDecimal
-            .Add "double", ntDouble
-            .Add "integer", ntInteger
-            .Add "long", ntLong
-            .Add "longlong", ntLongLong
-            .Add "longptr", ntLongPtr
-            .Add "single", ntSingle
+            .Add "byte", nt_Byte
+            .Add "currency", nt_Currency
+            .Add "date", nt_Date
+            .Add "decimal", nt_Decimal
+            .Add "double", nt_Double
+            .Add "integer", nt_Integer
+            .Add "long", nt_Long
+            .Add "longlong", nt_LongLong
+            .Add "longptr", nt_Longptr
+            .Add "single", nt_Single
             
         End With
 
@@ -288,13 +289,13 @@ Class TypeInfo
     
     Public Sub SetupPrimitive()
 
-        Set s.Primitive = Lookup.Deb
+        Set s.Primitive = KvpC.Deb
         
         With s.Primitive
             
             .AddPairs s.Number.Keys, s.Number.Items
-            .Add TYPE_BOOLEAN, ptBoolean
-            .Add TYPE_STRING, ptString
+            .Add TYPE_BOOLEAN, pt_Boolean
+            .Add TYPE_STRING, pt_String
             
         End With
         
@@ -303,15 +304,15 @@ Class TypeInfo
     
     Public Sub SetupAdmin()
     
-        Set s.Admin = Lookup.Deb
+        Set s.Admin = KvpC.Deb
         
         With s.Admin
         
-            .Add "empty", atEmpty
-            .Add "null", atNull
-            .Add "nothing", atNothing
-            .Add "unknown", atUnknown
-            .Add "error", atError
+            .Add "empty", at_Empty
+            .Add "null", at_Null
+            .Add "nothing", at_Nothing
+            .Add "unknown", at_Unknown
+            .Add "error", at_Error
         
         End With
         
@@ -319,10 +320,10 @@ Class TypeInfo
     
     Public Sub SetupItemByIndex0()
     
-        Set s.ItemByIndex0 = Lookup.Deb
+        Set s.ItemByIndex0 = KvpC.Deb
         With s.ItemByIndex0
         
-            .Add "arraylist", idArrayList
+            .Add "arraylist", ti_ArrayList
         
         End With
         
@@ -330,27 +331,27 @@ Class TypeInfo
     
     Public Sub SetupItemByIndex1()
     	
-        Set s.ItemByIndex1 = Lookup.Deb
+        Set s.ItemByIndex1 = KvpC.Deb
         With s.ItemByIndex1
         
-            .Add "collection", idCollection
-            .Add "seq", idSeq
-            .Add "wcollection", idwCollection
+            .Add "collection", ti_Collection
+            .Add "seq", ti_Seq
+            .Add "wcollection", ti_wCollection
         End With
     End Sub
     
     Public Sub SetupItemByKey()
     
-        Set s.ItemByKey = Lookup.Deb
+        Set s.ItemByKey = KvpC.Deb
         
         With s.ItemByKey
         
-        .Add "chashd", ikcHashD
-        .Add "lookup", ikLookup
-        .Add "dictionary", ikDictionary
-        .Add "KvpH", idKvpH
-        .Add "scriptingdictionary", ikScriptingDictionary
-        .Add "kvpair", ikKVPair
+        .Add "chashd", ik_cHashD
+        .Add "KvpC", ik_KvpC
+        .Add "dictionary", ik_Dictionary
+        .Add "KvpH", ik_KvpH
+        .Add "scriptingdictionary", ik_ScriptingDictionary
+        .Add "kvpair", ik_KVPair
         
         End With
         
@@ -358,25 +359,25 @@ Class TypeInfo
     
     Public Sub SetupItemByArray()
     	
-        Set s.ItemByToArray = Lookup.Deb
+        Set s.ItemByToArray = KvpC.Deb
         
         With s.ItemByToArray
         
-            .Add "stack", iaStack
-            .Add "queue", iaQueue
+            .Add "stack", ia_Stack
+            .Add "queue", ia_Queue
         End With
         
     End Sub
     
     Public Sub SetupWrappedEnums()
         
-        Set s.WrappedEnum = Lookup.Deb
+        Set s.WrappedEnum = KvpC.Deb
         
         With s.WrappedEnum
             
-            .Add weType, idEnumTypes
-            .Add wePreset, idEnumPreset
-            .Add weMessage, idEnumMessage
+            .Add we_Type, ti_EnumTypes
+            .Add we_Preset, ti_EnumPreset
+            .Add we_Message, ti_EnumMessage
         
         End With
         
@@ -384,22 +385,22 @@ Class TypeInfo
     
     Public Sub SetupIterators()
     
-        Set s.Iterator = Lookup.Deb
+        Set s.Iterator = KvpC.Deb
         
         With s.Iterator
         	
-            .Add itArray, idIterArray
-            .Add itConst, idIterConst
-            .Add itItems, idIterItems
-            .Add itString, idIterStrings
-            .Add itNumber, idIterNum
+            .Add it_Array, ti_IterArray
+            .Add it_Const, ti_IterConst
+            .Add it_Items, ti_IterItems
+            .Add it_String, ti_IterStrings
+            .Add it_Number, ti_IterNum
         End With
         
     End Sub
     
     Public Sub SetupContainers()
     	
-        Set s.Container = Lookup.Deb
+        Set s.Container = KvpC.Deb
         With s.Container
         
             .AddPairs s.ItemByToArray.Keys, s.ItemByToArray.Items
@@ -416,10 +417,10 @@ Class TypeInfo
     End Function
     
     
-    Public Function IsNumber(ByRef ipNumber As Variant, Optional ByVal ipNumberType As NumberType = ntAny) As Boolean
+    Public Function IsNumber(ByRef ipNumber As Variant, Optional ByVal ipNumberType As nt__NumberType = nt_Any) As Boolean
     
         Dim myBaseType As String = TypeInfo.BaseType(ipNumber)
-        If ipNumberType = ntAny Then
+        If ipNumberType = nt_Any Then
             Return s.Number.HoldsKey(myBaseType)
         Else
             Return s.Number.Item(myBaseType) = ipNumberType
@@ -427,10 +428,10 @@ Class TypeInfo
         
     End Function
     
-    Public Function IsNotNumber(ByRef ipNumber As Variant, Optional ByVal ipNumberType As NumberType = ntAny) As Boolean
+    Public Function IsNotNumber(ByRef ipNumber As Variant, Optional ByVal ipNumberType As nt__NumberType = nt_Any) As Boolean
         
         Dim myBaseType As String = TypeInfo.BaseType(ipNumber)
-        If ipNumberType = ntAny Then
+        If ipNumberType = nt_Any Then
             Return s.Number.LacksKey(myBaseType)
         Else
             Return s.Number.Item(myBaseType) <> ipNumberType
@@ -453,7 +454,7 @@ Class TypeInfo
     End Function
     
     
-    '@Description("Returns True if ipString is a String or String().  Objects with Defaultmembers that return strings will return False")
+    '@Descript_ion("Returns True if ipString is a String or String().  Objects with Defaultmembers that return strings will return False")
     Public Function IsString(ByRef ipString As Variant) As Boolean
         Return TypeInfo.BaseType(ipString) = TYPE_STRING
     End Function
@@ -463,46 +464,46 @@ Class TypeInfo
     End Function
     
     
-    Public Function IsAdmin(ByRef ipAdmin As Variant, Optional ByVal ipAdminType As AdminType = atAny) As Boolean
+    Public Function IsAdmin(ByRef ipAdmin As Variant, Optional ByVal ipAdminType As at__AdminType = at_Any) As Boolean
     	Dim myBaseType As String = TypeInfo.BaseType(ipAdmin)
-        If ipAdminType = atAny Then
+        If ipAdminType = at_Any Then
             Return s.Admin.HoldsKey(myBaseType)
         Else
             Return s.Admin.Item(myBaseType) = ipAdminType
         End If
     End Function
     
-    Public Function IsNotAdmin(ByRef ipAdmin As Variant, Optional ByVal ipAdminType As AdminType = atAny) As Boolean
+    Public Function IsNotAdmin(ByRef ipAdmin As Variant, Optional ByVal ipAdminType As at__AdminType = at_Any) As Boolean
         Return Not IsAdmin(ipAdmin, ipAdminType)
     End Function
     
     
-    Public Function IsPrimitive(ByRef ipPrimitive As Variant, Optional ByVal ipPrimitiveType As PrimitiveType = ptAny) As Boolean
+    Public Function IsPrimitive(ByRef ipPrimitive As Variant, Optional ByVal ipPrimitiveType As pt__PrimitiveType = pt_Any) As Boolean
         Dim myBaseType As String = TypeInfo.BaseType(ipPrimitive)
-        If ipPrimitiveType = atAny Then
+        If ipPrimitiveType = at_Any Then
             Return s.Primitive.HoldsKey(myBaseType)
         Else
             Return s.Primitive.Item(myBaseType) = ipPrimitiveType
         End If
     End Function
     
-    Public Function IsNotPrimitive(ByRef ipPrimitive As Variant, Optional ByVal ipPrimitiveType As PrimitiveType = ptAny) As Boolean
+    Public Function IsNotPrimitive(ByRef ipPrimitive As Variant, Optional ByVal ipPrimitiveType As pt__PrimitiveType = pt_Any) As Boolean
         Return Not IsPrimitive(ipPrimitive, ipPrimitiveType)
     End Function
     
     
-    Public Function IsArray(ByRef ipArray As Variant, Optional ByVal ipArrayType As ArrayType = atAny) As Boolean
+    Public Function IsArray(ByRef ipArray As Variant, Optional ByVal ipArrayType As ArrayType = at_Any) As Boolean
         Return ArrayInfo.IsArray(ipArray, ipArrayType)
     End Function
     
-    Public Function IsNotArray(ByRef ipArray As Variant, Optional ByVal ipArrayType As ArrayType = AtAny) As Boolean
+    Public Function IsNotArray(ByRef ipArray As Variant, Optional ByVal ipArrayType As ArrayType = at_Any) As Boolean
         Return ArrayInfo.IsNotArray(ipArray, ipArrayType)
     End Function
     
-    Public Function IsItemByIndex0(ByRef ipItemByIndex0 As Variant, Optional ByVal ipItemByIndex0Type As ItemByIndex0Type = i0Any) As Boolean
+    Public Function IsItemByIndex0(ByRef ipItemByIndex0 As Variant, Optional ByVal ipItemByIndex0Type As i0__ItemByIndex0Type = i0_Any) As Boolean
     
         Dim myBaseType As String = TypeInfo.BaseType(ipItemByIndex0)
-        If ipItemByIndex0Type = i0Any Then
+        If ipItemByIndex0Type = i0_Any Then
             Return s.ItemByIndex0.HoldsKey(myBaseType)
         Else
             Return s.ItemByIndex0.Item(myBaseType) <> ipItemByIndex0Type
@@ -510,15 +511,15 @@ Class TypeInfo
     
     End Function
     
-    Public Function IsNotItemByIndex0(ByRef ipItemByIndex0 As Variant, Optional ByVal ipItemByIndex0Type As ItemByIndex0Type = i0Any) As Boolean
+    Public Function IsNotItemByIndex0(ByRef ipItemByIndex0 As Variant, Optional ByVal ipItemByIndex0Type As i0__ItemByIndex0Type = i0_Any) As Boolean
         Return Not IsItemByIndex0(ipItemByIndex0, ipItemByIndex0Type)
     End Function
     
     
-    Public Function IsItemByIndex1(ByRef ipItemByIndex1 As Variant, Optional ByVal ipItemByIndex1Type As ItemByIndex1Type = i0Any) As Boolean
+    Public Function IsItemByIndex1(ByRef ipItemByIndex1 As Variant, Optional ByVal ipItemByIndex1Type As i1__ItemByIndex1Type = i1_Any) As Boolean
     
         Dim myBaseType As String = TypeInfo.BaseType(ipItemByIndex1)
-        If ipItemByIndex1Type = i0Any Then
+        If ipItemByIndex1Type = i0_Any Then
             Return s.ItemByIndex1.HoldsKey(myBaseType)
         Else
             Return s.ItemByIndex1.Item(myBaseType) <> ipItemByIndex1Type
@@ -526,15 +527,15 @@ Class TypeInfo
     
     End Function
     
-    Public Function IsNotItemByIndex1(ByRef ipItemByIndex1 As Variant, Optional ByVal ipItemByIndex1Type As ItemByIndex1Type = i0Any) As Boolean
+    Public Function IsNotItemByIndex1(ByRef ipItemByIndex1 As Variant, Optional ByVal ipItemByIndex1Type As i1__ItemByIndex1Type = i1_Any) As Boolean
         Return Not IsItemByIndex1(ipItemByIndex1, ipItemByIndex1Type)
     End Function
     
     
-    Public Function IsItemByKey(ByRef ipItemByKey As Variant, Optional ByVal ipItemByKeyType As ItemByKeyType = i0Any) As Boolean
+    Public Function IsItemByKey(ByRef ipItemByKey As Variant, Optional ByVal ipItemByKeyType As ik__ItemByKeyType = ik_Any) As Boolean
     
         Dim myBaseType As String = TypeInfo.BaseType(ipItemByKey)
-        If ipItemByKeyType = i0Any Then
+        If ipItemByKeyType = ik_any Then
             Return s.ItemByKey.HoldsKey(myBaseType)
         Else
             Return s.ItemByKey.Item(myBaseType) <> ipItemByKeyType
@@ -542,16 +543,16 @@ Class TypeInfo
     
     End Function
     
-    Public Function IsNotItemByKey(ByRef ipItemByKey As Variant, Optional ByVal ipItemByKeyType As ItemByKeyType = i0Any) As Boolean
+    Public Function IsNotItemByKey(ByRef ipItemByKey As Variant, Optional ByVal ipItemByKeyType As ik__ItemByKeyType = ik_Any) As Boolean
         Return Not IsItemByKey(ipItemByKey, ipItemByKeyType)
     End Function
     
     
     
-    Public Function IsItemByToArray(ByRef ipItemByArray As Variant, Optional ByVal ipItemByArrayType As ItemByArrayType = i0Any) As Boolean
+    Public Function IsItemByToArray(ByRef ipItemByArray As Variant, Optional ByVal ipItemByArrayType As ia__ItemByArrayType = ia_Any) As Boolean
     
         Dim myBaseType As String = TypeInfo.BaseType(ipItemByArray)
-        If ipItemByArrayType = i0Any Then
+        If ipItemByArrayType = ia_any Then
             Return s.ItemByToArray.HoldsKey(myBaseType)
         Else
             Return s.ItemByToArray.Item(myBaseType) <> ipItemByArrayType
@@ -559,7 +560,7 @@ Class TypeInfo
     
     End Function
     
-    Public Function IsNotItemByArray(ByRef ipItemByArray As Variant, Optional ByVal ipItemByArrayType As ItemByArrayType = i0Any) As Boolean
+    Public Function IsNotItemByArray(ByRef ipItemByArray As Variant, Optional ByVal ipItemByArrayType As ia__ItemByArrayType = ia_Any) As Boolean
         Return Not IsItemByToArray(ipItemByArray, ipItemByArrayType)
     End Function
     
@@ -593,8 +594,8 @@ Class TypeInfo
         Return Not IsItemObject(ipObject)
     End Function
     
-   Public Function IsType(ByVal ipTypeOrd As TypeOrd, ByRef ipTestType As Variant) As Boolean
-        Return ipTypeOrd = enums.Types.TypeNameToOrd(TypeInfo.BaseType(ipTestType))
+   Public Function IsType(ByVal ipt_ypeOrd As ti__TypeId, ByRef iptestType As Variant) As Boolean
+        Return ipt_ypeOrd = enums.Types.TypeNameToId(TypeInfo.BaseType(iptestType))
     End Function
     
 End Class

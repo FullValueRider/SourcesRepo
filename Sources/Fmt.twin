@@ -39,7 +39,7 @@ Class Fmt
 
     Private Type State
 
-        FormatFields                                As Lookup
+        FormatFields                                As KvpC
         Stringifier                                 As Stringifier
     End Type
 
@@ -85,7 +85,7 @@ Class Fmt
             Exit Sub
         End If
         
-        Set s.FormatFields = Lookup.Deb
+        Set s.FormatFields = KvpC.Deb
        
         With s.FormatFields
             

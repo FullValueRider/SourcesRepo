@@ -234,7 +234,7 @@ Class Stringifier
                         
             Case VBA.VarType(ipAdmin) = vbDataObject
             
-               Return s.ObjectMarkup.Left & enums.Types.OrdToTypeName(idUnknown) & s.ObjectMarkup.Right
+               Return s.ObjectMarkup.Left & enums.Types.IdToName(ti_Unknown) & s.ObjectMarkup.Right
                                                                         
 
             Case  ipadmin is nothing

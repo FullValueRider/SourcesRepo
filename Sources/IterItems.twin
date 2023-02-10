@@ -110,7 +110,7 @@ Class IterItems
         If VBA.IsObject(ipFromOrFTS) Then
         
         
-            If VBA.TypeName(ipFromOrFTS) = "FTS" Then
+            If VBA.TypeName(ipFromOrFTS) = FTS.TypeName Then
                 Set myFts = ipFromOrFTS
                 Return SetFTSByFTS(myFts)
             End If
@@ -281,7 +281,7 @@ Class IterItems
                 If myIndex < 0 Or myIndex > p.Keys.Count - 1 Then
                     Return Null
                 Else
-                    Dim mykey As Variant = p.Keys(myIndex +1)
+                    Dim mykey As Variant = p.Keys(myIndex + 1)
                     Return Cargo.Item(mykey) 'Return p.Items(myIndex)
                 End If
                 

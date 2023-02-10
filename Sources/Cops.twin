@@ -55,6 +55,7 @@ Class Cops
     
 
     Private Sub QuickSort1(ByRef iopSortable As Variant, Optional ByVal ipLeft As Long, Optional ByVal ipRight As Long)
+    
         Dim myFirst As Long
         Dim myLast As Long
         Dim myMid As Variant

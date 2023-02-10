@@ -136,7 +136,7 @@ Class cHashD2
     End Property
     
     
-    Public Function Keys() As Variant()
+    Public Function Keys(Optional ByVal ipSeqType As st__SeqType = st_seq) As Variant
         If s.Count = 0 Then
             Return Array()
         End If
@@ -170,12 +170,36 @@ Class cHashD2
         
         Next
         
-        Return V
+        Dim myItem As Variant
+        Select Case ipSeqType
+        
+            Case st_Array:          Return V
+                
+            Case st_Seq:            Return Seq.Deb(V)
+                
+            Case st_Collection:     
+                
+                Dim myC As Collection = New Collection
+                
+                For Each myItem In V
+                	myC.Add myItem
+                Next
+                
+                Return myC
+                
+            Case st_wCollection:  Return wCollection.Deb(V)
+                
+    
+            Case Else
+                Err.Raise 17 + vbObjectError, _
+                    "twLib.KvpC.Items", _
+                    "Unexpected ipSeqType"
+        End Select
         
     End Function
 
 
-    Public Function Items() As Variant()
+    Public Function Items(Optional ByVal ipSeqType As st__SeqType = st_Seq) As Variant
     
         If s.Count = 0 Then
             Return Array()
@@ -209,11 +233,35 @@ Class cHashD2
         
         Next
         
-        Return V
+        Dim myItem As Variant
+        Select Case ipSeqType
+        
+            Case st_Array:          Return V
+                
+            Case st_Seq:            Return Seq.Deb(V)
+                
+            Case st_Collection:     
+                
+                Dim myC As Collection = New Collection
+                
+                For Each myItem In V
+                	myC.Add myItem
+                Next
+                
+                Return myC
+                
+            Case st_wCollection:  Return wCollection.Deb(V)
+            
+            Case Else
+                Err.Raise 17 + vbObjectError, _
+                    "twLib.KvpC.Keys", _
+                    "Unexpected ipSeqType"
+        End Select
+        
     End Function
     
 
-    Public Function Pairs() As Variant() 'hand-out the Key-Values in a Pairs-Array
+    Public Function Pairs(Optional ipSeqType As st__SeqType = st_seq) As Variant 'hand-out the Key-Values in a Pairs-Array
     
         If s.Count = 0 Then
             Return Array()
@@ -246,7 +294,31 @@ Class cHashD2
         
         Next
         
-        Return V
+        Dim myItem As Variant
+        Select Case ipSeqType
+        
+            Case st_Array:          Return V
+                
+            Case st_Seq:            Return Seq.Deb(V)
+                
+            Case st_Collection:     
+                
+                Dim myC As Collection = New Collection
+                
+                For Each myItem In V
+                	myC.Add myItem
+                Next
+                
+                Return myC
+                
+            Case st_wCollection:  Return wCollection.Deb(V)
+                
+    
+            Case Else
+                Err.Raise 17 + vbObjectError, _
+                    "twLib.KvpC.Pairs", _
+                    "Unexpected ipSeqType"
+        End Select
         
     End Function
     

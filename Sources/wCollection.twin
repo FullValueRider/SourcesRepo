@@ -7,7 +7,7 @@ Class wCollection
      ' a wrapper for the twinBasic/vba Collection object
      ' that removbes some of the inconvenience
      
-	Implements collection Via Host = New collection
+	Implements Collection Via Host = New Collection
 
     Const MY_TYPENAME                   As String = "wCollection"
     Const FIRST_INDEX                   As Long = 1
@@ -19,19 +19,28 @@ Class wCollection
         End With
     End Function
     
-    Public Function ConstructInstance(ByRef ipListArray As Variant) As wCollection
+    Public Function ConstructInstance(ByRef ipList As Variant) As wCollection
         
-        If VBA.IsEmpty(ipListArray) Then
+        If VBA.IsEmpty(ipList) Then
             Return Me
         End If
         
-        Dim myitem As Variant
-        For Each myitem In ipListArray
-            Host.Add myitem
-        Next
+        Dim myItems As IterItems = IterItems(ipList)
+        Do
+            Host.Add myItems.Item(0)
+        Loop While myItems.MoveNext
         
         Return Me
         
+    End Function
+    
+    
+    Public Function Clear() As wCollection
+        Dim myIndex As Long
+        For myIndex = Host.Count To 1 Step -1
+            Host.Remove myIndex
+        Next
+        Return Me
     End Function
     
     
@@ -40,9 +49,8 @@ Class wCollection
         Dim myItems As wCollection = wCollection.Deb
         
         Dim myItem As Variant
-        
         For Each myItem In Host
-            myItems.Add myItem 'the paren are deliberate
+            myItems.Add myItem
         Next
         
         Return myItems
@@ -70,6 +78,7 @@ Class wCollection
         
     End Function
     
+    
     '@DefaultMember
     Public Property Get Item(ByVal ipIndex As Variant) As Variant
         Return Host.Item(ipIndex)
@@ -84,6 +93,26 @@ Class wCollection
     	Host.Add ipItem, after:=ipIndex
         Host.Remove ipIndex
     End Property
+    
+    Public Function Items(Optional ByVal ipSeqType As st__SeqType = st_seq) As Variant
+        
+        Select Case ipSeqType
+        
+            Case st_Array:          Return ToArray
+                
+            Case st_Seq:            Return Seq.Deb(Host)
+                
+            Case st_Collection:     Return Host
+                
+            Case st_wCollection:    Return Clone
+            
+            Case Else
+                Err.Raise 17 + vbObjectError, _
+                    "twLib.wCollection.Items", _
+                    "Unexpected ipSeqType"
+        End Select
+        
+    End Function
     
     Public Function HoldsItem(ByRef ipItem As Variant) As Boolean
         Return Me.Exists(ipItem)
@@ -119,13 +148,33 @@ Class wCollection
         Return Me
     End Function
     
+    
     Public Function Reverse() As wCollection
-        Dim myReversed As wCollection = wCollection.Deb
-        Dim myItems As IterItems = IterItems(Host).MoveToEnd
-        Do
-        	myReversed.Add myItems.Item(0)
-        Loop While myItems.MovePrev
-        Return myReversed
+        
+        Dim myA As Variant
+        ReDim myA(1 To Host.Count)
+        
+        Dim myIndex As Long
+        For myIndex = 1 To Host.Count
+        	If VBA.IsObject(Host.Item(myIndex)) Then
+                Set myA(myIndex) = Host.Item(myIndex)
+            Else
+                myA(myIndex) = Host.Item(myIndex)
+            End If
+        Next
+        
+        Dim myEndIndex As Long = Host.Count
+        For myIndex = 1 To Host.Count
+            If VBA.IsObject(myA(myEndIndex)) Then
+                Set Item(myIndex) = myA(myEndIndex)
+            Else
+            	Item(myIndex) = myA(myEndIndex)
+            End If
+            myEndIndex -= 1
+        Next
+        
+        Return Me
+        
     End Function
     
     
@@ -136,6 +185,11 @@ Class wCollection
     Public Function Last() As Variant
         Return Item(Count)
     End Function
+    
+    
+    Public Property Get Host() As Collection
+        Return Host
+    End Property
     
     Public Function ToArray() As Variant
     

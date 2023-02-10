@@ -92,8 +92,8 @@ Class Trail
 
         Origin                                  As Coord
         
-        DirectionMap                            As Lookup
-        MovementMap                             As Lookup
+        DirectionMap                            As KvpC
+        MovementMap                             As KvpC
         
         Mover                                   As XYMovement
         TurnAngle                               As long
@@ -177,7 +177,7 @@ Class Trail
 
     Private Sub PopulateDirectionMap()
     
-        Set s.DirectionMap = Lookup.Deb
+        Set s.DirectionMap = KvpC.Deb
         
         With s.DirectionMap
         
@@ -229,7 +229,7 @@ Class Trail
     
     Private Sub PopulateMovementMap()
 
-        Set s.MovementMap = Lookup.Deb
+        Set s.MovementMap = KvpC.Deb
         If p.UpType = UpIncY Then
             With s.MovementMap
             

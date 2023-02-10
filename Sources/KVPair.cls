@@ -51,7 +51,7 @@ Friend Function ConstructInstance(ByVal ipKVPairOrKey As Variant, ByVal ipItem A
     ReDim p.Key(0 To 0)
     ReDim p.Item(0 To 0)
     
-    If TypeName(ipKVPairOrKey) = enums.Types.OrdToTypeName.Item(idKVPair) Then
+    If TypeName(ipKVPairOrKey) = enums.Types.IdToName.Item(ti_KVPair) Then
 
         If VBA.IsObject(ipKVPairOrKey.Key) Then
             Set p.Key(0) = ipKVPairOrKey.Key
@@ -67,7 +67,7 @@ Friend Function ConstructInstance(ByVal ipKVPairOrKey As Variant, ByVal ipItem A
      
         
         
-    ElseIf Not VBA.IsEmpty(ipItem) And TypeName(ipKVPairOrKey) <> enums.Types.OrdToTypeName.Item(idKVPair) Then
+    ElseIf Not VBA.IsEmpty(ipItem) And TypeName(ipKVPairOrKey) <> enums.Types.IdToName.Item(ti_KVPair) Then
         
         Sys.Assign p.Key(0), ipKVPairOrKey
         Sys.Assign p.Item(0), ipItem

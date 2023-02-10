@@ -1,0 +1,8 @@
+Interface IKvp
+
+	Function Add(ByRef ipKey As Variant, ByRef ipItem As Variant) As IKvp
+    Function AddPairs(ByRef ipKeys As Variant, ByRef ipItems As Variant) As IKvp
+    Function Clear() As IKvp
+    Function Clone() As IKvp
+    
+End Interface

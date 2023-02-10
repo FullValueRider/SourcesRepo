@@ -1,4 +1,4 @@
-Attribute VB_Name = "TestLookup"
+Attribute VB_Name = "TestKvpC"
 
 Option Explicit
 Option Private Module
@@ -35,7 +35,7 @@ End Sub
 #End If
 
 
-Public Sub LookupTests()
+Public Sub KvpCTests()
 
 #If twinbasic Then
 
@@ -47,18 +47,18 @@ Public Sub LookupTests()
     
 #End If
     
-    T01_IsLookupObject
-    T02_LookupAddNumberKeys
-    T03_LookupAddNStringKeys
-    T03_LookupKeysAndItems
+    T01_IsKvpCObject
+    T02_KvpCAddNumberKeys
+    T03_KvpCAddNStringKeys
+    T03_KvpCKeysAndItems
     
     Debug.Print "Testing completed "
     
 End Sub
 
 
-'@TestMethod("Lookup")
-Public Sub T01_IsLookupObject()
+'@TestMethod("KvpC")
+Public Sub T01_IsKvpCObject()
 
  #If twinbasic Then
     
@@ -76,15 +76,15 @@ Public Sub T01_IsLookupObject()
     
    'On Error GoTo TestFail
     'Arrange
-    Dim myExpected As String = "Lookup"
+    Dim myExpected As String = "KvpC"
     
     'Act
-    Dim myL As Lookup = Lookup.Deb
+    Dim myL As KvpC = KvpC.Deb
     
     'Assert
     AssertStrictAreEqual True, VBA.IsObject(myL), myProcedureName
     AssertStrictAreEqual myExpected, VBA.TypeName(myL), myProcedureName
-    AssertStrictAreEqual myExpected, myL.TypeNAme, myProcedureName
+    AssertStrictAreEqual myExpected, myL.TypeName, myProcedureName
 TestExit:
     Exit Sub
     
@@ -93,8 +93,8 @@ TestFail:
     
 End Sub
 
-'@TestMethod("Lookup")
-Public Sub T02_LookupAddNumberKeys()
+'@TestMethod("KvpC")
+Public Sub T02_KvpCAddNumberKeys()
 
  #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -109,7 +109,7 @@ Public Sub T02_LookupAddNumberKeys()
     Dim myExpected As Variant = Array(3, "Hello", "World", "Thing")
     
     'Act
-    Dim myL As Lookup = Lookup.Deb
+    Dim myL As KvpC = KvpC.Deb
     myL.Add 1, "Hello"
     myL.Add 2, "World"
     myL.Add 4, "Thing"
@@ -132,7 +132,7 @@ TestFail:
     
 End Sub
 
-Public Sub T03_LookupAddNStringKeys()
+Public Sub T03_KvpCAddNStringKeys()
 
  #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -147,7 +147,7 @@ Public Sub T03_LookupAddNStringKeys()
     Dim myExpected As Variant = Array(3, 1, 2, 4)
     
     'Act
-    Dim myL As Lookup = Lookup.Deb
+    Dim myL As KvpC = KvpC.Deb
     myL.Add "Hello", 1
     myL.Add "World", 2
     myL.Add "Thing", 4
@@ -170,7 +170,7 @@ TestFail:
     
 End Sub
 
-Public Sub T03_LookupKeysAndItems()
+Public Sub T03_KvpCKeysAndItems()
 
  #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -185,7 +185,7 @@ Public Sub T03_LookupKeysAndItems()
     Dim myExpectedItems As Variant = Array(1, 2, 4)
     Dim myExpectedKeys As Variant = Array("Hello", "World", "Thing")
     'Act
-    Dim myL As Lookup = Lookup.Deb
+    Dim myL As KvpC = KvpC.Deb
     myL.Add "Hello", 1
     myL.Add "World", 2
     myL.Add "Thing", 4
@@ -206,7 +206,7 @@ TestFail:
     
 End Sub
 
-Public Sub T04_LookupAddPairs()
+Public Sub T04_KvpCAddPairs()
 
  #If twinbasic Then
         myProcedureName = CurrentProcedureName
@@ -221,7 +221,7 @@ Public Sub T04_LookupAddPairs()
     Dim myExpectedItems As Variant = Array(1, 2, 4)
     Dim myExpectedKeys As Variant = Array("Hello", "World", "Thing")
     'Act
-    Dim myL As Lookup = Lookup.Deb.AddPairs(Array("Hello", "World", "Thing"), Array(1, 2, 4))
+    Dim myL As KvpC = KvpC.Deb.AddPairs(Array("Hello", "World", "Thing"), Array(1, 2, 4))
    
     Dim myResultKeys As Variant = myL.Keys
     Dim myResultItems As Variant = myL.Items

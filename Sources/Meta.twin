@@ -31,8 +31,8 @@ Class Meta
         ' The number of elements in ipCargo
         Size                                    As Long
         IsArray                                 As boolean
-        GroupOrd                                As TypeOrd
-        TypeOrd                                 As TypeOrd
+        GroupId                                As ti__TypeId
+        TypeId                                 As ti__TypeId
         IsSingleValue                           As boolean
         
     End Type
@@ -59,8 +59,10 @@ Class Meta
         Set p.Ranks = wCollection.Deb
         p.Size = -1
         p.IsArray = False
-        p.GroupOrd = TypeOrd.idNoType
-        p.TypeOrd = enums.Types.TypeNameToOrd(TypeInfo.BaseType(ipCargo))
+        p.GroupId = ti__TypeId.ti_NoType
+        Debug.Print VBA.TypeName(ipCargo)
+        Debug.Print TypeInfo.BaseType(ipCargo)
+        p.TypeId = enums.Types.TypeNameToId(TypeInfo.BaseType(ipCargo))
         p.IsSingleValue = False
         
         If VBA.IsArray(ipCargo) Then
@@ -89,7 +91,7 @@ Class Meta
                     p.Cargo = ipCargo
                     p.Ranks.Add Rank.Deb(LBound(p.Cargo, 1), UBound(p.Cargo, 1))
                     p.Size = p.Ranks(1).count
-                    p.GroupOrd = TypeOrd.idListArray
+                    p.GroupId = ti__TypeId.ti_ListArray
 
                 
             End Select
@@ -104,14 +106,14 @@ Class Meta
             
                 Set p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, CLng(ipCargo.Count - 1))
-                p.GroupOrd = TypeOrd.idItemByKey
+                p.GroupId = ti__TypeId.ti_ItemByKey
                 p.Size = ipCargo.count
                 
                 
             Case TypeInfo.IsItemByToArray(ipCargo)
                 Set p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, CLng(ipCargo.count - 1))
-                p.GroupOrd = TypeOrd.idItemByToArray
+                p.GroupId = ti__TypeId.ti_ItemByToArray
                 p.Size = ipCargo.count
                 
                 
@@ -119,7 +121,7 @@ Class Meta
             
                 Set p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, CLng(ipCargo.count - 1))
-                p.GroupOrd = TypeOrd.idItemByIndex0
+                p.GroupId = ti__TypeId.ti_ItemByIndex0
                 p.Size = ipCargo.count
                 
 
@@ -127,7 +129,7 @@ Class Meta
                 
                 Set p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(1, CLng(ipCargo.count))
-                p.GroupOrd = TypeOrd.idItemByIndex1
+                p.GroupId = ti__TypeId.ti_ItemByIndex1
                 p.Size = ipCargo.count
                 
                 
@@ -140,7 +142,7 @@ Class Meta
                 Else
                     p.Ranks.Add Rank.Deb(0, 0)
                 End If
-                p.GroupOrd = TypeOrd.idString
+                p.GroupId = ti__TypeId.ti_String
                 p.Size = VBA.Len(ipCargo)
                 
                 
@@ -148,7 +150,7 @@ Class Meta
             
                 p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, 0)
-                p.GroupOrd = TypeOrd.idNumber
+                p.GroupId = ti__TypeId.ti_Number
                 p.Size = 1
                 p.IsSingleValue = True
                 
@@ -160,7 +162,7 @@ Class Meta
                 	p.Cargo = ipCargo
                 End If
                 p.Ranks.Add Rank.Deb(0, 0)
-                p.GroupOrd = TypeOrd.idAdmin
+                p.GroupId = ti__TypeId.ti_Admin
                 p.Size = 1
                 p.IsSingleValue = True
                 
@@ -168,7 +170,7 @@ Class Meta
             
                 p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, 0)
-                p.GroupOrd = TypeOrd.idBoolean
+                p.GroupId = ti__TypeId.ti_Boolean
                 p.Size = 1
                 p.IsSingleValue = True
                 
@@ -176,7 +178,7 @@ Class Meta
             
                 Set p.Cargo = ipCargo
                 p.Ranks.Add Rank.Deb(0, 0)
-                p.GroupOrd = TypeOrd.idItemObject
+                p.GroupId = ti__TypeId.ti_ItemObject
                 p.Size = 1
                 p.IsSingleValue = True
                 
@@ -603,8 +605,8 @@ Class Meta
     End Function
     
     
-    Public Function IsType(ByVal ipTypeOrd As TypeOrd) As Boolean
-        Return ipTypeOrd = p.TypeOrd
+    Public Function IsType(ByVal ipTypeId As ti__TypeId) As Boolean
+        Return ipTypeId = p.TypeId
     End Function
     Public Function IsEmpty() As Boolean
         Return VBA.IsEmpty(p.Cargo)
@@ -615,7 +617,7 @@ Class Meta
     End Function
     
     Public Function IsNumber() As Boolean
-        Return p.GroupOrd = TypeOrd.idNumber
+        Return p.GroupId = ti__TypeId.ti_Number
     End Function
     
     Public Function IsObject() As Boolean
@@ -627,47 +629,47 @@ Class Meta
     End Function
     
     Public Function IsString() As Boolean
-       Return p.GroupOrd = TypeOrd.idString
+       Return p.GroupId = ti__TypeId.ti_String
     End Function
     
     Public Function IsBoolean() As Boolean
-        Return p.GroupOrd = TypeOrd.idBoolean
+        Return p.GroupId = ti__TypeId.ti_Boolean
     End Function
     
     Public Function ISItemObject() As Boolean
-        Return p.GroupOrd = TypeOrd.idItemObject
+        Return p.GroupId = ti__TypeId.ti_ItemObject
     End Function
     
     Public Function IsAdmin() As Boolean
-        Return p.GroupOrd = TypeOrd.idAdmin
+        Return p.GroupId = ti__TypeId.ti_Admin
     End Function
     
     Public Function IsListArray() As Boolean
-        Return p.GroupOrd = TypeOrd.idListArray
+        Return p.GroupId = ti__TypeId.ti_ListArray
     End Function
     
     Public Function IsTableArray() As Boolean
-        Return p.GroupOrd = TypeOrd.idTableArray
+        Return p.GroupId = ti__TypeId.ti_TableArray
     End Function
     
     Public Function IsMathArray() As Boolean
-        Return p.GroupOrd = TypeOrd.idMathArray
+        Return p.GroupId = ti__TypeId.ti_MathArray
     End Function
     
     Public Function IsItemByIndex0() As Boolean
-        Return p.GroupOrd = TypeOrd.idItemByIndex0
+        Return p.GroupId = ti__TypeId.ti_ItemByIndex0
     End Function
     
     Public Function IsItemByIndex1() As Boolean
-        Return p.GroupOrd = TypeOrd.idItemByIndex1
+        Return p.GroupId = ti__TypeId.ti_ItemByIndex1
     End Function
     
     Public Function IsItemByKey() As Boolean
-        Return p.GroupOrd = TypeOrd.idItemByKey
+        Return p.GroupId = ti__TypeId.ti_ItemByKey
     End Function
     
     Public Function IsItemByToArray() As Boolean
-        Return p.GroupOrd = TypeOrd.idItemByToArray
+        Return p.GroupId = ti__TypeId.ti_ItemByToArray
     End Function
     
     End Class

@@ -1,0 +1,476 @@
+Class KvpC
+    '@ModuleDescription("Dictionary using  collections for Keys and Items, no Hashing)
+    Attribute VB_Creatable = True
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = True
+	' A very simple dictionary intended for
+    ' as set of data that is created and used as a KvpC table
+    Option Explicit
+
+
+    Const NO_SUCH_KEY                       As Long = -1
+    Const MY_TYPENAME                       As String = "KvpC"
+    
+    
+    Private Type State
+    	Keys                                As wCollection
+        Items                               As wcollection
+    End Type
+
+    Private s                               As State
+    
+    
+    Public Function Deb() As KvpC
+        With New KvpC
+            Return .ConstructInstance
+        End With
+    End Function
+    
+    Friend Function ConstructInstance() As KvpC
+        Set s.Keys = wCollection.Deb
+        Set s.Items = wCollection.Deb
+        Return Me
+        
+    End Function
+    
+    
+     ' Override the host add so that we can use it as a function
+    Public Function Add(ByRef ipKey As Variant, ipItem As Variant) As KvpC
+        
+        If s.Keys(HoldsItem(ipKey)) Then
+            Err.Raise 17 + vbObjectError, _
+                "twLib.KvpC.Add", _
+                "Duplicate key"
+        End If
+        
+        s.Keys.Add ipKey
+        s.Items.Add ipItem
+        
+        Return Me
+        
+    End Function
+    
+    Public Function AddPairs(ByRef ipKeys As Variant, ByRef ipItems As Variant) As KvpC
+        
+        Dim myKeys As IterItems = IterItems(ipKeys)
+        Dim myItems As IterItems = IterItems(ipItems)
+        Do
+            Add myKeys.Item(0), myItems.Item(0)
+        Loop While myKeys.MoveNext And myItems.MoveNext
+        
+        Return Me
+        
+    End Function
+    
+    Public Function Clear() As KvpC
+        s.Keys.Clear
+        s.Items.Clear
+        Return Me
+    End Function
+    
+    Public Function Clone() As KvpC
+        Return KvpC.Deb.AddPairs(s.Keys, s.Items)
+    End Function
+    
+     Public Function HoldsKey(ByRef ipKey As Variant) As Boolean
+        Return s.Keys.HoldsItem(ipKey)
+    End Function
+
+    Public Function LacksKey(ByRef ipKey As Variant) As Boolean
+        Return s.Keys.LacksItem(ipKey)
+    End Function
+    
+    
+    Public Function HoldsItem(ByRef ipItem As Variant) As Boolean
+        Return s.Items.HoldsItem(ipItem)
+    End Function
+
+    Public Function LacksItem(ByRef ipItem As Variant) As Boolean
+        Return s.Items.LacksItem(ipItem)
+    End Function
+
+    ' ' is this a pointless function for a dicttionary. We should only ever need to reverse the keys when extracted as an array (after sorting?)
+    ' Public Function Reverse() As KvpC
+    '     Return KvpC.Deb.AddPairs(s.Keys.Reverse, s.Items.Reverse)
+    ' End Function
+    
+    Public Function TypeName() As String
+        Return MY_TYPENAME
+    End Function
+    
+     Public Function MapIt(ByVal ipMapper As IMapper) As KvpC
+
+        Dim myC As KvpC = KvpC.Deb
+        
+        If s.Keys.Count = 0 Then
+            Return myC
+        End If
+   
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+            myC.Add s.Keys(myIndex), ipMapper.ExecMapper(s.Items(myIndex))
+        Next
+
+         Return myC
+
+    End Function
+    
+    
+    Public Function FilterIt(ByVal ipComparer As IComparer) As KvpC
+
+        Dim myC As KvpC = KvpC.Deb
+        If s.Keys.Count = 0 Then
+            Return myC
+        End If
+        
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+            If ipComparer.ExecCmp(s.Items(myIndex)) Then
+                myC.Add s.Keys(myIndex), s.Items(myIndex)
+            End If
+        Next
+        
+        Return myC
+        
+    End Function
+    
+    Public Function Count() As Long
+        Return s.Keys.Count
+    End Function
+    
+    Public Function CountIt(ByVal ipComparer As IComparer) As Long
+        
+        If s.Keys.Count = 0 Then
+            Return 0
+        End If
+        
+        Dim myCount As Long = 0
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+       	    
+            If ipComparer.ExecCmp(s.Items(myIndex)) Then
+                myCount += 1
+            End If
+        Next
+
+        Return myCount
+
+    End Function
+    
+    Public Function KeyByIndex(ByVal ipIndex As Long) As Variant
+        Return s.Keys(ipIndex)
+    End Function
+    
+    Public Function KeyOf(ByVal ipItem As Variant) As Variant
+        Return s.Keys(s.Items.IndexOf(ipItem))
+    End Function
+    
+    
+    Public Function ReduceIt(ByRef ipReducer As IReducer) As Variant
+        Return ipReducer.ExecReduction(s.Items)
+    End Function
+
+
+    
+    
+    Public Property Get Item(ByRef ipKey As Variant) As Variant
+        Return s.Items(s.Keys.IndexOf(ipKey))
+    End Property
+    
+    Public Property Let Item(ByRef ipKey As Variant, ByRef ipItem As Variant)
+       s.Items(s.Keys.IndexOf(ipKey)) = ipItem
+    End Property
+    
+    Public Property Set Item(ByRef ipKey As Variant, ByRef ipItem As Variant)
+       Set s.Items(s.Keys.IndexOf(ipKey)) = ipItem
+    End Property
+    
+    
+    Public Function Items(Optional ByVal ipSeqType As st__SeqType = st_seq) As Variant
+        Return s.Items(ipSeqType)
+    End Function
+    
+    Public Function Keys(Optional ByVal ipSeqType As st__SeqType = st_seq) As Variant
+        Return s.Keys(ipSeqType)
+    End Function
+    
+    Public Function Pairs(Optional ByVal ipSeqType As st__SeqType = st_seq) As Variant
+    
+        Dim myS As Seq = Seq.Deb
+        
+        If s.Keys.Count = 0 Then
+            Return myS
+        End If
+        
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+            myS.Add Array(s.Keys(myIndex), s.Items(myIndex))
+        Next
+        
+        Return myS.Items(ipSeqType)
+        
+    End Function
+    
+    
+    
+    Public Property Get FirstKey() As Variant
+        If s.Keys.Count = 0 Then
+             Err.Raise 17, "Lib.KvpC.FirstKey: Has no items"
+        End If
+        Return s.Keys.First
+    End Property
+    
+    Public Property Get LastKey() As Variant
+        If Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.LastKey: Seq has no items"
+        End If
+        Return s.Keys.Last
+    End Property
+    
+    Public Property Get FirstItem() As Variant
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.FirstItem: Has no items"
+        End If
+        Return s.Items.First
+    End Property
+    
+    
+    Public Property Set FirstItem(ByRef ipItem As Variant)
+        
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.FirstItem: Has no items"
+        End If
+    
+        Set s.Items.First = ipItem
+           
+    End Property
+    
+    Public Property Let FirstItem(ByRef ipItem As Variant)
+        
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.FirstItem: Has no items"
+        End If
+       
+        s.Items.First = ipItem
+           
+    End Property
+    
+    Public Property Get LastItem() As Variant
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.LastItem: Has no items"
+        End If
+        Return s.Items.Last
+    End Property
+    
+    Public Property Set LastItem(ByRef ipItem As Variant)
+        
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.LastItem: Seq has no items"
+        End If
+        Set s.Items.Last = ipItem
+    End Property
+    
+    
+    Public Property Let LastItem(ByRef ipItem As Variant)
+        
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.LastItem: Seq has no items"
+        End If
+        s.Items.Last = ipItem
+    End Property
+    
+    
+    Public Property Get FirstPair() As KVPair
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.FirstPair: Seq has no items"
+        End If
+        Return KVPair.Deb(s.Keys.First, s.Items.First)
+    End Property
+    
+    
+    Public Property Get LastPair() As KVPair
+        If s.Keys.Count = 0 Then
+            Err.Raise 17, "Lib.KvpC.LastPair: Seq has no items"
+        End If
+        Return KVPair.Deb(s.Keys.Last, s.Items.Last)
+    End Property
+    
+    
+    '@Description( returns a Kvp with values as keys.  Each Value is linked to a Kvp of Key vs Index for the host value
+    Public Function Mirror(Optional ByVal ipMirrorType As mt__MirrorType = mt__MirrorType.mt_ByAllValues) As KvpC
+        
+         If Count = 0 Then
+            Return Me
+        End If
+        
+        Select Case ipMirrorType
+        
+            Case mt_ByAllValues: Return MirrorByAllValues
+            Case Return mt_ByFirstValue: Return MirrorByFirstValue
+    
+            Case Else
+                Err.Raise 17 + vbObjectError, _ 
+                    "twLib.KvpH.Mirror", _
+                    "Mirror type not known"
+        End Select
+        
+    End Function
+    
+    
+    '@Description("Returns an KvpC of two KvpC.  Item(1) is an KvpC of the first found Host value vs Host Key. .Item(2) is a copy of the original KvpC with the first values removed (Host Key vs Host Value).")
+    Private Function MirrorByAllValues() As KvpC
+    
+        Dim myC As KvpC = KvpC.Deb
+        
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+        
+            If myC.LacksKey(s.Keys(myIndex)) Then
+            
+                myC.Add s.Items(myIndex), KvpC.Deb
+                
+                
+            End If
+               
+            myC.Item(s.Keys(myIndex)).add s.Keys(myIndex), myIndex
+                
+        Next
+        
+        Return myC
+
+    End Function
+    
+    Private Function MirrorByFirstValue() As KvpC
+    
+        Dim myFirst As KvpC = KvpC.Deb
+        Dim myOther As KvpC = KvpC.Deb
+    
+        
+        Dim myIndex As Long
+        For myIndex = 1 To s.Keys.Count
+        
+            If myFirst.LacksKey(s.Items(myIndex)) Then
+            
+                myFirst.Add s.Items(myIndex), s.Keys(myIndex)
+                
+                
+            Else
+            
+                myOther.Add s.Keys(myIndex), s.Items(myIndex)
+                    
+                    
+            End If
+            
+        Next
+               
+        Return KvpC.Deb.Add(0&, myFirst).Add(1&, myOther)
+        
+    End Function
+    
+  
+    
+    
+    '==============================
+    Public Function Set(ByVal ipSet As SetOf, ByRef ipRHS As KvpC) As KvpC
+    
+    	    ' Dim myLHS As Seq = Seq.Deb(ipLHS)
+            ' Dim myRHS As Seq = Seq.Deb(ipRHS)
+            
+            Select Case ipSet
+            
+                Case SetOf.InBoth:              Return Both(Me, ipRHS)
+                Case SetOf.InHostOnly:          Return LHSOnly(Me, ipRHS)
+                Case SetOf.InParamOnly:         Return LHSOnly(ipRHS, Me) ' note reversal of params
+                Case SetOf.NotInBoth:           Return NotBoth(Me, ipRHS)
+                Case SetOf.Unique:              Return CombineUnique(Me, ipRHS)
+                
+            End Select
+            
+    End Function
+    
+   
+    Private Function LHSOnly(ByRef ipLHS As KvpC, ByRef ipRHS As KvpC) As KvpC
+
+        Dim myResult As KvpC = KvpC.Deb
+        Dim myH As IterItems = IterItems(ipLHS)
+        Do
+            If ipRHS.LacksKey(myH.Key(0)) And myResult.LacksKey(myH.Key(0)) Then
+                myResult.Add myH.Key(0), myH.Item(0)
+            End If
+            
+        Loop While myH.MoveNext
+        
+        Return myResult
+        
+    End Function
+
+    Private Function Both(ByRef ipLHS As KvpC, ByRef ipRHS As KvpC) As KvpC
+
+        Dim myResult As KvpC = KvpC.Deb
+        Dim myLHS As IterItems = IterItems(ipLHS)
+        Do
+            If ipRHS.HoldsKey(myLHS.Key(0)) Then
+                myResult.Add myLHS.Key(0), myLHS.Item(0)
+            End If
+        Loop While myLHS.MoveNext
+
+        Return myResult
+        
+    End Function
+
+
+    Private Function NotBoth(ByRef ipLHS As KvpC, ByRef ipRHS As KvpC) As KvpC
+
+            'Return KvpC.Deb(Me.LHSOnly(ipLHS, ipRHS)).MergeUnique(LHSOnly(ipRHS, ipLHS)) ' note the reversal of the parameters
+            Dim myResult As KvpC = KvpC.Deb
+            If ipLHS.Count > 0 Then
+                Dim myLHS As IterItems = IterItems(ipLHS)
+                Do
+                    
+                    If ipRHS.LacksKey(myLHS.Key(0)) Then
+                        myResult.Add myLHS.Key(0), myLHS.Item(0)
+                    End If
+                Loop While myLHS.MoveNext
+            End If
+            If ipRHS.Count > 0 Then
+                Dim myRHS As IterItems = IterItems(ipRHS)
+                Do
+                    If ipLHS.LacksKey(myRHS.Key(0)) Then
+                        myResult.Add myRHS.Key(0), myRHS.Item(0)
+                    End If
+                Loop While myRHS.MoveNext
+            End If
+    End Function
+
+
+    Private Function CombineUnique(ByRef ipLHS As KvpC, ByRef ipRHS As KvpC) As KvpC
+        Dim myResult As KvpC = KvpC.Deb
+        Dim myI As IterItems = IterItems(ipRHS)
+        Do
+            If myResult.Count = 0 Then
+            	myResult.Add myI.Key(0), myI.Item(0)
+            ElseIf myResult.LacksKey(myI.Key(0)) Then
+                myResult.Add myI.Key(0), myI.Item(0)
+            End If
+        Loop While myI.MoveNext
+        Return myResult
+    End Function
+    
+    ' Public Function MergeUnique(ByRef ipRHS As KvpC) As KvpC
+        
+    '     If ipRHS.Count = 0 Then
+    '         Return Me
+    '     End If
+        
+    '     Dim myI As IterItems = IterItems(ipRHS)
+    '     Do
+    '     	DoEvents
+    '         If Me.Count = 0 Then
+    '         	Me.Add myI.Key(0), myI.Item(0)
+    '         ElseIf Me.LacksKey(myI.Key(0)) Then
+    '             Me.Add myI.Key(0), myI.Item(0)
+    '         End If
+    '     Loop While myI.MoveNext
+    '     Return Me
+    ' End Function
+End Class

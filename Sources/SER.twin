@@ -1,8 +1,5 @@
 Class SER
-    ' it would be possible to emulate this class using a seq
-    ' so I guess to make it a proper independent class I need to move the startrunend
-    ' code from ranges nto this class.
-    ' That's a todo
+    
     Attribute VB_GlobalNameSpace = False
     Attribute VB_Creatable = True
     Attribute VB_PredeclaredId = True
@@ -91,7 +88,7 @@ Class SER
     
     
     Public Property Get NativeFirst() As Long
-        Return CLng(p.Fields.Item(IsNativeFirst))
+        Return VBA.CLng(p.Fields.Item(IsNativeFirst))
     End Property
     
     Public Property Let NativeFirst(ByRef ipNativeFirst As Long)
@@ -100,7 +97,7 @@ Class SER
     
     
     Public Property Get NativeLast() As Long
-        Return CLng(p.Fields.Item(IsNativeLast))
+        Return VBA.CLng(p.Fields.Item(IsNativeLast))
     End Property
     
     Public Property Let NativeLast(ByRef ipNativeLast As Long)
@@ -109,7 +106,7 @@ Class SER
     
     
     Public Property Get Size() As Long
-        Return CLng(p.Fields.Item(IsSize))
+        Return VBA.CLng(p.Fields.Item(IsSize))
     End Property
     
     Public Property Let Size(ByRef ipSize As Long)
@@ -118,7 +115,7 @@ Class SER
     
     
     Public Property Get NativeStart() As Long
-         Return CLng(p.Fields.Item(IsNativeStart))
+         Return VBA.CLng(p.Fields.Item(IsNativeStart))
     End Property
     
     Public Property Let NativeStart(ByRef ipNativeStart As Long)
@@ -127,7 +124,7 @@ Class SER
     
     
     Public Property Get NativeEnd() As Long
-        Return CLng(p.Fields.Item(IsNativeEnd))
+        Return VBA.CLng(p.Fields.Item(IsNativeEnd))
     End Property
     
     Public Property Let NativeEnd(ByRef ipNativeEnd As Long)
@@ -136,7 +133,7 @@ Class SER
     
     
     Public Property Get NormStart() As Long
-        Return CLng(p.Fields.Item(IsNormStart))
+        Return VBA.CLng(p.Fields.Item(IsNormStart))
     End Property
     
     Public Property Let NormStart(ByRef ipNormStart As Long)
@@ -145,7 +142,7 @@ Class SER
     
     
     Public Property Get NormEnd() As Long
-         Return CLng(p.Fields.Item(IsNormEnd))
+         Return VBA.CLng(p.Fields.Item(IsNormEnd))
     End Property
     
     Public Property Let NormEnd(ByRef ipNormEnd As Long)
@@ -154,7 +151,7 @@ Class SER
     
     
     Public Property Get NormFirst() As Long
-        Return CLng(p.Fields.Item(IsNormFirst))
+        Return VBA.CLng(p.Fields.Item(IsNormFirst))
     End Property
     
     Public Property Let NormFirst(ByRef ipNormFirst As Long)
@@ -163,7 +160,7 @@ Class SER
     
     
     Public Property Get Run() As Long
-        Return CLng(p.Fields.Item(IsRun))
+        Return VBA.CLng(p.Fields.Item(IsRun))
     End Property
     
     Public Property Let Run(ByRef ipRun As Long)
@@ -172,7 +169,7 @@ Class SER
     
     
     Public Property Get NormLast() As Long
-        Return CLng(p.Fields.Item(IsNormLast))
+        Return VBA.CLng(p.Fields.Item(IsNormLast))
     End Property
         
     Public Property Let NormLast(ByRef ipNormLast As Long)

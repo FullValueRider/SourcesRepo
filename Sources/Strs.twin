@@ -167,7 +167,7 @@ Class Strs
                 Set myTrimChars = Strs.WhitespaceSeq
                 
                 
-            Case myMeta.IsType(idSeq)
+            Case myMeta.IsType(ti_Seq)
             
                 ' error without the cvar wrapper
                 Set myTrimChars = myTmp
